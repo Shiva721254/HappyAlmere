@@ -7,6 +7,18 @@ No license to redistribute this proprietary source is granted.
 Open this directory (the Git root) in VS Code. The original versioned source folder
 is retained to avoid an unnecessary directory migration.
 
+## Git workflow
+
+Private repository: https://github.com/Shiva721254/HappyAlmere
+
+- `main` holds the verified baseline and reviewed stable changes.
+- `develop` is the working branch for ongoing development.
+- Build and test changes before pushing. Promote verified work from `develop`
+  to `main` through a reviewed pull request.
+- Do not commit secrets, customer data, or the confidential business-plan files.
+
+This is the agreed workflow; GitHub branch protection is not yet configured.
+
 ## Prerequisites and commands
 
 - .NET SDK 10.0.403 (global.json permits later patches within that SDK feature band).
