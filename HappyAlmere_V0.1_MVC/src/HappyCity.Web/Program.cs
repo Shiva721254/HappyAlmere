@@ -1,29 +1,47 @@
 using HappyCity.Application;
 using HappyCity.Infrastructure;
+using HappyCity.Web.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using System.Threading.RateLimiting;
+
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllersWithViews(o => o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
+builder.Services.AddControllersWithViews(options =>
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+builder.Services.AddAntiforgery(options =>
+{
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+});
 builder.Services.AddSingleton<IDiscoveryRepository, DemoDiscoveryRepository>();
 builder.Services.AddScoped<IDiscoveryService, DiscoveryService>();
-builder.Services.AddRateLimiter(o => {
- o.RejectionStatusCode = 429;
- o.AddFixedWindowLimiter("search", x => { x.PermitLimit = 120; x.Window = TimeSpan.FromMinutes(1); x.QueueLimit = 0; });
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    // Deliberately shared and bounded for this local demo. Review before multi-user hosting.
+    options.AddFixedWindowLimiter("search", limiter =>
+    {
+        limiter.PermitLimit = 120;
+        limiter.Window = TimeSpan.FromMinutes(1);
+        limiter.QueueLimit = 0;
+    });
 });
+
 var app = builder.Build();
-if (!app.Environment.IsDevelopment()) { app.UseExceptionHandler("/Home/Error"); app.UseHsts(); }
-app.Use(async (context, next) => {
- context.Response.Headers["Content-Security-Policy"] = "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'";
- context.Response.Headers["X-Content-Type-Options"] = "nosniff";
- context.Response.Headers["X-Frame-Options"] = "DENY";
- context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
- context.Response.Headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
- await next();
-});
+// Register headers before exception handling; OnStarting also covers cleared error responses.
+app.UseMiddleware<SecurityHeadersMiddleware>();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseRateLimiter();
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
+
+// Entry point for real-pipeline integration tests.
+public partial class Program { }

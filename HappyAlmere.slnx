@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/HappyAlmere_V0.1_MVC/" />
+  <Folder Name="/HappyAlmere_V0.1_MVC/src/">
+    <Project Path="HappyAlmere_V0.1_MVC/src/HappyCity.Application/HappyCity.Application.csproj" />
+    <Project Path="HappyAlmere_V0.1_MVC/src/HappyCity.Domain/HappyCity.Domain.csproj" />
+    <Project Path="HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/HappyCity.Infrastructure.csproj" />
+    <Project Path="HappyAlmere_V0.1_MVC/src/HappyCity.Web/HappyCity.Web.csproj" />
+  </Folder>
+  <Folder Name="/HappyAlmere_V0.1_MVC/tests/">
+    <Project Path="HappyAlmere_V0.1_MVC/tests/HappyCity.FoundationTests/HappyCity.FoundationTests.csproj" />
+  </Folder>
+</Solution>

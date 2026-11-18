@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+**/TestResults/
+.vs/
+.env
+.env.*
+*.pfx
+*.pem
+*.user
+artifacts/
+node_modules/
