@@ -48,10 +48,25 @@ Playwright/Chromium installation:
 node scripts/verify-browser.cjs <absolute-path-to-playwright-or-playwright-core>
 ```
 
-The script keeps certificate validation enabled, checks five viewport widths,
+The script keeps certificate validation enabled, checks all seven required viewport widths,
 navigation, keyboard skip access and search, and writes screenshots to ignored
 `artifacts/`. Node/Playwright are QA tools, not application runtime requirements.
 Browser verification is separate from CI's .NET integration tests.
 
 See [architecture](docs/ARCHITECTURE.md), [security review](docs/SECURITY.md), and
 [V0.1 verification report](docs/V0.1-VERIFICATION.md).
+
+## HA-001-R01 remediation checkout
+
+This branch is based on V0.1 commit ebc99a0. The original develop branch already
+contains separate V0.2 work and is intentionally untouched. Open this worktree root
+(the directory containing HappyAlmere.slnx) in VS Code, not the nested source folder.
+No PostgreSQL, Docker or customer-data setup is required for this V0.1 checkout.
+
+Browser regression coverage now includes all seven required widths and accepted
+long-category text, with screenshots and document/viewport measurements in artifacts/.
+See [development instructions](docs/DEVELOPMENT.md), [engineering rules](AGENTS.md),
+[security](SECURITY.md), [changelog](CHANGELOG.md),
+[acceptance audit](docs/reports/HA-001-acceptance-audit.md) and
+[remediation report](docs/reports/HA-001-R01-remediation-report.md).
+V0.1 acceptance remains subject to architect recommendation and product-owner approval.

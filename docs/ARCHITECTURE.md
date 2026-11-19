@@ -73,3 +73,13 @@ The CI workflow lives at the actual repository root.
 The frontend uses native Razor/HTML/CSS without JavaScript or external assets.
 Small-screen rules are the base; larger layouts use a min-width breakpoint.
 Shared components and framework DI remain sufficient for this scope.
+
+## HA-001-R01 refinements
+
+DiscoveryCategories holds stable city-independent category IDs in Domain; repository
+and Razor reference those IDs. Razor derives maxlength from DiscoveryFilter.
+Inherited overflow-wrap:anywhere allows accepted unbroken text to remain readable;
+flex/grid children have min-width:0. No global overflow hiding is used.
+Rate limiting partitions by normalized transport peer with no forwarded-header trust,
+retaining the original per-bucket count/window and zero queue. See SECURITY.md for
+NAT/proxy and public-hosting limitations. No dependency direction or framework changed.

@@ -7,12 +7,12 @@ public sealed class DemoDiscoveryRepository : IDiscoveryRepository
 {
     private static readonly IReadOnlyList<DiscoveryItem> Items = Array.AsReadOnly(new DiscoveryItem[]
     {
-        new("Een wandeling aan het water", "Inspiratie voor een gratis buitenactiviteit.", "activiteiten", "Almere Stad", "☀"),
-        new("Een familiedag plannen", "Ontdek ideeën voor een dag met kinderen.", "activiteiten", "Almere Buiten", "♧"),
-        new("Lokaal lunchen", "Voorbeeld van een categorie voor lunch en restaurants.", "eten", "Almere Haven", "♨"),
-        new("Winkelaanbiedingen", "Hier komen actuele, gecontroleerde acties.", "besparen", "Almere Stad", "€"),
-        new("Huis en tuin", "Vind straks lokale vakmensen voor onderhoud.", "diensten", "Almere Poort", "⌂"),
-        new("Ontdek je buurt", "Inspiratie voor lokale winkels en voorzieningen.", "winkelen", "Muziekwijk", "◇")
+        new("Een wandeling aan het water", "Inspiratie voor een gratis buitenactiviteit.", DiscoveryCategories.Activities, "Almere Stad", "☀"),
+        new("Een familiedag plannen", "Ontdek ideeën voor een dag met kinderen.", DiscoveryCategories.Activities, "Almere Buiten", "♧"),
+        new("Lokaal lunchen", "Voorbeeld van een categorie voor lunch en restaurants.", DiscoveryCategories.Food, "Almere Haven", "♨"),
+        new("Winkelaanbiedingen", "Hier komen actuele, gecontroleerde acties.", DiscoveryCategories.Savings, "Almere Stad", "€"),
+        new("Huis en tuin", "Vind straks lokale vakmensen voor onderhoud.", DiscoveryCategories.Services, "Almere Poort", "⌂"),
+        new("Ontdek je buurt", "Inspiratie voor lokale winkels en voorzieningen.", DiscoveryCategories.Shopping, "Muziekwijk", "◇")
     });
 
     public Task<IReadOnlyList<DiscoveryItem>> FindAsync(DiscoveryFilter filter, CancellationToken cancellationToken = default)

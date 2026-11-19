@@ -12,9 +12,9 @@
   cover normal responses, static assets, 400, 404, 429 and production exceptions.
   Host filtering can reject a request before application middleware.
 - Global AutoValidateAntiforgeryToken MVC filter, secure/HttpOnly/Strict antiforgery
-  cookie configuration. A test-only POST action proves missing tokens are rejected.
+  cookie configuration. Test-only actions exercise missing, valid and tampered tokens; production has no token-probe route.
 - Query/category length bounds and default Razor encoding of untrusted input.
-- Shared fixed-window discovery budget: 120 requests/minute/process, no queue.
+- Fixed-window discovery budget: 120 requests/minute/normalized transport IP per process, no queue; Retry-After on rejection. Missing peer addresses share an unknown bucket. Forwarding headers do not select the bucket.
 - Generic production error output with no-store caching. Detailed diagnostics
   remain restricted to Development.
 - Kestrel server-identification header disabled.
@@ -34,9 +34,7 @@ Search is GET-based: terms remain in browser history and may appear in access
 logs. Users can still type personal information; the UI warning cannot prevent it.
 No request-body or query logging feature was added.
 
-The shared limiter permits one client to consume the process budget. It is not
-distributed or a DDoS defense. Production needs a reviewed per-client/account
-policy and edge protection; never trust arbitrary forwarded IP headers.
+The limiter isolates distinct transport peers; clients behind the same NAT or proxy still share a budget. IPv4 and IPv4-mapped IPv6 use one bucket. This is not distributed or a DDoS defense; many IPs can consume resources and create partitions. Public hosting needs reviewed account/proxy/edge controls and load testing. Never trust arbitrary forwarded IP headers.
 
 Before any production deployment, review TLS termination, trusted proxies,
 forwarded headers, hostnames, secrets, persistent encrypted Data Protection keys,
@@ -45,7 +43,7 @@ database TLS, migration authorization, security patching and monitoring.
 
 Before real accounts/data, implement an approved identity system, MFA for admins,
 resource-level authorization, rate limits, session/cookie protections and audit
-events. Add valid-token and tampered-token tests for actual state-changing flows.
+events. Extend token tests to actual state-changing flows when those are approved.
 Plan GDPR/privacy and content moderation/verification with qualified reviewers.
 Only synthetic sample content is present; no real business claims were introduced.
 
