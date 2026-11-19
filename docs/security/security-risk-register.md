@@ -4,7 +4,7 @@ Last updated: 19 November 2026 (Europe/Amsterdam). Scope: V0.1, reviewed commit 
 
 Authority: the owner's HA-001-R02 assignment and supplied **HA-001-ARCH-02 Independent Audit Findings Supplement**. SEC-F02?F06, PERF-F01?F02, UI-F01?F02, ARCH-F01 and GOV-F01 retain the supplied classifications, severity and deadlines. SEC-F01, QA-F01, QA-F02 and CODE-F01 were specified in the assignment without formal severity values; their provisional engineering priorities below are explicitly not attributed to the independent reviewer.
 
-The architecture and R02 direction are accepted in principle. This is not final V0.1 approval, public deployment authorization or blanket risk acceptance. Future requirements are not claims of currently exploitable defects or implemented capabilities. R02 stops before HA-002/HA-003. Responsible roles are assignments to roles, not claims that named people accepted them.
+The owner now temporarily accepts documented residual risks for local synthetic-data development only under HA-001-CLOSE. V0.1's remote-CI condition is satisfied by run 44541406736 for the CI-corrected descendant a174aa7 (application/tests unchanged from cbe2def). Final PR-head checks still gate merge. This is not public deployment authorization or acceptance for production/customer data. Original per-finding R02 decisions below are historical; this limited owner decision supersedes their local acceptance-pending wording. Resolution milestones remain binding. Future requirements are not claims of currently exploitable defects or implemented capabilities. R02 stops before HA-002/HA-003. Responsible roles are assignments to roles, not claims that named people accepted them.
 
 Source shorthand: `Web/`, `Application/`, `Infrastructure/` resolve under `HappyAlmere_V0.1_MVC/src/HappyCity.*`; `tests/` resolves under `HappyAlmere_V0.1_MVC/`. Other paths are repository-relative. R01 evidence is historical; fresh evidence and exact commands are in [the R02 report](../reports/HA-001-R02-independent-audit-remediation.md).
 
@@ -202,3 +202,7 @@ Source shorthand: `Web/`, `Application/`, `Infrastructure/` resolve under `Happy
 - **Verification requirements:** Record authorized branch comparisons/SHAs, integration results, regression checks and deviations.
 - **Responsible role:** Product owner; independent architect; repository maintainer.
 - **Risk acceptance decision:** Open. Architecture/remediation direction approval is not final V0.1 approval or blanket residual-risk acceptance.
+
+## HA-001-CLOSE acceptance boundary
+
+The owner explicitly accepts the documented residual risks only during local synthetic-data development. Future controls remain unimplemented requirements with their original deadlines. Successful Ubuntu and Windows CI is recorded in the closure report; local-scope V0.1 acceptance is now recorded. GOV-F01 reconciliation is authorized on a dedicated branch; develop and its original PostgreSQL history must remain recoverable. Independent review of the HA-002 gap analysis precedes additional database features.

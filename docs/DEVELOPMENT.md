@@ -71,7 +71,7 @@ The root workflow retains the Ubuntu .NET job and adds a Windows 2025 browser jo
 Actions are pinned by full commit SHA; token permissions are contents:read, checkout
 credentials are not persisted, and package-manager caching is disabled. The browser
 job uses the same lockfile, pinned Node version, Chromium installer and harness.
-A trusted certificate is generated on the ephemeral runner; no repository secret is
+The ephemeral Windows runner exports its public dev certificate, imports it into the machine Root store with certutil, and verifies trust without an unattended user-consent dialog; no repository secret is
 needed. Artifact selection includes results/screenshots only, excluding certificates,
 keys and server logs. Retention is seven days. Hosted runner images and the OS trust
 store are external inputs, not bit-for-bit frozen infrastructure.

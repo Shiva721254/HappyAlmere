@@ -1,5 +1,24 @@
 # HA-001-R01: current V0.1 acceptance audit
 
+## HA-001-CLOSE - current acceptance decision
+
+The owner supplied HA-001-ARCH-03 and formal closure authorization on 19 November
+2026. Independent review accepts AC01-AC13. The owner temporarily accepts documented
+residual risks only for local synthetic development: **AC14 PASS** in that boundary.
+The original cbe2def Windows run was cancelled, not passed. Authorized CI-only
+corrections produced a174aa76ce411d510f4b8de77bacd50eab995999 with identical application
+and test source; both jobs in [run 44541406736](https://github.com/Shiva721254/HappyAlmere/actions/runs/44541406736)
+passed (33 .NET tests, 42 layouts, 190 security and five rate assertions). The owner's
+remote-CI condition is satisfied: **AC15 PASS**, local synthetic V0.1 only.
+
+**15 PASS within the approved scope.** This is an attributed owner/reviewer decision,
+not agent self-approval or production certification. The final PR head must pass all
+mandatory checks and branch protection before merge. Existing V0.2 reconciliation and
+HA-002 acceptance remain separate; no new database feature implementation is approved.
+See [ARCH-03](HA-001-ARCH-03-final-architectural-review.md),
+[closure report](HA-001-CLOSE-final-report.md), and the permanent risk register.
+All R02/R01 assessments below are historical, superseded for current V0.1 acceptance.
+
 ## Current HA-001-R02 independent audit remediation
 
 19 November 2026: [R02 report](HA-001-R02-independent-audit-remediation.md) supersedes

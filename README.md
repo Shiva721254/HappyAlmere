@@ -80,3 +80,7 @@ V0.1 acceptance remains subject to architect recommendation and product-owner ap
 
 Historical R01 continuation results: [verification ledger](docs/reports/evidence/HA-001-R01-refresh/README.md). Browser coverage includes
 42 layouts across seven widths, including combined maximum-length query/category input.
+
+Current closure status: [HA-001-CLOSE](docs/reports/HA-001-CLOSE-final-report.md).
+Owner approval is limited to local synthetic development; the remote CI condition passed.
+protected integration and existing-work reconciliation are authorized. No public release.

@@ -2,6 +2,11 @@
 
 Only observed Git history and actual local changes are recorded. Dates use Europe/Amsterdam.
 
+## HA-001-CLOSE - 2026-11-19
+- Record the owner's limited residual-risk acceptance and conditional V0.1 approval.
+- Correct the unattended Windows CI certificate trust prompt without weakening TLS validation.
+- Authorize protected foundation integration and history-preserving reconciliation; additional database features remain out of scope.
+
 ## Unreleased - HA-001-R02 - 2026-11-19
 - Verify actual loopback listeners and local non-loopback connection rejection; clarify that Host filtering and noindex do not isolate a network service.
 - Pin development-only Playwright/Chromium tooling with an npm lockfile and repeatable trusted-HTTPS Windows harness.
