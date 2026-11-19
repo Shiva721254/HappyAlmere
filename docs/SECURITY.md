@@ -2,7 +2,7 @@
 
 ## Enforced and tested
 
-- Localhost launch bindings and AllowedHosts allowlist.
+- Localhost launch bindings; actual loopback socket inventory and non-loopback local-interface probes in R02. AllowedHosts separately validates HTTP Host headers.
 - HTTPS redirection; production HSTS (localhost is intentionally excluded by ASP.NET).
 - CSP: self-only resources, no scripts, no objects, no framing, self-only form actions.
 - X-Content-Type-Options, X-Frame-Options, restrictive Permissions-Policy.
@@ -12,9 +12,9 @@
   cover normal responses, static assets, 400, 404, 429 and production exceptions.
   Host filtering can reject a request before application middleware.
 - Global AutoValidateAntiforgeryToken MVC filter, secure/HttpOnly/Strict antiforgery
-  cookie configuration. A test-only POST action proves missing tokens are rejected.
+  cookie configuration. Test-only actions exercise missing, valid and tampered tokens; production has no token-probe route.
 - Query/category length bounds and default Razor encoding of untrusted input.
-- Shared fixed-window discovery budget: 120 requests/minute/process, no queue.
+- Fixed-window discovery budget: 120 requests/minute/normalized transport IP per process, no queue; Retry-After on rejection. Missing peer addresses share an unknown bucket. Forwarding headers do not select the bucket.
 - Generic production error output with no-store caching. Detailed diagnostics
   remain restricted to Development.
 - Kestrel server-identification header disabled.
@@ -34,9 +34,7 @@ Search is GET-based: terms remain in browser history and may appear in access
 logs. Users can still type personal information; the UI warning cannot prevent it.
 No request-body or query logging feature was added.
 
-The shared limiter permits one client to consume the process budget. It is not
-distributed or a DDoS defense. Production needs a reviewed per-client/account
-policy and edge protection; never trust arbitrary forwarded IP headers.
+The limiter isolates distinct transport peers; clients behind the same NAT or proxy still share a budget. IPv4 and IPv4-mapped IPv6 use one bucket. This is not distributed or a DDoS defense; many IPs can consume resources and create partitions. Public hosting needs reviewed account/proxy/edge controls and load testing. Never trust arbitrary forwarded IP headers.
 
 Before any production deployment, review TLS termination, trusted proxies,
 forwarded headers, hostnames, secrets, persistent encrypted Data Protection keys,
@@ -45,7 +43,7 @@ database TLS, migration authorization, security patching and monitoring.
 
 Before real accounts/data, implement an approved identity system, MFA for admins,
 resource-level authorization, rate limits, session/cookie protections and audit
-events. Add valid-token and tampered-token tests for actual state-changing flows.
+events. Extend token tests to actual state-changing flows when those are approved.
 Plan GDPR/privacy and content moderation/verification with qualified reviewers.
 Only synthetic sample content is present; no real business claims were introduced.
 
@@ -57,3 +55,26 @@ accessibility audit, load test or certification of OWASP compliance.
 - [ASP.NET Core integration testing](https://learn.microsoft.com/aspnet/core/test/integration-tests?view=aspnetcore-10.0)
 - [ASP.NET Core rate limiting](https://learn.microsoft.com/aspnet/core/performance/rate-limit?view=aspnetcore-10.0)
 - [ASP.NET Core antiforgery](https://learn.microsoft.com/aspnet/core/security/anti-request-forgery?view=aspnetcore-10.0)
+
+## SEC-F01 local deployment boundary
+
+The normal launch profile and VS Code launch use `https://localhost:7143` and
+`http://localhost:5143`. Kestrel binds localhost to loopback (127.0.0.1 and ::1).
+The repeatable browser harness inspects every listening socket of the test server
+process and fails on any non-loopback address. It also tests this machine's non-loopback
+IPv4 interfaces; this is local boundary evidence, not an external firewall audit.
+
+AllowedHosts is an HTTP Host allowlist, **not a network access control**. A remote
+client could send an allowed Host value if the listener were exposed. X-Robots-Tag
+and HTML noindex are crawler instructions, **not access control**. HTTPS encrypts
+traffic but does not authorize users. The local boundary depends on loopback sockets
+and absence of forwarding/tunnels; other local users/processes can reach it.
+Do not override URLs with `0.0.0.0`, `[::]`, `*`, `+` or a LAN/public address. No public
+exposure, customer data or production use is authorized.
+
+Permanent findings, classifications, milestones, ownership and acceptance decisions:
+[security and engineering risk register](security/security-risk-register.md).
+Future identity, secret storage, Data Protection and database requirements in that
+register are not represented as implemented V0.1 capabilities.
+
+Reference: [Kestrel endpoint binding](https://learn.microsoft.com/aspnet/core/fundamentals/servers/kestrel/endpoints?view=aspnetcore-10.0).

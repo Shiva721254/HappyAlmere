@@ -1,0 +1,33 @@
+[
+  {
+    "command": [
+      "git",
+      "bundle",
+      "verify",
+      "artifacts/r01/ha001-r01.bundle"
+    ],
+    "exitCode": 0,
+    "stdout": "The bundle contains this ref:\nc13f2232e331be5ba5d4ab7ab7cec84783a3eed1 refs/heads/fix/ha-001-r01\nThe bundle records a complete history.\nThe bundle uses this hash algorithm: sha1\n",
+    "stderr": "artifacts/r01/ha001-r01.bundle is okay\n"
+  },
+  {
+    "command": [
+      "git",
+      "fsck",
+      "--full"
+    ],
+    "exitCode": 0,
+    "stdout": "dangling tree d30add29cdb209a87b8c9e5ffc45dfbd99cc812e\ndangling tree 0be5d4ceb34b2864ef4f26d110c9d92d32812170\ndangling tree 1a03d90dbabee466ba0309201cf88ccb02d7df37\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

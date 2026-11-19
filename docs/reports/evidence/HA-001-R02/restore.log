@@ -1,0 +1,6 @@
+Determining projects to restore...
+  Restored <workspace>\HappyAlmere_V0.1_MVC\src\HappyCity.Web\HappyCity.Web.csproj (in 90 ms).
+  Restored <workspace>\HappyAlmere_V0.1_MVC\src\HappyCity.Application\HappyCity.Application.csproj (in 90 ms).
+  Restored <workspace>\HappyAlmere_V0.1_MVC\src\HappyCity.Infrastructure\HappyCity.Infrastructure.csproj (in 90 ms).
+  Restored <workspace>\HappyAlmere_V0.1_MVC\src\HappyCity.Domain\HappyCity.Domain.csproj (in 89 ms).
+  Restored <workspace>\HappyAlmere_V0.1_MVC\tests\HappyCity.FoundationTests\HappyCity.FoundationTests.csproj (in 400 ms).

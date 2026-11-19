@@ -1,5 +1,7 @@
 @model HappyCity.Web.ViewModels.DiscoveryViewModel
-@{ ViewData["Title"] = "Haal meer uit jouw Almere"; }
+@{
+    ViewData["Title"] = "Haal meer uit jouw Almere";
+}
 
 <section class="hero">
     <div class="wrap">
@@ -10,7 +12,7 @@
             <label for="q">Wat zoek je vandaag?</label>
             <input type="hidden" name="category" value="@Model.Category">
             <div>
-                <input id="q" name="q" maxlength="100" value="@Model.Query"
+                <input id="q" name="q" maxlength="@HappyCity.Application.DiscoveryFilter.MaximumQueryLength" value="@Model.Query"
                        aria-describedby="search-help" placeholder="Bijvoorbeeld: familie, lunch, tuin">
                 <button type="submit">Zoeken</button>
             </div>
@@ -21,11 +23,11 @@
 <section class="wrap section">
     <h2>Waar heb je zin in?</h2>
     <div class="categories">
-        <a asp-action="Index" asp-route-category="activiteiten">☀ Activiteiten</a>
-        <a asp-action="Index" asp-route-category="besparen">€ Besparen</a>
-        <a asp-action="Index" asp-route-category="eten">♨ Eten &amp; drinken</a>
-        <a asp-action="Index" asp-route-category="diensten">⌂ Diensten</a>
-        <a asp-action="Index" asp-route-category="winkelen">◇ Winkelen</a>
+        <a asp-action="Index" asp-route-category="@DiscoveryCategories.Activities">☀ Activiteiten</a>
+        <a asp-action="Index" asp-route-category="@DiscoveryCategories.Savings">€ Besparen</a>
+        <a asp-action="Index" asp-route-category="@DiscoveryCategories.Food">♨ Eten &amp; drinken</a>
+        <a asp-action="Index" asp-route-category="@DiscoveryCategories.Services">⌂ Diensten</a>
+        <a asp-action="Index" asp-route-category="@DiscoveryCategories.Shopping">◇ Winkelen</a>
         <a asp-action="Index">Alles bekijken</a>
     </div>
 </section>

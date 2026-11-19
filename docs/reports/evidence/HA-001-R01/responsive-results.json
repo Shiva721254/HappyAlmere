@@ -1,0 +1,181 @@
+{
+  "layouts": [
+    {
+      "route": "/",
+      "viewport": 320,
+      "document": 320
+    },
+    {
+      "route": "/Home/Business",
+      "viewport": 320,
+      "document": 320
+    },
+    {
+      "route": "/Home/Privacy",
+      "viewport": 320,
+      "document": 320
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "viewport": 320,
+      "document": 320
+    },
+    {
+      "route": "/?category=WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+      "viewport": 320,
+      "document": 320
+    },
+    {
+      "route": "/",
+      "viewport": 375,
+      "document": 375
+    },
+    {
+      "route": "/Home/Business",
+      "viewport": 375,
+      "document": 375
+    },
+    {
+      "route": "/Home/Privacy",
+      "viewport": 375,
+      "document": 375
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "viewport": 375,
+      "document": 375
+    },
+    {
+      "route": "/?category=WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+      "viewport": 375,
+      "document": 375
+    },
+    {
+      "route": "/",
+      "viewport": 430,
+      "document": 430
+    },
+    {
+      "route": "/Home/Business",
+      "viewport": 430,
+      "document": 430
+    },
+    {
+      "route": "/Home/Privacy",
+      "viewport": 430,
+      "document": 430
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "viewport": 430,
+      "document": 430
+    },
+    {
+      "route": "/?category=WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+      "viewport": 430,
+      "document": 430
+    },
+    {
+      "route": "/",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "route": "/Home/Business",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "route": "/Home/Privacy",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "route": "/?category=WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "route": "/",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "route": "/Home/Business",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "route": "/Home/Privacy",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "route": "/?category=WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "route": "/",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/Home/Business",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/Home/Privacy",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/?category=WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "route": "/Home/Business",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "route": "/Home/Privacy",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "route": "/?category=WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+      "viewport": 1920,
+      "document": 1920
+    }
+  ],
+  "browser": "149.0.7827.55",
+  "result": "PASS"
+}

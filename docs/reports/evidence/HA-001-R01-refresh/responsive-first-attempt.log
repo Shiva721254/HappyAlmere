@@ -1,0 +1,16 @@
+node : page.goto: net::ERR_CONNECTION_CLOSED at https://localhost:7143/
+At line:2 char:1
++ node scripts/verify-browser.cjs C:/Users/shiva/AppData/Local/npm-cach ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (page.goto: net:...localhost:7143/:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Call log:
+[2m  - navigating to "https://localhost:7143/", waiting until "load"[22m
+
+    at <workspace>\scripts\verify-browser.cjs:23:41 {
+  log: [
+    '  - navigating to "https://localhost:7143/", waiting until "load"'
+  ],
+  name: 'Error'
+}

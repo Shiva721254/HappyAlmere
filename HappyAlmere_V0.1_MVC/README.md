@@ -9,4 +9,5 @@ and [verification results](../docs/V0.1-VERIFICATION.md) for the verified scope.
 
 This remains a local prototype with synthetic content. Do not enter real customer
 information. No database, accounts, registration or payments are implemented.
-V0.2 has not started.
+This V0.1 remediation does not implement V0.2. Pre-existing develop work remains
+untouched; the sequencing exception is tracked as GOV-F01 in the root risk register.

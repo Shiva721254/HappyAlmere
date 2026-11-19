@@ -1,0 +1,38 @@
+{
+  "started": "2026-11-19T10:29:01.016Z",
+  "workspace": "c:\\Users\\shiva\\Desktop\\HappyAlmere\\HA-001-R01",
+  "events": [
+    {
+      "event": "stopped",
+      "reason": "breakpoint"
+    },
+    {
+      "event": "stopped",
+      "reason": "step"
+    },
+    {
+      "command": "variables",
+      "error": "Evaluation aborted."
+    },
+    {
+      "event": "stopped",
+      "reason": "breakpoint"
+    },
+    {
+      "event": "stopped",
+      "reason": "step"
+    }
+  ],
+  "breakpoint": true,
+  "step": true,
+  "launchAccepted": true,
+  "frame": {
+    "name": "HappyCity.Web.dll!HappyCity.Web.Controllers.HomeController.Index(string category, string q, System.Threading.CancellationToken cancellationToken) Line 18",
+    "line": 18,
+    "source": "c:\\Users\\shiva\\Desktop\\HappyAlmere\\HA-001-R01\\HappyAlmere_V0.1_MVC\\src\\HappyCity.Web\\Controllers\\HomeController.cs"
+  },
+  "scopes": [
+    "Locals"
+  ],
+  "terminated": true
+}

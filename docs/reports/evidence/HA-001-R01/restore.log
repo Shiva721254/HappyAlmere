@@ -1,0 +1,6 @@
+  Determining projects to restore...
+  Restored C:\Users\shiva\Desktop\HappyAlmere\HA-001-R01\HappyAlmere_V0.1_MVC\src\HappyCity.Web\HappyCity.Web.csproj (in 78 ms).
+  Restored C:\Users\shiva\Desktop\HappyAlmere\HA-001-R01\HappyAlmere_V0.1_MVC\src\HappyCity.Application\HappyCity.Application.csproj (in 78 ms).
+  Restored C:\Users\shiva\Desktop\HappyAlmere\HA-001-R01\HappyAlmere_V0.1_MVC\src\HappyCity.Domain\HappyCity.Domain.csproj (in 76 ms).
+  Restored C:\Users\shiva\Desktop\HappyAlmere\HA-001-R01\HappyAlmere_V0.1_MVC\src\HappyCity.Infrastructure\HappyCity.Infrastructure.csproj (in 78 ms).
+  Restored C:\Users\shiva\Desktop\HappyAlmere\HA-001-R01\HappyAlmere_V0.1_MVC\tests\HappyCity.FoundationTests\HappyCity.FoundationTests.csproj (in 716 ms).

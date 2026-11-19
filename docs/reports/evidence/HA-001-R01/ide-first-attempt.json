@@ -1,0 +1,32 @@
+{
+  "started": "2026-11-19T10:28:15.572Z",
+  "workspace": "c:\\Users\\shiva\\Desktop\\HappyAlmere\\HA-001-R01",
+  "events": [
+    {
+      "event": "stopped",
+      "reason": "breakpoint"
+    },
+    {
+      "command": "scopes",
+      "error": "Error processing 'scopes' request. The operation cannot be performed while the target process is running."
+    },
+    {
+      "event": "stopped",
+      "reason": "step"
+    },
+    {
+      "command": "stackTrace",
+      "error": "Error processing 'stackTrace' request. The operation cannot be performed while the target process is running."
+    }
+  ],
+  "breakpoint": true,
+  "step": true,
+  "launchAccepted": true,
+  "requestError": "unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca",
+  "frame": {
+    "name": "HappyCity.Web.dll!HappyCity.Web.Controllers.HomeController.Index(string category, string q, System.Threading.CancellationToken cancellationToken) Line 18",
+    "line": 18,
+    "source": "c:\\Users\\shiva\\Desktop\\HappyAlmere\\HA-001-R01\\HappyAlmere_V0.1_MVC\\src\\HappyCity.Web\\Controllers\\HomeController.cs"
+  },
+  "terminated": true
+}

@@ -1,0 +1,43 @@
+{
+  "commit": "c22c76bfbf7303f9f3349fe8d8c55bd4cfb7b7d2",
+  "currentAuthoredFiles": 128,
+  "requiredDocumentation": [
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "README.md",
+    "docs/ARCHITECTURE.md",
+    "docs/DEVELOPMENT.md"
+  ],
+  "projectReferences": {
+    "HappyCity.Application": [
+      "HappyCity.Domain"
+    ],
+    "HappyCity.Domain": [],
+    "HappyCity.Infrastructure": [
+      "HappyCity.Application",
+      "HappyCity.Domain"
+    ],
+    "HappyCity.Web": [
+      "HappyCity.Application",
+      "HappyCity.Infrastructure"
+    ],
+    "HappyCity.FoundationTests": [
+      "HappyCity.Web"
+    ]
+  },
+  "dependencyDirection": "PASS",
+  "jsonParsing": "PASS",
+  "credentialScan": {
+    "commitCount": 4,
+    "fileVersionsScanned": 196,
+    "findings": [],
+    "scope": "V0.1 reachable tracked history and current nonignored authored files; no ignored credentials opened or recorded"
+  },
+  "sourceReviewChecks": {
+    "rawHtml": [],
+    "blockingAsync": [],
+    "sqlOrDatabase": [],
+    "outboundNetwork": []
+  }
+}

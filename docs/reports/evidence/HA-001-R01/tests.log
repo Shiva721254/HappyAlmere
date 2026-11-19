@@ -1,0 +1,5 @@
+Test run for C:\Users\shiva\Desktop\HappyAlmere\HA-001-R01\HappyAlmere_V0.1_MVC\tests\HappyCity.FoundationTests\bin\Release\net10.0\HappyCity.FoundationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: C:\Users\shiva\Desktop\HappyAlmere\HA-001-R01\artifacts\r01\test-results\Shiva_SHIVA-PC_2026-11-19_11_24_40_net10.0.trx
+
+Passed!  - Failed:     0, Passed:    33, Skipped:     0, Total:    33, Duration: 1 s - HappyCity.FoundationTests.dll (net10.0)

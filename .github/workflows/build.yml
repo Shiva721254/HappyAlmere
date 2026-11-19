@@ -4,12 +4,60 @@ permissions:
   contents: read
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
         with:
           global-json-file: global.json
       - run: dotnet restore HappyAlmere.slnx
       - run: dotnet build HappyAlmere.slnx --configuration Release --no-restore
       - run: dotnet test HappyAlmere.slnx --configuration Release --no-build --logger trx
+      - run: dotnet list HappyAlmere.slnx package --vulnerable --include-transitive
+
+  browser:
+    # Windows certificate trust matches the documented local test environment.
+    runs-on: windows-2025
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - run: npm audit --audit-level=high
+      - run: python scripts/verify-source.py
+      - run: npm run browser:install
+      - run: dotnet restore HappyAlmere.slnx
+      - run: dotnet build HappyAlmere.slnx -c Release --no-restore
+      - name: Trust the ephemeral runner certificate without an interactive dialog
+        timeout-minutes: 1
+        run: |
+          New-Item -ItemType Directory -Force artifacts/ci | Out-Null
+          dotnet dev-certs https --export-path artifacts/ci/localhost.crt --format PEM
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          # Hosted Windows runners are ephemeral administrators. Machine-root import
+          # avoids the current-user untrusted-root consent dialog; validation stays on.
+          certutil.exe -f -addstore Root artifacts/ci/localhost.crt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          dotnet dev-certs https --check --trust
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - run: npm run test:browser
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        if: ${{ !cancelled() }}
+        with:
+          name: browser-verification
+          retention-days: 7
+          path: |
+            artifacts/responsive-results.json
+            artifacts/*-*.png
+            artifacts/r02/browser/*-results.json
+            artifacts/r02/browser/*-network.json

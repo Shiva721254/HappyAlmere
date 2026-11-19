@@ -1,0 +1,5 @@
+Test run for <workspace>\HappyAlmere_V0.1_MVC\tests\HappyCity.FoundationTests\bin\Release\net10.0\HappyCity.FoundationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: <workspace>\artifacts\r02\test-results\foundation-results.trx
+
+Passed!  - Failed:     0, Passed:    33, Skipped:     0, Total:    33, Duration: 1 s - HappyCity.FoundationTests.dll (net10.0)
