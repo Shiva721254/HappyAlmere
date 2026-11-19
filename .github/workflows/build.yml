@@ -39,9 +39,14 @@ jobs:
       - run: dotnet restore HappyAlmere.slnx
       - run: dotnet build HappyAlmere.slnx -c Release --no-restore
       - name: Trust the ephemeral runner certificate without an interactive dialog
+        timeout-minutes: 1
         run: |
           New-Item -ItemType Directory -Force artifacts/ci | Out-Null
           dotnet dev-certs https --export-path artifacts/ci/localhost.crt --format PEM
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          # Hosted Windows runners are ephemeral administrators. Machine-root import
+          # avoids the current-user untrusted-root consent dialog; validation stays on.
+          certutil.exe -f -addstore Root artifacts/ci/localhost.crt
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           certutil.exe -user -f -addstore Root artifacts/ci/localhost.crt
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
