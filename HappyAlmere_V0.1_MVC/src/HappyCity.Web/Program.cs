@@ -16,9 +16,15 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.SameSite = SameSiteMode.Strict;
 });
-builder.Services.AddDbContext<HappyCityDbContext>(options => options.UseNpgsql(
-    DatabaseConfiguration.RequireVerifiedTls(builder.Configuration.GetConnectionString("HappyCity"))));
+builder.Services.AddSingleton<SafeQueryTimingInterceptor>();
+builder.Services.AddDbContext<HappyCityDbContext>((provider, options) => options.UseNpgsql(
+    DatabaseConfiguration.RequireVerifiedTls(builder.Configuration.GetConnectionString("HappyCity")))
+    .AddInterceptors(provider.GetRequiredService<SafeQueryTimingInterceptor>()));
 builder.Services.AddScoped<IDiscoveryRepository, PostgresDiscoveryRepository>();
+builder.Services.AddScoped<ICategoryLookup, PostgresCategoryLookup>();
+builder.Services.AddScoped<ICityResolver>(provider => new PostgresCityResolver(
+    provider.GetRequiredService<HappyCityDbContext>(),
+    builder.Configuration.GetSection("TrustedLocalCities").Get<Dictionary<string, string>>() ?? new Dictionary<string, string>()));
 builder.Services.AddScoped<IDiscoveryService, DiscoveryService>();
 builder.Services.AddRateLimiter(options =>
 {

@@ -20,6 +20,7 @@ public sealed class HappyCityDbContext(DbContextOptions<HappyCityDbContext> opti
         city.ToTable("cities", "catalog", t =>
         {
             t.HasCheckConstraint("cities_slug", "slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'");
+            t.HasCheckConstraint("cities_supported_region", "country_code = 'NL' AND (default_language = 'nl' OR default_language = 'en')");
             t.HasCheckConstraint("cities_country", "country_code ~ '^[A-Z]{2}$'");
             t.HasCheckConstraint("cities_language", "default_language ~ '^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$'");
         });
@@ -94,6 +95,7 @@ public sealed class HappyCityDbContext(DbContextOptions<HappyCityDbContext> opti
         location.ToTable("locations", "catalog", t =>
         {
             t.HasCheckConstraint("locations_coordinates", "(latitude IS NULL AND longitude IS NULL) OR (latitude IS NOT NULL AND longitude IS NOT NULL AND latitude BETWEEN -90 AND 90 AND longitude BETWEEN -180 AND 180)");
+            t.HasCheckConstraint("locations_supported_country", "country_code = 'NL'");
             t.HasCheckConstraint("locations_country", "country_code ~ '^[A-Z]{2}$'");
             t.HasCheckConstraint("locations_number", "house_number ~ '^[0-9]+$'");
         });
@@ -111,7 +113,11 @@ public sealed class HappyCityDbContext(DbContextOptions<HappyCityDbContext> opti
             .HasPrincipalKey(x => new { x.CityId, x.Id }).OnDelete(DeleteBehavior.Restrict);
 
         var translation = model.Entity<CategoryTranslation>();
-        translation.ToTable("category_translations", "catalog", t => t.HasCheckConstraint("translations_language", "language_code ~ '^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$'"));
+        translation.ToTable("category_translations", "catalog", t =>
+        {
+            t.HasCheckConstraint("translations_language", "language_code ~ '^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$'");
+            t.HasCheckConstraint("translations_supported_language", "language_code = 'nl' OR language_code = 'en'");
+        });
         translation.HasKey(x => new { x.CategoryId, x.LanguageCode });
         translation.Property(x => x.LanguageCode).HasMaxLength(10);
         translation.Property(x => x.Name).HasMaxLength(100);

@@ -1,3 +1,13 @@
+# Latest handover ? HA-002-R01
+
+Branch **feature/ha-002-a**; remediation baseline **d3d6a558cccda2d8e437854c46b5cbfe5ab7b9f4**. Authorized by owner and independent [Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10); keep [PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6) draft. No merge/deployment. Current finding/task/three acceptance matrices and exact evidence are maintained in [HA-002 implementation report](docs/reports/HA-002-implementation-report.md). Final containing commits and exact remote CI are reported in Issue #10/PR #6 after synchronization.
+
+Implemented: trusted synthetic host resolution; bounded translation lookup; new forward SupportedRegions correction with multi-row hierarchy protection; safe elapsed-only slow-read monitoring; exact negative verification; full restored schema/security/EF physical comparisons; concurrency and actual deep-query tests. Existing two applied migrations remain byte-preserved. Fresh 18-check rehearsal and 104 .NET tests pass; browser 42 responsive/190 security-functional/5 rate checks pass. Dependency scans report zero known vulnerabilities. Scoped secret/history scan passed with zero findings; exact remote CI remains pending. Original database/volumes unchanged; only isolated synthetic targets used. No new package dependency, identity/business feature or live domain.
+
+Governance branch docs/ha-gov-001 remains at **871e7a35c95b05b75b047fc1cc048f29e33b7cbc**. Reconciliation plan is in the current report; do not merge/overwrite it. Independent re-review and product-owner decision are required. Production controls remain deferred requirements, not implemented claims. HA-002-ARCH-01 is unavailable; Issue #10 supplies ARCH-02 independently.
+
+## Earlier handover (historical)
+
 # HappyAlmere - implementation handover
 
 Updated: 19 November 2026 (Europe/Amsterdam).

@@ -5,14 +5,21 @@ using Microsoft.AspNetCore.RateLimiting;
 
 namespace HappyCity.Web.Controllers;
 
-public sealed class HomeController(IDiscoveryService discovery) : Controller
+public sealed class HomeController(IDiscoveryService discovery, ICityResolver cities) : Controller
 {
     [HttpGet, EnableRateLimiting("search")]
     public async Task<IActionResult> Index(string? category, string? q, CancellationToken cancellationToken, string? cursor = null)
     {
+        var city = await cities.ResolveAsync(Request.Host.Host, cancellationToken);
+        if (city is null) return NotFound();
+        if (city.CanonicalHost is not null)
+        {
+            var canonical = new UriBuilder("https", city.CanonicalHost);
+            // Host is from validated database configuration; no forwarded-host redirect input.
+            return RedirectPermanent(canonical.Uri.GetLeftPart(UriPartial.Authority) + Request.PathBase + Request.Path + Request.QueryString);
+        }
         DiscoveryFilter filter;
-        // This deployment serves Almere. Request parameters cannot override the city.
-        try { filter = new DiscoveryFilter("almere", category, q); }
+        try { filter = new DiscoveryFilter(city.CitySlug, category, q); }
         catch (ArgumentException) { return BadRequest(); }
 
         try

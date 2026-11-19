@@ -1,3 +1,111 @@
+# Current implementation ? HA-002-R01 remediation candidate
+
+Authority: independently supplied [HA-002-ARCH-02 / Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10), owner-authorized bounded remediation, 19 November 2026. Baseline **d3d6a558cccda2d8e437854c46b5cbfe5ab7b9f4**, branch **feature/ha-002-a**, [draft PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6). This section supersedes historical implementation/pending-design statements below. It records implementing-agent evidence, **not independent acceptance**. HA-002-ARCH-01 remains unavailable as a verified standalone reference.
+
+## Finding ? correction ? verification
+
+| Finding / task | Correction and evidence source | Disposition |
+|---|---|---|
+| F01 / R01-01 | Application ICityResolver, Infrastructure PostgresCityResolver, HomeController; RemediationTests trusted-host and actual HTTP tests | Implemented; explicit localhost/127.0.0.1 configuration; active synthetic .test domains only; unknown/inactive reject; primary/alias redirect ignores forwarded host and port; another city's results remain isolated. No real DNS activation. Existing Almere branding retained; not a complete multi-city presentation feature |
+| F02 / R01-02 | verify-forward-migration.py execute/verify_role_controls | Exact SQLSTATE; exact controlled P0001 failpoint message and hierarchy reason; successful identity/TLS/read controls; unrelated syntax/authentication/unavailable-target errors rejected. No raw secret-bearing diagnostics |
+| F03 / R01-03 | migrated_snapshot/security_snapshot plus independent restricted restore | Seven tables, columns/types/defaults, constraints, indexes, functions, triggers, history, owners, effective grants/default ACLs/memberships; restored runtime/backup negatives and category/district/regional controls. Fresh credentials and revoked temporary restore identity deliberately differ |
+| F04 / R01-04 | New SupportedRegions migration and RemediationTests | Existing BEFORE-row ancestor traversal needed to detect references to a not-yet-inserted new node during multi-row inserts. New forward function includes ancestor parent references. Real two-connection A?B / waiting B?A rejects cycle after A commits; valid competing change and rollback; categories/districts, multi-row insert/update. Existing applied migrations unchanged |
+| F05 / R01-05 | relational_metadata/compare_model in forward runner | Execute actual EF-generated relational schema in separate reference instance; compare canonical PostgreSQL definitions against clean, upgrade and restored paths. Full column type/nullability/default/length/precision, key/FK/check/index definitions; explicit SQL-only inventory retained |
+| F06 / R01-06 | ICategoryLookup/PostgresCategoryLookup; RemediationTests plus existing CatalogTests duplicate constraint | At most 100 active categories; requested translation ? configured city default ? retained legacy name. Tests missing/default/legacy/unsupported language/invalid FK/duplicate/bound. Existing discovery/search labels preserved; no full multilingual site |
+| F07 / R01-07 | QueryEvidenceTests; SafeQueryTimingInterceptor | Actual parameterized EF queries/plans, first/middle/deep pages, mixed active/publication states and filters, full stable counts and cancellation. Existing 10k/250ms test retained. Slow-read event 2001 logs elapsed milliseconds only, threshold 250ms, at most once/minute/process |
+| F08 / R01-08 | RegionalPolicy; new SupportedRegions checks; RemediationTests | Supported product countries NL, languages nl/en. Canonical database values; helper trims and normalizes case. All city/location/translation writes constrained; existing timezone catalog validation preserved. Other syntactically valid ISO codes are unsupported, not declared invalid |
+| F09 / R01-08 | Explicit grants in forward runner | Revoke future default SELECT; grant only current seven public synthetic tables (history backup-only). Newly created private_probe denied to both runtime and backup. No demonstrated private data exposure in baseline |
+| F10 / R01-09 | Current sections of existing reports/database docs/HANDOVER; governance reconciliation plan below | Historical evidence retained and superseded explicitly. Remote final-head verification remains pending until linked results are recorded; independent reviewer/owner gates remain open |
+
+## Evidence scope and repeatability
+
+Use the exact environment printed by `python scripts/verify-forward-migration.py --gate <verified gate evidence.json>`. It creates separate synthetic instances and volumes; never point these tests at the preserved original database. The existing verified source archive gate at `artifacts/ha002a/20261119161050-4b5de6/evidence.json` was reused locally, **not claimed as a fresh original-source backup**. Each R01 rehearsal creates fresh enriched and pre-correction migrated protected archives and independent restores before correction. CI creates its own fresh synthetic baseline gate. Archives/passwords/private inventories stay ignored and protected; only sanitized evidence is published.
+
+Commands: `dotnet restore HappyAlmere.slnx`; Debug and Release `dotnet build HappyAlmere.slnx -c <configuration> --no-restore`; forward runner above; `scripts/Test-Local.ps1 -EnvironmentFile <rehearsal.env>` with HAPPYCITY_EVIDENCE_DIRECTORY; load that environment then `npm run test:browser`; `dotnet package list --project HappyAlmere.slnx --vulnerable --include-transitive --format json`; `npm audit --json`; `python scripts/verify-source.py`; `git diff --check`.
+
+Query workloads/thresholds are encoded before execution in QueryEvidenceTests and documented in migration-policy.md. 10,000 synthetic rows, 30 warmed sequential samples per first/middle/deepest available position, page 50, five scenarios, p95 <=250ms. EXPLAIN uses actual intercepted EF command plus cloned bound synthetic parameters. Artifacts omit parameter values, but plans may contain explicitly synthetic test constants. No real searches or connection strings. Slow-query monitoring measures command execution/reader opening, not complete result consumption; it is a diagnostic signal, not a production SLA or comprehensive monitoring platform. Framework sensitive-data logging remains disabled.
+
+Supported hierarchy transaction isolation is READ COMMITTED. Existing statement advisory lock serializes writes; higher isolation is rejected explicitly. Tests use bounded statement timeouts to distinguish deadlock/hang from expected 23514 cycle rejection. Multi-row insert and update are separately exercised.
+
+SQL-only objects: archival discovery legacy_city_id/legacy_category_id; preserved UUID and legacy indexes plus entries_page_order expression index (exact definitions in rehearsal evidence); catalog.lock_hierarchy, check_hierarchy and timezone validation functions and their triggers (exact restore comparison). EF-generated schema is a definition reference only, not a replacement for migrations or SQL-only controls. PostgreSQL implicit NOT NULL constraints are represented by column nullability rather than compared as extra named constraints.
+
+Restoration does not replay privileged global roles/passwords. Common role capabilities, memberships, effective table/schema/database/function access and default ACLs are compared. Fresh per-instance passwords intentionally differ and are not read into evidence. A restricted temporary restore login assumes the non-login owner only during restoration; login and owner membership are explicitly revoked and verified afterward. Source global administrator secrets are never replayed. PUBLIC function execution is revoked after no-ACL restore.
+
+## Updated acceptance matrix A ? Issue #4
+
+| ID | Current technical disposition / evidence | Acceptance boundary |
+|---|---|---|
+| AC01 | Preserved original database/volumes and applied migration bytes; baseline d3d6a | Independent review pending |
+| AC02 | Reused verified protected original archive; fresh isolated enriched/pre-correction/restricted backups | Local synthetic protection only |
+| AC03 | Extended independent restoration metadata/rows/security comparisons | R01 fresh evidence required |
+| AC04 | Six catalog tables/UUIDs plus retained discovery; actual EF physical parity | Approved D01-D10 retained |
+| AC05 | Full UUID mappings and boundary IDs reconciled by runner | Single-source namespace unchanged |
+| AC06 | Full original rows/relationships/publication reconciled | Synthetic-only |
+| AC07 | Clean/upgrade/no-op and immutable applied history | New forward correction only |
+| AC08 | Exact intended permission denials, positive controls, deny-by-default future tables | No runtime owner/migration privilege |
+| AC09 | VerifyFull TLS, protected external credentials, scans | Production lifecycle deferred |
+| AC10 | Existing regressions plus actual deep filtered EF plans/timings | Local sequential budget only |
+| AC11 | Exact P0001 marker, full rollback, fresh independent recovery | No production RTO/PITR claim |
+| AC12 | Updated evidence and re-review submission | Independent acceptance and owner disposition pending |
+
+## Updated acceptance matrix B ? master HA-002
+
+These classifications concern observed implementation, not architectural acceptance.
+
+| ID | Classification | Actual evidence / remaining limitation |
+|---|---|---|
+| AC01 | implemented | Layered project graph, build and source checks; EF only Infrastructure |
+| AC02 | implemented | Isolated persistent Docker volumes, loopback bindings, verified TLS |
+| AC03 | implemented | Catalog UUID definitions; clean/upgrade/reference metadata comparisons |
+| AC04 | implemented | Cities fields/checks, active state and supported region tests |
+| AC05 | implemented | Trusted synthetic resolver and HTTP host/alias/inactive tests; no live domain activation |
+| AC06 | implemented | Same-city district FK and committed concurrency/multi-row cycle tests |
+| AC07 | implemented | Structured location checks and NL support; no fabricated addresses |
+| AC08 | implemented | Shared category constraints and concurrency tests |
+| AC09 | implemented | Composite translation key/FK and bounded requested/default/legacy lookup |
+| AC10 | implemented | Relational same-city constraints and actual request city scoping; private authorization is future HA-003/004 |
+| AC11 | implemented | Async bounded projected/keyset queries; actual EF deep/filter plans and local budget; production capacity deferred |
+| AC12 | implemented | Separated roles, exact negatives/positive controls, explicit grants and future-table denial |
+| AC13 | partial | Verified local TLS/secrets; production rotation/storage/retention remains HA-009/010, not waived |
+| AC14 | implemented | Immutable applied history, new forward correction, clean/upgrade/no-op and complete recovery comparison |
+| AC15 | implemented | Synthetic-only fixtures; no auth/payments/imports/live deployment |
+| AC16 | implemented | Actual PostgreSQL suites; fresh final-head CI still required at this checkpoint |
+| AC17 | partial | Actual protected local backup/restore demonstrated; production encryption, RTO/RPO and recovery operations deferred HA-009/010 |
+| AC18 | partial | Current documentation/matrices supplied; independent acceptance and owner decision outstanding |
+
+## R01 acceptance checklist ? evidence submission, not self-approval
+
+| ID | Technical evidence / remaining gate |
+|---|---|
+| AC01 | Ten-finding mapping above; future risks and limitations explicit |
+| AC02 | Resolver and HTTP host/canonical/isolation tests; no DNS activation |
+| AC03 | Exact SQLSTATE/reason and positive controls; syntax/auth/unavailable-target false positives rejected |
+| AC04 | Exact controlled P0001 marker plus rollback and independent recovery |
+| AC05 | Full migrated metadata/rows/security comparisons and restored functional negatives; intentional credential/restore differences documented |
+| AC06 | Categories and districts: committed competing-cycle rejection, valid competition/rollback, multi-row insert/update |
+| AC07 | Actual EF plans/deep filter traversal; EF physical definitions; regional checks; unchanged local budget |
+| AC08 | Bounded translation fallback tests and future private-table denial |
+| AC09 | Preserved applied history, source rows/publication, role/TLS/security/discovery regressions |
+| AC10 | Fresh local and exact final-head remote results must be recorded below; no historical results relabeled |
+| AC11 | Isolated environments only; original/main/develop/governance untouched; no merge/deployment |
+| AC12 | Both original matrices above; independent re-review to be requested in Issue #10, Issue #4 and PR #6; no acceptance claim |
+
+## Governance reconciliation plan and residual risks
+
+PR #9 / docs/ha-gov-001 at 871e7a35c95b05b75b047fc1cc048f29e33b7cbc remains separate and unchanged. After explicit integration authorization: compare its document index/protocol with these current top sections, retain review provenance and historical evidence, resolve links/status conflicts, validate all matrices, and submit the combined diff for review. Do not merge that branch as part of R01. HA-003/004 design observations remain design-only. ARCH-01 missing provenance is not replaced with invented findings.
+
+Residual production encryption, retention, credential rotation, operational RTO/RPO, capacity and infrastructure controls are proposed for HA-009/010 disposition; private resource authorization belongs to HA-003/004. These are explicit outstanding requirements, not silently waived or claimed complete. Public deployment remains prohibited. Independent reviewer and owner must decide acceptance and any scope deferral.
+
+## Fresh verification record
+
+Latest local final verification: **104 .NET passed, zero failed/skipped; 42 responsive cases across seven widths; 190 functional/security and five rate assertions passed**. All three suites verified loopback listeners and rejected six non-loopback connections each across three local interfaces, with HTTPS certificate validation retained. Debug/Release builds: zero warnings/errors. Restore succeeded. NuGet direct/transitive and npm audits: zero known vulnerabilities. Fresh isolated rehearsal: **18 checks passed**, including restored district and category controls. Actual EF query evidence contains 11 workload/position measurements with p95 **1.5998?26.9403 ms**, below 250ms. Sanitized artifacts: [evidence/HA-002-A/r01](evidence/HA-002-A/r01/README.md). Scoped current-source and reachable-history credential scan passed with zero findings; dependency direction and development binding configuration checks passed. Exact final-head remote CI is pending until synchronization.
+
+Changed files include Application resolver/lookup contracts; Domain RegionalPolicy; Infrastructure resolver/lookup/elapsed-only interceptor, DbContext, new correction migration/designer and snapshot; HomeController, Program, appsettings; three test files; forward verifier; CI artifact list; existing documentation and sanitized evidence. No package manifests or existing applied migration files changed. Exact list is `git diff --name-only d3d6a558cccda2d8e437854c46b5cbfe5ab7b9f4..HEAD` after commit.
+
+Initial expanded .NET run: 100 passed/4 failed (three overlength synthetic category slugs, one HSTS test-host mapping). Corrected fixtures: 104 passed, zero failures/skips. Earlier rehearsal exposed equivalent PostgreSQL dump serialization for a new draft language check; simplified that uncommitted expression without modifying applied migrations. Restricted sandbox build returned failure without compiler diagnostics; authorized local build passed with zero warnings/errors. These failed attempts are retained as limitations of the working process, not counted as passing runs.
+
+## Historical implementation record (superseded status; evidence retained)
+
 # HA-002 implementation report - HA-002-A recovery/design phase
 
 Date: 19 November 2026 (Europe/Amsterdam). [Assignment: Issue #4](https://github.com/Shiva721254/HappyAlmere/issues/4).

@@ -26,6 +26,8 @@ public sealed class FoundationFactory : WebApplicationFactory<Program>
         {
             services.RemoveAll<IDiscoveryRepository>();
             services.AddSingleton<IDiscoveryRepository, DemoDiscoveryRepository>();
+            services.RemoveAll<ICityResolver>();
+            services.AddSingleton<ICityResolver, TestCityResolver>();
             services.AddControllersWithViews().AddApplicationPart(typeof(SecurityProbeController).Assembly);
         });
     }
@@ -35,6 +37,12 @@ public sealed class FoundationFactory : WebApplicationFactory<Program>
         BaseAddress = new Uri("https://localhost:7143"),
         AllowAutoRedirect = false
     });
+}
+
+public sealed class TestCityResolver : ICityResolver
+{
+    public Task<CityResolution?> ResolveAsync(string hostname, CancellationToken cancellationToken = default) =>
+        Task.FromResult<CityResolution?>(hostname is "localhost" or "127.0.0.1" or "example.test" ? new CityResolution("almere", null) : null);
 }
 
 public sealed class SecurityProbeController : Controller
@@ -115,7 +123,8 @@ public sealed class WebTests
         await using var factory = new FoundationFactory();
         using var client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
-            BaseAddress = new Uri("http://localhost:5143"), AllowAutoRedirect = false
+            BaseAddress = new Uri("http://localhost:5143"),
+            AllowAutoRedirect = false
         });
         using var response = await client.GetAsync("/?q=familie");
         Assert.Equal(HttpStatusCode.TemporaryRedirect, response.StatusCode);
@@ -166,7 +175,8 @@ public sealed class WebTests
                 new Dictionary<string, string?> { ["AllowedHosts"] = "example.test" })));
         using var hostedClient = hosted.CreateClient(new WebApplicationFactoryClientOptions
         {
-            BaseAddress = new Uri("https://example.test"), AllowAutoRedirect = false
+            BaseAddress = new Uri("https://example.test"),
+            AllowAutoRedirect = false
         });
         using var response = await hostedClient.GetAsync("/");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

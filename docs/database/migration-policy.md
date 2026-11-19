@@ -1,3 +1,13 @@
+# Current status ? HA-002-R01 review candidate
+
+The historical proposal below is superseded by the owner-authorized forward implementation and bounded remediation in [Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10). Applied InitialDiscovery and CatalogForward files are preserved. The new SupportedRegions correction adds explicit supported-code checks and closes the multi-row hierarchy insertion gap; it is applied only after a protected migrated backup and independent restore comparison. No original database, main, develop or governance branch is changed. Independent acceptance remains pending.
+
+## Predetermined R01 query verification workload
+
+Retain the existing 10,000-row benchmark and local p95 <=250 ms budget. Additional actual-EF workloads use 10,000 synthetic rows with mixed active/inactive cities/categories and publication states, page size 50, complete stable traversal, and 30 warmed sequential timings at first, middle and deepest available pages. Scenarios: Almere text search; selective category plus text; another city; inactive city; inactive category. Capture parameterized generated SQL and EXPLAIN ANALYZE/BUFFERS, including continuation predicates. Compare complete row counts independently and exercise cancellation. These are local development measurements, not concurrent load or production SLA evidence. Initial execution passed this workload; the full suite still required fixture corrections at this checkpoint. Future reruns retain these thresholds.
+
+## Historical proposal (retained for provenance)
+
 ï»¿# HA-002 migration policy and non-destructive design
 
 Status: proposal for independent review under [Issue #4](https://github.com/Shiva721254/HappyAlmere/issues/4).

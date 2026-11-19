@@ -1,3 +1,5 @@
+> **Current development checkpoint:** HA-002-R01 remediation candidate on `feature/ha-002-a`; [Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10), [draft PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6). See [HANDOVER](HANDOVER.md) and [current report](docs/reports/HA-002-implementation-report.md) for evidence and remaining independent review gates. Earlier phase descriptions below remain historical. No public deployment or merge is authorized.
+
 # HappyAlmere - HA-002-A forward migration review candidate
 
 This branch reconciles existing develop c2964ee with approved V0.1 main 0e7739d.

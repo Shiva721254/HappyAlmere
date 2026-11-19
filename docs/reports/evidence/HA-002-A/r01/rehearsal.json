@@ -1,0 +1,138 @@
+{
+  "baselineCommit": "d3d6a558cccda2d8e437854c46b5cbfe5ab7b9f4",
+  "startedUtc": "2026-11-19T18:11:20.374280+00:00",
+  "sourceGate": "artifacts\\ha002a\\20261119161050-4b5de6\\evidence.json",
+  "checks": {
+    "enrichedBackupRestore": "PASS",
+    "afterBackfillRollback": "PASS: P0001 Controlled migration failure after backfill; full rollback verified",
+    "postFailureFreshRestore": "PASS",
+    "preCorrectionMigratedBackupRestore": "PASS",
+    "completeRowsAssociationsPublication": "PASS",
+    "allUuidMappingsAndBoundaryIds": "PASS",
+    "secondRunNoOp": "PASS",
+    "cleanCreation": "PASS",
+    "efPhysicalDefinitionsCleanAndUpgrade": "PASS",
+    "exactSqlstateAndUnrelatedErrorRejection": "PASS",
+    "futurePrivateTableDenied": "PASS",
+    "tlsRoleReadsAndEscalationNegatives": "PASS",
+    "restrictedLogicalBackup": "PASS",
+    "dedicatedRestoreIdentityAndRevocation": "PASS",
+    "migratedArchiveAllTablesConstraintsIndexes": "PASS",
+    "restoredColumnsFunctionsTriggersHistoryOwnershipEffectivePrivileges": "PASS",
+    "restoredFunctionalNegatives": "PASS",
+    "nonLoginObjectOwnership": "PASS"
+  },
+  "enrichedCounts": {
+    "Categories": 5,
+    "Cities": 1,
+    "DiscoveryEntries": 8,
+    "__EFMigrationsHistory": 1
+  },
+  "enrichedSha256": "abaa67672e4fe13aea38f3becf3bdb480bd255eb077d49a5189b82ca3f58a6bc",
+  "recoverySeconds": 5.002,
+  "preCorrectionBackupSha256": "dc981339cb143a84b701fb6cb25eff9fa7ddc0c8c3c754c8fd2c5470e49b14d0",
+  "rowDigests": {
+    "Cities": "da2eb7e6813b67d233a4e745a2a3d6a5c8f44709c8268d6e3578eee7743dbad6",
+    "Categories": "91e8603da6334368edd904c23cba93d8b1bd556ad17970356a1939c3b1b58e31",
+    "DiscoveryEntries": "61004d54e9d80c626feb03e113da850df8969243cf1df83366272760ca111f07"
+  },
+  "migrationHistory": [
+    {
+      "MigrationId": "20261119000108_InitialDiscovery",
+      "ProductVersion": "10.0.14"
+    },
+    {
+      "MigrationId": "20261119161305_CatalogForward",
+      "ProductVersion": "10.0.14"
+    },
+    {
+      "MigrationId": "20261119175842_SupportedRegions",
+      "ProductVersion": "10.0.14"
+    }
+  ],
+  "sqlOnlyInventory": {
+    "columns": [
+      {
+        "table_schema": "discovery",
+        "table_name": "discovery_entries",
+        "column_name": "legacy_category_id",
+        "data_type": "integer",
+        "udt_name": "int4",
+        "is_nullable": "YES",
+        "column_default": null,
+        "character_maximum_length": null,
+        "numeric_precision": 32,
+        "numeric_scale": 0
+      },
+      {
+        "table_schema": "discovery",
+        "table_name": "discovery_entries",
+        "column_name": "legacy_city_id",
+        "data_type": "integer",
+        "udt_name": "int4",
+        "is_nullable": "YES",
+        "column_default": null,
+        "character_maximum_length": null,
+        "numeric_precision": 32,
+        "numeric_scale": 0
+      }
+    ],
+    "constraints": [],
+    "indexes": [
+      {
+        "schemaname": "catalog",
+        "tablename": "categories",
+        "indexname": "Categories_uuid",
+        "indexdef": "CREATE UNIQUE INDEX \"Categories_uuid\" ON catalog.categories USING btree (id)"
+      },
+      {
+        "schemaname": "catalog",
+        "tablename": "cities",
+        "indexname": "Cities_uuid",
+        "indexdef": "CREATE UNIQUE INDEX \"Cities_uuid\" ON catalog.cities USING btree (id)"
+      },
+      {
+        "schemaname": "discovery",
+        "tablename": "discovery_entries",
+        "indexname": "DiscoveryEntries_uuid",
+        "indexdef": "CREATE UNIQUE INDEX \"DiscoveryEntries_uuid\" ON discovery.discovery_entries USING btree (id)"
+      },
+      {
+        "schemaname": "discovery",
+        "tablename": "discovery_entries",
+        "indexname": "IX_DiscoveryEntries_CategoryId",
+        "indexdef": "CREATE INDEX \"IX_DiscoveryEntries_CategoryId\" ON discovery.discovery_entries USING btree (legacy_category_id)"
+      },
+      {
+        "schemaname": "discovery",
+        "tablename": "discovery_entries",
+        "indexname": "IX_DiscoveryEntries_CityId_IsPublished_CategoryId_Id",
+        "indexdef": "CREATE INDEX \"IX_DiscoveryEntries_CityId_IsPublished_CategoryId_Id\" ON discovery.discovery_entries USING btree (legacy_city_id, is_published, legacy_category_id, legacy_id)"
+      },
+      {
+        "schemaname": "discovery",
+        "tablename": "discovery_entries",
+        "indexname": "IX_DiscoveryEntries_CityId_Slug",
+        "indexdef": "CREATE UNIQUE INDEX \"IX_DiscoveryEntries_CityId_Slug\" ON discovery.discovery_entries USING btree (legacy_city_id, slug)"
+      },
+      {
+        "schemaname": "discovery",
+        "tablename": "discovery_entries",
+        "indexname": "entries_page_order",
+        "indexdef": "CREATE INDEX entries_page_order ON discovery.discovery_entries USING btree (city_id, ((legacy_id IS NULL)), legacy_id, id) WHERE is_published"
+      }
+    ]
+  },
+  "targetContainers": [
+    "6f32eeaefcbeaef8892d816b67cda7cbe5c4088942d64960b27f21ff02b71bfc",
+    "814345e4e9315eddedb250272e8a325ca76c5b530d6af91366b3a828989caab4",
+    "8ac03f395a84b1874c9daa83add467b856a1dd67897e9d215d09774da7388189",
+    "adc2dfd2fc3e8d1170334d4624568ea99d289a9347c83ac571a60429f708828a",
+    "3c26a821015b373486b55b60410a4c1cf09b67ee236d62b948948f38e148270a",
+    "54149dad563045a4b524e90fd01c6bd31fd347eb2f5c652d0cfd4db88aa60d87",
+    "0df64679ce47e8076b8113b84cd2cb396d13a9f00a2bb796333493b786e9e7e6"
+  ],
+  "regressionContainer": "3c26a821015b373486b55b60410a4c1cf09b67ee236d62b948948f38e148270a",
+  "completedUtc": "2026-11-19T18:12:34.791127+00:00",
+  "status": "PASS"
+}

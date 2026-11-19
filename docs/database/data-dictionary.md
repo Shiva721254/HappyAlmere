@@ -1,3 +1,5 @@
+> **Current status (HA-002-R01, 19 November 2026):** The owner-authorized remediation in [Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10) is a review candidate on feature/ha-002-a. Earlier pending-design statements below are historical and superseded by the [current implementation report](../reports/HA-002-implementation-report.md). Existing applied migrations and original database remain preserved. No independent acceptance, merge or deployment is implied. HA-002-ARCH-01 remains unavailable as a standalone verified source.
+
 # Implemented HA-002-A data dictionary
 
 Review candidate. Physical source of truth: embedded CatalogForward.sql and EF model.

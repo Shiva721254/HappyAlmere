@@ -1,3 +1,7 @@
+## HA-002-R01 local boundary
+
+Trusted city routing uses explicitly configured loopback entries or active synthetic `.test` domains; forwarding headers do not choose city context. AllowedHosts and indexing headers remain application controls, not network isolation. Runtime/backup access uses explicit table grants; future tables receive no automatic SELECT. Supported catalog values are NL and nl/en, with canonical database checks. Other valid regional codes require reviewed expansion. Slow-read warnings contain elapsed milliseconds only; sensitive EF parameter logging stays disabled. Production secret lifecycle/retention/recovery and future private authorization remain outstanding. See the [current report](docs/reports/HA-002-implementation-report.md).
+
 # Security policy and release boundary
 
 HappyAlmere V0.1 is a proprietary, local, read-only prototype with synthetic content.

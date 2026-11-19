@@ -120,6 +120,8 @@ namespace HappyCity.Infrastructure.Migrations
                     b.ToTable("category_translations", "catalog", t =>
                         {
                             t.HasCheckConstraint("translations_language", "language_code ~ '^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$'");
+
+                            t.HasCheckConstraint("translations_supported_language", "language_code = 'nl' OR language_code = 'en'");
                         });
                 });
 
@@ -195,6 +197,8 @@ namespace HappyCity.Infrastructure.Migrations
                             t.HasCheckConstraint("cities_language", "default_language ~ '^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$'");
 
                             t.HasCheckConstraint("cities_slug", "slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'");
+
+                            t.HasCheckConstraint("cities_supported_region", "country_code = 'NL' AND (default_language = 'nl' OR default_language = 'en')");
                         });
                 });
 
@@ -468,6 +472,8 @@ namespace HappyCity.Infrastructure.Migrations
                             t.HasCheckConstraint("locations_country", "country_code ~ '^[A-Z]{2}$'");
 
                             t.HasCheckConstraint("locations_number", "house_number ~ '^[0-9]+$'");
+
+                            t.HasCheckConstraint("locations_supported_country", "country_code = 'NL'");
                         });
                 });
 

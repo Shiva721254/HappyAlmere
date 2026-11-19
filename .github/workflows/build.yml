@@ -70,6 +70,7 @@ jobs:
           path: |
             artifacts/forward/*/evidence.json
             artifacts/forward-tests/performance.json
+            artifacts/forward-tests/r01-query-plans.json
             artifacts/ha002a/*/evidence.json
             artifacts/responsive-results.json
             artifacts/*-*.png

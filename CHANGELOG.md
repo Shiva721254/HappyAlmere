@@ -1,3 +1,11 @@
+## HA-002-R01 ? remediation review candidate, 19 November 2026
+
+- Trusted synthetic city-domain resolution and bounded category translation fallback.
+- New forward supported-region and multi-row hierarchy correction; existing migrations retained.
+- Exact SQLSTATE/failpoint verification; expanded restored schema/role comparisons and deny-by-default future table grants.
+- Committed concurrency, metadata parity, actual EF deep-query plans and safe elapsed-only monitoring tests.
+- Current/historical documentation reconciliation and governance integration plan; no merge/deployment or self-acceptance.
+
 # Changelog
 
 Only observed Git history and actual local changes are recorded. Dates use Europe/Amsterdam.
