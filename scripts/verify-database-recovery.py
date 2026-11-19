@@ -154,7 +154,7 @@ def main():
     succeeded = False
     evidence = {'task':'HA-002-A backup/restore gate','startedUtc':dt.datetime.now(dt.timezone.utc).isoformat(),
                 'implementationBaseline':run('git','rev-parse','HEAD').strip(),
-                'developBaseline':run('git','rev-parse','develop').strip(),
+                'developBaseline':run('git','rev-parse','refs/remotes/origin/develop').strip(),
                 'project':project,'backupProtection':protection,'sourceImage':source['Config']['Image'],
                 'limitations':['Only exact known synthetic fixtures accepted.','Local ACL-protected storage; encryption-at-rest status of host disk not asserted.','Single logical database restore, not point-in-time or production recovery.','Current baseline administrative role design is inventoried, not hardened by this gate.']}
     try:

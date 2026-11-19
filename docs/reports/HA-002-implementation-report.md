@@ -155,3 +155,16 @@ review, not a guarantee against all secret forms. Relative documentation links a
 `git diff --check` passed. Original Infrastructure/entities/migrations diff against
 develop is empty; backup archives are confirmed Git-ignored. No raw dump, globals,
 row snapshot, environment file or private certificate material is staged.
+
+
+## Initial remote CI portability correction
+
+Implementation checkpoint e652622f2d4243dac55aa12e32f2d92e003b81e4 was pushed for review
+in [draft PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6), based on integration,
+without any merge. Initial push run [44557097305](https://github.com/Shiva721254/HappyAlmere/actions/runs/44557097305)
+failed in recovery inventory metadata with Git exit 128: a clean Actions checkout does
+not create a local develop branch. This is not counted as a passed recovery run.
+The correction fetches history with checkout and resolves refs/remotes/origin/develop;
+local resolution was verified as c2964eeff4232dd1f925c63af06f8c97c751b161. Backup/restore,
+TLS, isolation and data checks are unchanged. Corrected CI results are recorded against
+their exact final SHA in Issue #4/PR #6; no pending result is presumed successful.
