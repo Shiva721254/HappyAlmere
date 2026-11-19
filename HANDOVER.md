@@ -2,11 +2,37 @@
 
 ## HA-003-A current execution update
 
+## Verified implementation CI and review handoff
+
+Draft [PR #32](https://github.com/Shiva721254/HappyAlmere/pull/32) targets `integration/ha-001-v02`; branch `feature/ha-003-a`. Implementation checkpoint `3c2b715f6f246033e16f426e63ee042aed5e4e81`; remote-verified tested head `d4ec5512e9fc2b1e9854ecf6068f721c202ebc54`. This documentation follow-up changes no application, migration, test, dependency or workflow code. Its final containing SHA and fresh push/PR results are recorded in the final submission comments on [Issue #26](https://github.com/Shiva721254/HappyAlmere/issues/26) and PR #32, avoiding a fabricated self-referential hash.
+
+| Evidence | Push | Pull request |
+|---|---|---|
+| Actual successful job | [44628202136 / 135927530701](https://github.com/Shiva721254/HappyAlmere/actions/runs/44628202136/job/135927530701) | [44628266329 / 135927759607](https://github.com/Shiva721254/HappyAlmere/actions/runs/44628266329/job/135927759607) |
+| Checkout | d4ec5512e9fc2b1e9854ecf6068f721c202ebc54 | deb05a51b7601326b02b33c687c4ed286a965106 |
+| Job duration | 9m58s | 7m14s |
+| Original tests, Identity disabled | 105 passed, 0 failed/skipped | 105 passed, 0 failed/skipped |
+| Complete enabled suite | 157 passed, 0 failed/skipped | 157 passed, 0 failed/skipped |
+| 10k distinct traversal p95 | 99.5979ms | 116.3922ms |
+| Highest actual EF-query p95 (11 workloads) | 73.5628ms | 82.0012ms |
+| Disabled traversal / max EF p95 | 42.4815 / 60.8093ms | 37.7847 / 63.1087ms |
+| Artifact ID, downloaded and inspected | 14579444748 | 14580218598 |
+| Reachable commits / historical file versions scanned | 33 / 5907 | 34 / 6211 |
+
+Both runs passed restore, Debug/Release, original backup/restore (15 checks), original forward rehearsal (21 checks), new Identity rehearsal (11 checks), dependency audits, source/secret scans, 42 responsive cases, 190 functional/security assertions, five rate assertions, actual HTTPS/network checks and targeted cleanup. All performance thresholds remain **250ms**; these are synthetic sequential measurements, not production capacity. Neither job changed the 20-minute budget.
+
+PR checkout parents are exactly `216df25c5656a979fcf67dfe3a16d07d7d66f154` and `d4ec5512e9fc2b1e9854ecf6068f721c202ebc54`; its tree `a050d58ae9be1f79769edbe595718be6a1b94563` equals the submitted head tree. Identity artifacts independently record their actual checkout SHAs. Push artifact digest: `sha256:20eef78ba433d1ba038b3c60e11e1b1de4353d73e13f7aa90de66f20a3f717d6`; PR: `sha256:e0b55810b3b69869766230c89211c6f801bfd1eb9a42936f4dd5981105b183c3`. Each contains 34 inspected files; no env, database dump, private key, SQL or server-log files. Artifacts expire after seven days; durable counts/provenance remain here and in GitHub comments.
+
+Protected remote refs were rechecked: main `0e7739d3f72f08b095c3316e6680053ae99915f6`, develop `c2964eeff4232dd1f925c63af06f8c97c751b161`, integration `216df25c5656a979fcf67dfe3a16d07d7d66f154`. No merge, deployment, original database access, branch reset, force push or settings change occurred. Six successful local rehearsal containers were stopped; volumes preserved.
+
+The candidate's 24 A-phase criteria and 48 scenarios have concrete code/test/CI routes in ACCEPTANCE.md. Independent **HA-003-A-ARCH-01**, exact-candidate owner acceptance and separate merge/integration authority remain outstanding. No full HA-003 acceptance or closure of DEF-01–08 is claimed. Production key/secret/token protection, sessions, MFA, resource authorization, lifecycle controls, public accounts and business functionality remain excluded/deferred.
+
+
 Implementation checkpoint: `3c2b715f6f246033e16f426e63ee042aed5e4e81` (34 approved paths). The following documentation/whitespace commit preserves its implementation; final remote head and actual push/PR CI will be linked in the submission ledger.
 
 Current branch `feature/ha-003-a`, exact accepted baseline `216df25c5656a979fcf67dfe3a16d07d7d66f154`. [IAM-G04 authorization](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023159754) and [approved #28 contract](https://github.com/Shiva721254/HappyAlmere/issues/28) supersede historical execution snapshots below only within the bounded persistence scope. [INT-G12 passed](https://github.com/Shiva721254/HappyAlmere/issues/27#issuecomment-7022990043); [IAM-G05 passed before implementation](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023218886).
 
-IAM-A01–02 preflight complete; A03–07 entities/context/migration/roles/minimal DI implemented locally; A08–09 verification in progress; A10 draft PR/handover pending. Identity defaults off, with seven functional tables and separate context/history. Existing catalog/discovery source, migrations, original tests and performance thresholds are preserved. Exact authorized changes remain within the 34-path maximum. [Technical dictionary/runbook](docs/database/identity-foundation.md), [acceptance](ACCEPTANCE.md) and [handover](HANDOVER.md) own detailed evidence. Debug/Release builds pass with zero warnings/errors; 157 enabled .NET tests and all 105 original tests with Identity disabled pass (zero failures/skips). Eleven isolated database rehearsal checks, 42 responsive cases, 190 functional/security assertions and five rate assertions pass. NuGet/npm audits report no known vulnerabilities. Exact-head push/PR CI and independent review remain pending.
+IAM-A01–02 preflight complete; A03–07 entities/context/migration/roles/minimal DI implemented locally; A08–09 verification in progress; A10 draft PR/handover pending. Identity defaults off, with seven functional tables and separate context/history. Existing catalog/discovery source, migrations, original tests and performance thresholds are preserved. Exact authorized changes remain within the 34-path maximum. [Technical dictionary/runbook](docs/database/identity-foundation.md), [acceptance](ACCEPTANCE.md) and [handover](HANDOVER.md) own detailed evidence. Debug/Release builds pass with zero warnings/errors; 157 enabled .NET tests and all 105 original tests with Identity disabled pass (zero failures/skips). Eleven isolated database rehearsal checks, 42 responsive cases, 190 functional/security assertions and five rate assertions pass. NuGet/npm audits report no known vulnerabilities. Implementation head d4ec551 passed both push and PR CI; actual links/artifacts are in HANDOVER.md. Final documentation-head CI is reported in the GitHub submission ledger. Independent review remains outstanding.
 
 Owner remains migration coordinator and final approval authority; ChatGPT performs independent HA-003-A-ARCH-01 review. No merge, deployment, public auth endpoints, real accounts, business features or later Identity phases. IAM-OPEN-01–10 and IAM-PRE-D01/D02 are approved as recorded in #28; future cryptographic/session/resource policies remain deferred. Final commit, draft PR and push/PR CI are recorded in the GitHub submission ledger after actual synchronization; no self-referential commit hash is fabricated. Historical content below remains intact.
 

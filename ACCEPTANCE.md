@@ -7,29 +7,29 @@ Sources: [#26 original criteria](https://github.com/Shiva721254/HappyAlmere/issu
 | ID | Requirement | Actual evidence route | Current disposition |
 |---|---|---|---|
 | IAM-A-AC01 | Baseline/authority | IAM-G04 + IAM-G05 comments; git ancestry/path audit | Preflight verified |
-| IAM-A-AC02 | Compatible reviewed dependencies | Identity EF 10.0.14; EF/Npgsql graph; Debug/Release + NuGet audit | Local verified; CI pending |
-| IAM-A-AC03 | UUID accounts/roles and mappings | IdentityPersistenceTests; independent SQL contract | Local verified; exact-head CI pending |
+| IAM-A-AC02 | Compatible reviewed dependencies | Identity EF 10.0.14; EF/Npgsql graph; Debug/Release + NuGet audit | Verified locally and in both implementation CI runs |
+| IAM-A-AC03 | UUID accounts/roles and mappings | IdentityPersistenceTests; independent SQL contract | Verified locally and in both implementation CI runs |
 | IAM-A-AC04 | Infrastructure/layer boundaries | Preserved source verifier; unchanged project references | Local verified |
-| IAM-A-AC05 | Dedicated history/physical schema | IdentityMigrationTests; runner independent contract | Local verified; exact-head CI pending |
-| IAM-A-AC06 | Existing foundation preservation | Original 105 tests; protected blobs; runner original-state snapshots | Local verified; exact-head CI pending |
-| IAM-A-AC07 | Least privilege | IdentityPrivilegeTests; runner full ACL/role/sequence matrix | Local verified; exact-head CI pending |
-| IAM-A-AC08 | Exact denials and controls | 42501/28000 checks with live TLS positive controls; contract mismatch controls | Local verified; exact-head CI pending |
-| IAM-A-AC09 | Actual relational invariants | IdentityPersistenceTests on actual PostgreSQL | Local verified; exact-head CI pending |
-| IAM-A-AC10 | Clean/upgrade/no-op/recovery | verify-identity-foundation.py full state comparison | Local verified; exact-head CI pending |
-| IAM-A-AC11 | Fresh original/new regressions and CI | Original suite default-off; full suite enabled; browser; push and PR CI | Pending |
-| IAM-A-AC12 | Scope/docs/review submission | No auth surface; 34-path maximum; draft PR/handover | Pending submission; acceptance reserved |
+| IAM-A-AC05 | Dedicated history/physical schema | IdentityMigrationTests; runner independent contract | Verified locally and in both implementation CI runs |
+| IAM-A-AC06 | Existing foundation preservation | Original 105 tests; protected blobs; runner original-state snapshots | Verified locally and in both implementation CI runs |
+| IAM-A-AC07 | Least privilege | IdentityPrivilegeTests; runner full ACL/role/sequence matrix | Verified locally and in both implementation CI runs |
+| IAM-A-AC08 | Exact denials and controls | 42501/28000 checks with live TLS positive controls; contract mismatch controls | Verified locally and in both implementation CI runs |
+| IAM-A-AC09 | Actual relational invariants | IdentityPersistenceTests on actual PostgreSQL | Verified locally and in both implementation CI runs |
+| IAM-A-AC10 | Clean/upgrade/no-op/recovery | verify-identity-foundation.py full state comparison | Verified locally and in both implementation CI runs |
+| IAM-A-AC11 | Fresh original/new regressions and CI | Original suite default-off; full suite enabled; browser; push and PR CI | Verified at d4ec551; final documentation-head evidence in GitHub ledger |
+| IAM-A-AC12 | Scope/docs/review submission | No auth surface; 34-path maximum; draft PR/handover | Draft PR #32 submitted; independent acceptance reserved |
 | IAM-EXEC-AC01 | INT-G12/exact baseline | Issue #27 comment7022990043, exact216df25 | Verified |
-| IAM-EXEC-AC02 | Seven functional + history | Independent SQL + actual metadata, IdentityMigrationTests | Local verified; exact-head CI pending |
-| IAM-EXEC-AC03 | Complete physical contract | Column/PK/FK/index/ownership/sequence snapshots and mismatch controls | Local verified; exact-head CI pending |
-| IAM-EXEC-AC04 | Concurrent email uniqueness | Concurrent_normalized_email_insert_is_rejected_by_database | Local verified; exact-head CI pending |
-| IAM-EXEC-AC05 | Framework hashing/concurrency | Framework_managers_round_trip_hash_normalize_and_cascade_all_stores; Stale_framework_concurrency_stamp_rejects_update | Local verified; exact-head CI pending |
-| IAM-EXEC-AC06 | Explicit DML/sequence rights | Full table/column/sequence effective privileges and actual framework operations | Local verified; exact-head CI pending |
-| IAM-EXEC-AC07 | Discovery/backup exclusion | Positive_control_precedes_exact_authorization_denial and runner | Local verified; exact-head CI pending |
-| IAM-EXEC-AC08 | Applied migration preservation | Protected blobs; original-state/history snapshots and original no-op tests | Local verified; exact-head CI pending |
-| IAM-EXEC-AC09 | Identity-inclusive restoration | Coordinated shared-state restore and retired login tests | Local verified; exact-head CI pending |
+| IAM-EXEC-AC02 | Seven functional + history | Independent SQL + actual metadata, IdentityMigrationTests | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC03 | Complete physical contract | Column/PK/FK/index/ownership/sequence snapshots and mismatch controls | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC04 | Concurrent email uniqueness | Concurrent_normalized_email_insert_is_rejected_by_database | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC05 | Framework hashing/concurrency | Framework_managers_round_trip_hash_normalize_and_cascade_all_stores; Stale_framework_concurrency_stamp_rejects_update | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC06 | Explicit DML/sequence rights | Full table/column/sequence effective privileges and actual framework operations | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC07 | Discovery/backup exclusion | Positive_control_precedes_exact_authorization_denial and runner | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC08 | Applied migration preservation | Protected blobs; original-state/history snapshots and original no-op tests | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC09 | Identity-inclusive restoration | Coordinated shared-state restore and retired login tests | Verified locally and in both implementation CI runs |
 | IAM-EXEC-AC10 | No public auth routes | IdentityArchitectureTests endpoint cases; no sign-in/cookie service | Local verified (account-route/DI tests) |
-| IAM-EXEC-AC11 | Allowlist/no secrets/production | Scope diff; source/history scan; task-owned isolated resources | 34/34 approved paths; local scan passed; final CI pending |
-| IAM-EXEC-AC12 | Exact-head handoff/review | New draft PR + actual push/PR logs/artifacts + review request | Pending |
+| IAM-EXEC-AC11 | Allowlist/no secrets/production | Scope diff; source/history scan; task-owned isolated resources | 34/34 approved paths; local and both CI scans passed |
+| IAM-EXEC-AC12 | Exact-head handoff/review | New draft PR + actual push/PR logs/artifacts + review request | Handover supplied; final SHA/checks and review request in GitHub submission ledger; independent acceptance reserved |
 
 ### Scenario-to-test traceability
 
@@ -216,3 +216,5 @@ Source [#23](https://github.com/Shiva721254/HappyAlmere/issues/23); all initiall
 | GOV-G10 | Post-integration integrity/applicable fresh CI | Independent reviewer |
 
 G01–G06 are execution/submission gates, evidenced in docs/README and the final GitHub ledger. G07–G10 remain pending independent review, owner acceptance, separate merge authorization and post-integration checks. INT-G12 cannot close at draft submission or candidate acceptance alone. No issue/PR closure or merge from this task.
+
+Implementation CI provenance and actual numeric results: [HANDOVER](HANDOVER.md#verified-implementation-ci-and-review-handoff). Both d4ec551 push and synthetic-merge PR runs passed; final containing documentation-head results are the Issue #26 / PR #32 submission ledger. Green checks do not grant IAM-G10?12 or parent identity acceptance.
