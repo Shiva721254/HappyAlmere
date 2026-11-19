@@ -16,6 +16,9 @@ public sealed record DiscoveryFilter
             !System.Text.RegularExpressions.Regex.IsMatch(citySlug, @"\A[a-z0-9]+(-[a-z0-9]+)*\z"))
             throw new ArgumentException("A valid explicit city scope is required.", nameof(citySlug));
         CitySlug = citySlug;
+        // PostgreSQL text cannot contain NUL; reject it before any repository I/O.
+        if (category?.Contains('\0') == true || query?.Contains('\0') == true)
+            throw new ArgumentException("Search input contains an unsupported character.");
         if (category?.Length > MaximumCategoryLength || query?.Length > MaximumQueryLength)
             throw new ArgumentException("Search input exceeds the supported length.");
 

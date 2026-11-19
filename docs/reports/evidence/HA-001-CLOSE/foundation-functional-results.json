@@ -1,0 +1,1540 @@
+{
+  "timestamp": "2026-11-19T14:17:02.354Z",
+  "mode": "functional",
+  "checks": [
+    {
+      "name": "320 / status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "320 / no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "320 cards",
+      "actual": 6,
+      "expected": 6,
+      "status": "PASS"
+    },
+    {
+      "name": "320 stylesheet loaded",
+      "actual": "0px",
+      "expected": "0px",
+      "status": "PASS"
+    },
+    {
+      "name": "320 skip link focused",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "320 skip target",
+      "actual": "#main",
+      "expected": "#main",
+      "status": "PASS"
+    },
+    {
+      "name": "320 /Home/Business status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "320 /Home/Business no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "320 /Home/Privacy status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "320 /Home/Privacy no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "320 /?q=does-not-exist status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "320 /?q=does-not-exist no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "320 boundary category no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "375 / status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "375 / no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "375 cards",
+      "actual": 6,
+      "expected": 6,
+      "status": "PASS"
+    },
+    {
+      "name": "375 stylesheet loaded",
+      "actual": "0px",
+      "expected": "0px",
+      "status": "PASS"
+    },
+    {
+      "name": "375 skip link focused",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "375 skip target",
+      "actual": "#main",
+      "expected": "#main",
+      "status": "PASS"
+    },
+    {
+      "name": "375 /Home/Business status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "375 /Home/Business no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "375 /Home/Privacy status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "375 /Home/Privacy no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "375 /?q=does-not-exist status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "375 /?q=does-not-exist no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "375 boundary category no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "430 / status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "430 / no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "430 cards",
+      "actual": 6,
+      "expected": 6,
+      "status": "PASS"
+    },
+    {
+      "name": "430 stylesheet loaded",
+      "actual": "0px",
+      "expected": "0px",
+      "status": "PASS"
+    },
+    {
+      "name": "430 skip link focused",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "430 skip target",
+      "actual": "#main",
+      "expected": "#main",
+      "status": "PASS"
+    },
+    {
+      "name": "430 /Home/Business status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "430 /Home/Business no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "430 /Home/Privacy status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "430 /Home/Privacy no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "430 /?q=does-not-exist status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "430 /?q=does-not-exist no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "430 boundary category no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "768 / status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "768 / no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "768 cards",
+      "actual": 6,
+      "expected": 6,
+      "status": "PASS"
+    },
+    {
+      "name": "768 stylesheet loaded",
+      "actual": "0px",
+      "expected": "0px",
+      "status": "PASS"
+    },
+    {
+      "name": "768 skip link focused",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "768 skip target",
+      "actual": "#main",
+      "expected": "#main",
+      "status": "PASS"
+    },
+    {
+      "name": "768 /Home/Business status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "768 /Home/Business no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "768 /Home/Privacy status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "768 /Home/Privacy no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "768 /?q=does-not-exist status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "768 /?q=does-not-exist no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "768 boundary category no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1024 / status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1024 / no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1024 cards",
+      "actual": 6,
+      "expected": 6,
+      "status": "PASS"
+    },
+    {
+      "name": "1024 stylesheet loaded",
+      "actual": "0px",
+      "expected": "0px",
+      "status": "PASS"
+    },
+    {
+      "name": "1024 skip link focused",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1024 skip target",
+      "actual": "#main",
+      "expected": "#main",
+      "status": "PASS"
+    },
+    {
+      "name": "1024 /Home/Business status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1024 /Home/Business no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1024 /Home/Privacy status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1024 /Home/Privacy no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1024 /?q=does-not-exist status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1024 /?q=does-not-exist no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1024 boundary category no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1440 / status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1440 / no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1440 cards",
+      "actual": 6,
+      "expected": 6,
+      "status": "PASS"
+    },
+    {
+      "name": "1440 stylesheet loaded",
+      "actual": "0px",
+      "expected": "0px",
+      "status": "PASS"
+    },
+    {
+      "name": "1440 skip link focused",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1440 skip target",
+      "actual": "#main",
+      "expected": "#main",
+      "status": "PASS"
+    },
+    {
+      "name": "1440 /Home/Business status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1440 /Home/Business no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1440 /Home/Privacy status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1440 /Home/Privacy no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1440 /?q=does-not-exist status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1440 /?q=does-not-exist no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1440 boundary category no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1920 / status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1920 / no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1920 cards",
+      "actual": 6,
+      "expected": 6,
+      "status": "PASS"
+    },
+    {
+      "name": "1920 stylesheet loaded",
+      "actual": "0px",
+      "expected": "0px",
+      "status": "PASS"
+    },
+    {
+      "name": "1920 skip link focused",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1920 skip target",
+      "actual": "#main",
+      "expected": "#main",
+      "status": "PASS"
+    },
+    {
+      "name": "1920 /Home/Business status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1920 /Home/Business no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1920 /Home/Privacy status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1920 /Home/Privacy no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1920 /?q=does-not-exist status",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "1920 /?q=does-not-exist no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "1920 boundary category no overflow",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "Navigation /",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Navigation /?category=activiteiten",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Navigation /?category=besparen",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Navigation /?category=diensten",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Navigation /Home/Business",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Navigation /?category=eten",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Navigation /?category=winkelen",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Navigation /Home/Privacy",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Form search family result",
+      "actual": 1,
+      "expected": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "Form search expected title",
+      "actual": "Een familiedag plannen",
+      "expected": "Een familiedag plannen",
+      "status": "PASS"
+    },
+    {
+      "name": "Form retains category",
+      "actual": "eten",
+      "expected": "eten",
+      "status": "PASS"
+    },
+    {
+      "name": "Combined filter result",
+      "actual": 1,
+      "expected": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "Search payload round-trips as data",
+      "actual": "\"><img src=x onerror=alert(1)>",
+      "expected": "\"><img src=x onerror=alert(1)>",
+      "status": "PASS"
+    },
+    {
+      "name": "No injected image",
+      "actual": 0,
+      "expected": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Category markup encoded",
+      "actual": 0,
+      "expected": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Input q=xxxxxxxxxxxxxxxxxx length 102",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Input q=xxxxxxxxxxxxxxxxxx length 103",
+      "actual": 400,
+      "expected": 400,
+      "status": "PASS"
+    },
+    {
+      "name": "Input category=xxxxxxxxxxx length 39",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Input category=xxxxxxxxxxx length 40",
+      "actual": 400,
+      "expected": 400,
+      "status": "PASS"
+    },
+    {
+      "name": "Input q=%25 length 5",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Input q=%00 length 5",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "Input category=unknown length 16",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "HTTP route /",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "/ header content-security-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/ header x-content-type-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/ header x-frame-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/ header referrer-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/ header permissions-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/ header x-robots-tag",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/ no server banner",
+      "actual": false,
+      "expected": false,
+      "status": "PASS"
+    },
+    {
+      "name": "HTTP route /css/site.css",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "/css/site.css header content-security-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/css/site.css header x-content-type-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/css/site.css header x-frame-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/css/site.css header referrer-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/css/site.css header permissions-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/css/site.css header x-robots-tag",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/css/site.css no server banner",
+      "actual": false,
+      "expected": false,
+      "status": "PASS"
+    },
+    {
+      "name": "HTTP route /not-found",
+      "actual": 404,
+      "expected": 404,
+      "status": "PASS"
+    },
+    {
+      "name": "/not-found header content-security-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/not-found header x-content-type-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/not-found header x-frame-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/not-found header referrer-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/not-found header permissions-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/not-found header x-robots-tag",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/not-found no server banner",
+      "actual": false,
+      "expected": false,
+      "status": "PASS"
+    },
+    {
+      "name": "HTTP route /Home/Error",
+      "actual": 500,
+      "expected": 500,
+      "status": "PASS"
+    },
+    {
+      "name": "/Home/Error header content-security-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/Home/Error header x-content-type-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/Home/Error header x-frame-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/Home/Error header referrer-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/Home/Error header permissions-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/Home/Error header x-robots-tag",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/Home/Error no server banner",
+      "actual": false,
+      "expected": false,
+      "status": "PASS"
+    },
+    {
+      "name": "HTTP route /.env",
+      "actual": 404,
+      "expected": 404,
+      "status": "PASS"
+    },
+    {
+      "name": "/.env header content-security-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/.env header x-content-type-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/.env header x-frame-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/.env header referrer-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/.env header permissions-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/.env header x-robots-tag",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/.env no server banner",
+      "actual": false,
+      "expected": false,
+      "status": "PASS"
+    },
+    {
+      "name": "HTTP route /appsettings.json",
+      "actual": 404,
+      "expected": 404,
+      "status": "PASS"
+    },
+    {
+      "name": "/appsettings.json header content-security-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/appsettings.json header x-content-type-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/appsettings.json header x-frame-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/appsettings.json header referrer-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/appsettings.json header permissions-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/appsettings.json header x-robots-tag",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/appsettings.json no server banner",
+      "actual": false,
+      "expected": false,
+      "status": "PASS"
+    },
+    {
+      "name": "HTTP route /test/throw",
+      "actual": 404,
+      "expected": 404,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/throw header content-security-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/throw header x-content-type-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/throw header x-frame-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/throw header referrer-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/throw header permissions-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/throw header x-robots-tag",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/throw no server banner",
+      "actual": false,
+      "expected": false,
+      "status": "PASS"
+    },
+    {
+      "name": "HTTP route /test/unsafe",
+      "actual": 404,
+      "expected": 404,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/unsafe header content-security-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/unsafe header x-content-type-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/unsafe header x-frame-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/unsafe header referrer-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/unsafe header permissions-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/unsafe header x-robots-tag",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/unsafe no server banner",
+      "actual": false,
+      "expected": false,
+      "status": "PASS"
+    },
+    {
+      "name": "HTTP route /test/token",
+      "actual": 404,
+      "expected": 404,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/token header content-security-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/token header x-content-type-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/token header x-frame-options",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/token header referrer-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/token header permissions-policy",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/token header x-robots-tag",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "/test/token no server banner",
+      "actual": false,
+      "expected": false,
+      "status": "PASS"
+    },
+    {
+      "name": "Live HTTP redirect",
+      "actual": 307,
+      "expected": 307,
+      "status": "PASS"
+    },
+    {
+      "name": "Live redirect destination",
+      "actual": "https://localhost:7243/?q=familie",
+      "expected": "https://localhost:7243/?q=familie",
+      "status": "PASS"
+    },
+    {
+      "name": "Live host rejection",
+      "actual": 400,
+      "expected": 400,
+      "status": "PASS"
+    },
+    {
+      "name": "POST to read-only index rejected",
+      "actual": 405,
+      "expected": 405,
+      "status": "PASS"
+    },
+    {
+      "name": "No browser JS errors",
+      "actual": 0,
+      "expected": 0,
+      "status": "PASS"
+    }
+  ],
+  "layouts": [
+    {
+      "route": "/",
+      "width": 320,
+      "scrollWidth": 320,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Business",
+      "width": 320,
+      "scrollWidth": 320,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Privacy",
+      "width": 320,
+      "scrollWidth": 320,
+      "overflowing": []
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "width": 320,
+      "scrollWidth": 320,
+      "overflowing": []
+    },
+    {
+      "route": "valid-boundary-category-30W",
+      "width": 320,
+      "scrollWidth": 320
+    },
+    {
+      "route": "/",
+      "width": 375,
+      "scrollWidth": 375,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Business",
+      "width": 375,
+      "scrollWidth": 375,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Privacy",
+      "width": 375,
+      "scrollWidth": 375,
+      "overflowing": []
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "width": 375,
+      "scrollWidth": 375,
+      "overflowing": []
+    },
+    {
+      "route": "valid-boundary-category-30W",
+      "width": 375,
+      "scrollWidth": 375
+    },
+    {
+      "route": "/",
+      "width": 430,
+      "scrollWidth": 430,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Business",
+      "width": 430,
+      "scrollWidth": 430,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Privacy",
+      "width": 430,
+      "scrollWidth": 430,
+      "overflowing": []
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "width": 430,
+      "scrollWidth": 430,
+      "overflowing": []
+    },
+    {
+      "route": "valid-boundary-category-30W",
+      "width": 430,
+      "scrollWidth": 430
+    },
+    {
+      "route": "/",
+      "width": 768,
+      "scrollWidth": 768,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Business",
+      "width": 768,
+      "scrollWidth": 768,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Privacy",
+      "width": 768,
+      "scrollWidth": 768,
+      "overflowing": []
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "width": 768,
+      "scrollWidth": 768,
+      "overflowing": []
+    },
+    {
+      "route": "valid-boundary-category-30W",
+      "width": 768,
+      "scrollWidth": 768
+    },
+    {
+      "route": "/",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Business",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Privacy",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "overflowing": []
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "overflowing": []
+    },
+    {
+      "route": "valid-boundary-category-30W",
+      "width": 1024,
+      "scrollWidth": 1024
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Business",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Privacy",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "overflowing": []
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "overflowing": []
+    },
+    {
+      "route": "valid-boundary-category-30W",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "route": "/",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Business",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "overflowing": []
+    },
+    {
+      "route": "/Home/Privacy",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "overflowing": []
+    },
+    {
+      "route": "/?q=does-not-exist",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "overflowing": []
+    },
+    {
+      "route": "valid-boundary-category-30W",
+      "width": 1920,
+      "scrollWidth": 1920
+    }
+  ],
+  "timings": [
+    {
+      "ttfbMs": 2.5,
+      "loadMs": 26.900000000023283,
+      "domContentLoadedMs": 23.800000000046566,
+      "htmlBytes": 4741,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 3912
+        }
+      ]
+    },
+    {
+      "ttfbMs": 3,
+      "loadMs": 27.900000000023283,
+      "domContentLoadedMs": 24.600000000034925,
+      "htmlBytes": 4741,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 3912
+        }
+      ]
+    },
+    {
+      "ttfbMs": 4.5,
+      "loadMs": 86.60000000003492,
+      "domContentLoadedMs": 83,
+      "htmlBytes": 4741,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 3912
+        }
+      ]
+    },
+    {
+      "ttfbMs": 3.900000000023283,
+      "loadMs": 30.599999999976717,
+      "domContentLoadedMs": 26.400000000023283,
+      "htmlBytes": 4741,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 3912
+        }
+      ]
+    },
+    {
+      "ttfbMs": 4.099999999976717,
+      "loadMs": 30.899999999965075,
+      "domContentLoadedMs": 28.099999999976717,
+      "htmlBytes": 4741,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 3912
+        }
+      ]
+    }
+  ],
+  "browser": "159.0.8154.6",
+  "navigationDestinations": [
+    "/",
+    "/?category=activiteiten",
+    "/?category=besparen",
+    "/?category=diensten",
+    "/Home/Business",
+    "/?category=eten",
+    "/?category=winkelen",
+    "/Home/Privacy"
+  ],
+  "headers": {
+    "/": {
+      "content-type": "text/html; charset=utf-8",
+      "date": "Thu, 19 Nov 2026 14:17:07 GMT",
+      "transfer-encoding": "chunked",
+      "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "no-referrer",
+      "permissions-policy": "camera=(), microphone=(), geolocation=()",
+      "x-robots-tag": "noindex, nofollow"
+    },
+    "/css/site.css": {
+      "content-length": "3912",
+      "content-type": "text/css",
+      "date": "Thu, 19 Nov 2026 14:17:07 GMT",
+      "accept-ranges": "bytes",
+      "etag": "\"1dd7830313050c8\"",
+      "last-modified": "Thu, 19 Nov 2026 14:13:47 GMT",
+      "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "no-referrer",
+      "permissions-policy": "camera=(), microphone=(), geolocation=()",
+      "x-robots-tag": "noindex, nofollow"
+    },
+    "/not-found": {
+      "content-length": "0",
+      "date": "Thu, 19 Nov 2026 14:17:07 GMT",
+      "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "no-referrer",
+      "permissions-policy": "camera=(), microphone=(), geolocation=()",
+      "x-robots-tag": "noindex, nofollow"
+    },
+    "/Home/Error": {
+      "content-type": "text/html; charset=utf-8",
+      "date": "Thu, 19 Nov 2026 14:17:07 GMT",
+      "cache-control": "no-store,no-cache",
+      "pragma": "no-cache",
+      "transfer-encoding": "chunked",
+      "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "no-referrer",
+      "permissions-policy": "camera=(), microphone=(), geolocation=()",
+      "x-robots-tag": "noindex, nofollow"
+    },
+    "/.env": {
+      "content-length": "0",
+      "date": "Thu, 19 Nov 2026 14:17:07 GMT",
+      "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "no-referrer",
+      "permissions-policy": "camera=(), microphone=(), geolocation=()",
+      "x-robots-tag": "noindex, nofollow"
+    },
+    "/appsettings.json": {
+      "content-length": "0",
+      "date": "Thu, 19 Nov 2026 14:17:07 GMT",
+      "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "no-referrer",
+      "permissions-policy": "camera=(), microphone=(), geolocation=()",
+      "x-robots-tag": "noindex, nofollow"
+    },
+    "/test/throw": {
+      "content-length": "0",
+      "date": "Thu, 19 Nov 2026 14:17:07 GMT",
+      "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "no-referrer",
+      "permissions-policy": "camera=(), microphone=(), geolocation=()",
+      "x-robots-tag": "noindex, nofollow"
+    },
+    "/test/unsafe": {
+      "content-length": "0",
+      "date": "Thu, 19 Nov 2026 14:17:07 GMT",
+      "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "no-referrer",
+      "permissions-policy": "camera=(), microphone=(), geolocation=()",
+      "x-robots-tag": "noindex, nofollow"
+    },
+    "/test/token": {
+      "content-length": "0",
+      "date": "Thu, 19 Nov 2026 14:17:07 GMT",
+      "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "referrer-policy": "no-referrer",
+      "permissions-policy": "camera=(), microphone=(), geolocation=()",
+      "x-robots-tag": "noindex, nofollow"
+    }
+  },
+  "badHostHeaders": {
+    "content-length": "334",
+    "content-type": "text/html",
+    "date": "Thu, 19 Nov 2026 14:17:07 GMT"
+  },
+  "privacyLatency": {
+    "samples": 50,
+    "medianMs": 2.0901999999996406,
+    "p95Ms": 5.2447000000001935,
+    "minMs": 1.899899999999434,
+    "maxMs": 12.646099999999933
+  },
+  "summary": {
+    "passed": 190,
+    "failed": 0
+  }
+}

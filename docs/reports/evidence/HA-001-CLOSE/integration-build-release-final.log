@@ -1,0 +1,11 @@
+  HappyCity.Domain -> <integration-workspace>\HappyAlmere_V0.1_MVC\src\HappyCity.Domain\bin\Release\net10.0\HappyCity.Domain.dll
+  HappyCity.Application -> <integration-workspace>\HappyAlmere_V0.1_MVC\src\HappyCity.Application\bin\Release\net10.0\HappyCity.Application.dll
+  HappyCity.Infrastructure -> <integration-workspace>\HappyAlmere_V0.1_MVC\src\HappyCity.Infrastructure\bin\Release\net10.0\HappyCity.Infrastructure.dll
+  HappyCity.Web -> <integration-workspace>\HappyAlmere_V0.1_MVC\src\HappyCity.Web\bin\Release\net10.0\HappyCity.Web.dll
+  HappyCity.FoundationTests -> <integration-workspace>\HappyAlmere_V0.1_MVC\tests\HappyCity.FoundationTests\bin\Release\net10.0\HappyCity.FoundationTests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:13.12

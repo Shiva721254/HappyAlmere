@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-11-19T10:26:33.567Z",
+  "mode": "rate",
+  "checks": [
+    {
+      "name": "First 120 discovery requests succeed",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "Separate context on same transport peer shares budget",
+      "actual": 429,
+      "expected": 429,
+      "status": "PASS"
+    },
+    {
+      "name": "429 supplies bounded Retry-After",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "Privacy remains available",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "429 CSP present",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    }
+  ],
+  "layouts": [],
+  "timings": [],
+  "browser": "149.0.7827.55",
+  "rateHeaders": {
+    "content-length": "0",
+    "date": "Thu, 19 Nov 2026 10:26:33 GMT",
+    "retry-after": "60",
+    "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "referrer-policy": "no-referrer",
+    "permissions-policy": "camera=(), microphone=(), geolocation=()",
+    "x-robots-tag": "noindex, nofollow"
+  },
+  "summary": {
+    "passed": 5,
+    "failed": 0
+  }
+}

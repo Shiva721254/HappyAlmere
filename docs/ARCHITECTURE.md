@@ -1,5 +1,19 @@
 # V0.1 architecture
 
+## Current integration candidate
+
+The dedicated integration branch preserves existing EF Core/PostgreSQL entities,
+migration and projected/cancellation-aware repository, while retaining the approved
+MVC/Razor layout, centralized category IDs and normalized transport-peer limiter.
+Infrastructure owns DbContext/Npgsql; the demo repository exists only in tests.
+The approved project graph is unchanged. Existing integer/public-schema models are
+not yet compliant with the supplied UUID/catalog master; see the HA-002 gap analysis.
+No new schema, migration, identity or payment feature is introduced.
+
+The foundation descriptions below are historical design records. Where they describe
+an in-memory runtime repository or future-only persistence, the existing PostgreSQL
+implementation supersedes them on this integration branch only.
+
 Historical V0.1 baseline. See [V0.2 database discovery](V0.2-DATABASE-DISCOVERY.md)
 for the current persistence implementation and its approved scope.
 
@@ -76,3 +90,23 @@ The CI workflow lives at the actual repository root.
 The frontend uses native Razor/HTML/CSS without JavaScript or external assets.
 Small-screen rules are the base; larger layouts use a min-width breakpoint.
 Shared components and framework DI remain sufficient for this scope.
+
+## HA-001-R01 refinements
+
+DiscoveryCategories holds stable city-independent category IDs in Domain; repository
+and Razor reference those IDs. Razor derives maxlength from DiscoveryFilter.
+Inherited overflow-wrap:anywhere allows accepted unbroken text to remain readable;
+flex/grid children have min-width:0. No global overflow hiding is used.
+Rate limiting partitions by normalized transport peer with no forwarded-header trust,
+retaining the original per-bucket count/window and zero queue. See SECURITY.md for
+NAT/proxy and public-hosting limitations. No dependency direction or framework changed.
+
+## HA-001-R02 independent review remediation
+
+The existing layered MVC architecture is accepted in principle by the independent
+review; no rewrite is authorized or performed. Razor/CSS/configuration edits are
+formatting only. Browser QA now has a private development-only npm package and
+lockfile; no JavaScript dependency enters the application or .NET project graph.
+The Windows local/CI harness preserves trusted HTTPS and verifies actual loopback
+sockets. Planned multi-city and persistence requirements remain unimplemented and
+are tracked in [the risk register](security/security-risk-register.md).

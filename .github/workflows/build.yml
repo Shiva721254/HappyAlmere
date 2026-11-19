@@ -1,26 +1,64 @@
-name: HappyAlmere verification
+name: Reconciled foundation and PostgreSQL verification
 on: [push, pull_request]
 permissions:
   contents: read
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
-      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
         with:
           global-json-file: global.json
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
       - run: dotnet restore HappyAlmere.slnx
-      - run: dotnet build HappyAlmere.slnx --configuration Release --no-restore
-      - name: Initialize isolated TLS PostgreSQL and apply migrations
+      - run: dotnet build HappyAlmere.slnx -c Debug --no-restore
+      - run: dotnet build HappyAlmere.slnx -c Release --no-restore
+      - name: Initialize isolated TLS PostgreSQL
         shell: pwsh
         run: ./scripts/Initialize-LocalDatabase.ps1
-      - name: Foundation and real PostgreSQL integration tests
+      - name: Foundation and actual PostgreSQL tests
         shell: pwsh
         run: ./scripts/Test-Local.ps1
-      - name: Stop local database
+      - run: dotnet list HappyAlmere.slnx package --vulnerable --include-transitive
+      - run: npm ci --ignore-scripts
+      - run: npm audit --audit-level=high
+      - run: python3 scripts/verify-source.py
+      - run: npm run browser:install -- --with-deps
+      - name: Trust only the ephemeral local HTTPS certificate
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3-tools
+          mkdir -p artifacts/ci "$HOME/.pki/nssdb"
+          dotnet dev-certs https --export-path artifacts/ci/localhost.crt --format PEM
+          if [ ! -f "$HOME/.pki/nssdb/cert9.db" ]; then
+            certutil -N -d "sql:$HOME/.pki/nssdb" --empty-password
+          fi
+          certutil -A -d "sql:$HOME/.pki/nssdb" -n HappyAlmereCI -t "P,," -i artifacts/ci/localhost.crt
+          sudo cp artifacts/ci/localhost.crt /usr/local/share/ca-certificates/happyalmere-ci.crt
+          sudo update-ca-certificates
+      - name: Trusted HTTPS PostgreSQL browser, responsive, security and network tests
+        shell: pwsh
+        run: |
+          . ./scripts/Load-LocalEnvironment.ps1
+          npm run test:browser
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        if: ${{ !cancelled() }}
+        with:
+          name: integration-verification
+          retention-days: 7
+          path: |
+            artifacts/responsive-results.json
+            artifacts/*-*.png
+            artifacts/r02/browser/*-results.json
+            artifacts/r02/browser/*-network.json
+      - name: Stop CI database without deleting volumes
         if: always()
-        run: docker compose down
+        run: docker compose stop postgres

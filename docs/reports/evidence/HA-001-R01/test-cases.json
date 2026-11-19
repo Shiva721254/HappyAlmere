@@ -1,0 +1,167 @@
+[
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/\", expected: \"Haal meer uit\")",
+    "outcome": "Passed",
+    "duration": "00:00:00.0345239"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Search_budget_returns_429_without_blocking_privacy",
+    "outcome": "Passed",
+    "duration": "00:00:00.1069624"
+  },
+  {
+    "name": "HappyCity.FoundationTests.DiscoveryTests.Cancellation_is_propagated",
+    "outcome": "Passed",
+    "duration": "00:00:00.0017351"
+  },
+  {
+    "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: null, query: null, count: 6)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0000049"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Rate_limit_isolates_peers_and_ignores_spoofed_forwarding_headers",
+    "outcome": "Passed",
+    "duration": "00:00:00.1000869"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?q=familie\", expected: \"Een familiedag plannen\")",
+    "outcome": "Passed",
+    "duration": "00:00:00.0466721"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Oversized_input_is_rejected(name: \"category\", length: 31)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0280641"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?category=eten\", expected: \"Lokaal lunchen\")",
+    "outcome": "Passed",
+    "duration": "00:00:00.5461509"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Hsts_is_emitted_for_non_loopback_https_host",
+    "outcome": "Passed",
+    "duration": "00:00:00.0628029"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?category=besparen\", expected: \"Winkelaanbiedingen\")",
+    "outcome": "Passed",
+    "duration": "00:00:00.0652508"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Security_headers_cover_errors_and_static_files(path: \"/not-found\", status: NotFound)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0129253"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?category=winkelen\", expected: \"Ontdek je buurt\")",
+    "outcome": "Passed",
+    "duration": "00:00:00.0284946"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Untrusted_host_is_rejected",
+    "outcome": "Passed",
+    "duration": "00:00:00.0146997"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?category=activiteiten\", expected: \"Een wandeling aan het water\")",
+    "outcome": "Passed",
+    "duration": "00:00:00.0352273"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Http_redirects_to_https",
+    "outcome": "Passed",
+    "duration": "00:00:00.0132925"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?category=diensten\", expected: \"Huis en tuin\")",
+    "outcome": "Passed",
+    "duration": "00:00:00.0291401"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Valid_csrf_token_succeeds_but_tampered_token_fails",
+    "outcome": "Passed",
+    "duration": "00:00:00.0259546"
+  },
+  {
+    "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: null, query: \" FAMILIE \", count: 1)",
+    "outcome": "Passed",
+    "duration": "00:00:00.2404512"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Unsafe_action_requires_antiforgery_token",
+    "outcome": "Passed",
+    "duration": "00:00:00.0164774"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Security_headers_cover_errors_and_static_files(path: \"/test/throw\", status: InternalServerError)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0383777"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/Home/Privacy\", expected: \"Privacy\")",
+    "outcome": "Passed",
+    "duration": "00:00:00.0303080"
+  },
+  {
+    "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: null, query: \"does-not-exist\", count: 0)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0000068"
+  },
+  {
+    "name": "HappyCity.FoundationTests.DiscoveryTests.Search_limits_are_enforced_at_application_boundary",
+    "outcome": "Passed",
+    "duration": "00:00:00.0009926"
+  },
+  {
+    "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: \" ETEN \", query: \"lunch\", count: 1)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0000119"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Security_headers_cover_errors_and_static_files(path: \"/css/site.css\", status: OK)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0149888"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Oversized_input_is_rejected(name: \"q\", length: 101)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0158489"
+  },
+  {
+    "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: \"unknown\", query: null, count: 0)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0000056"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/Home/Business\", expected: \"Voor ondernemers\")",
+    "outcome": "Passed",
+    "duration": "00:00:00.0252594"
+  },
+  {
+    "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: \"activiteiten\", query: null, count: 2)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0000490"
+  },
+  {
+    "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: \"diensten\", query: \"familie\", count: 0)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0000360"
+  },
+  {
+    "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: null, query: \"   \", count: 6)",
+    "outcome": "Passed",
+    "duration": "00:00:00.0002550"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?q=does-not-exist\", expected: \"Geen resultaten\")",
+    "outcome": "Passed",
+    "duration": "00:00:00.0293815"
+  },
+  {
+    "name": "HappyCity.FoundationTests.WebTests.Search_encodes_untrusted_text_and_retains_category",
+    "outcome": "Passed",
+    "duration": "00:00:00.0276092"
+  }
+]

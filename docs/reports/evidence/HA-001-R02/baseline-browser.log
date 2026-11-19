@@ -1,0 +1,112 @@
+> happyalmere-browser-verification@0.1.0 test:browser
+> node scripts/run-browser-tests.cjs
+
+A trusted certificate was found: 0EF1B53EC9D4426651329A0769310D0608E6443C - CN=localhost - Valid from 2026-02-09 13:55:10Z to 2027-02-09 13:55:10Z - IsHttpsDevelopmentCertificate: true - IsExportable: true
+A valid HTTPS certificate is already present.
+{
+    "suite":  "responsive",
+    "result":  "PASS",
+    "listeners":  [
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  7143
+                      },
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  5143
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  7143
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  5143
+                      }
+                  ],
+    "nonLoopbackInterfacesProbed":  3,
+    "nonLoopbackConnectionsRejected":  6,
+    "limitation":  "Local interface probes and process socket inventory; not an external firewall or public deployment test."
+}
+{
+  "result": "PASS",
+  "widths": [
+    320,
+    375,
+    430,
+    768,
+    1024,
+    1440,
+    1920
+  ],
+  "links": 8,
+  "checks": [
+    "trusted HTTPS",
+    "no horizontal overflow",
+    "keyboard skip link",
+    "navigation",
+    "search",
+    "empty state",
+    "category retained",
+    "no browser errors"
+  ]
+}
+{
+    "suite":  "functional",
+    "result":  "PASS",
+    "listeners":  [
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  7243
+                      },
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  5243
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  7243
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  5243
+                      }
+                  ],
+    "nonLoopbackInterfacesProbed":  3,
+    "nonLoopbackConnectionsRejected":  6,
+    "limitation":  "Local interface probes and process socket inventory; not an external firewall or public deployment test."
+}
+node.exe : apiRequestContext.get: Hostname/IP does not match certificate's altnames: Host: untrusted.example. is not
+in the cert's altnames: DNS:localhost, DNS:*.dev.localhost, DNS:*.dev.internal, DNS:host.docker.internal,
+DNS:host.containers.internal, IP Address:127.0.0.1, IP Address:0:0:0:0:0:0:0:1
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (apiRequestConte...0:0:0:0:0:0:0:1:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Call log:
+  - → GET https://localhost:7243/
+    - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
+HeadlessChrome/159.0.8154.6 Safari/537.36
+    - accept: */*
+    - accept-encoding: gzip,deflate,br
+    - Host: untrusted.example
+
+    at <workspace>\scripts\verify-security.cjs:107:51 {
+  log: [
+    '  - → GET https://localhost:7243/',
+    '    - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
+HeadlessChrome/159.0.8154.6 Safari/537.36',
+    '    - accept: */*',
+    '    - accept-encoding: gzip,deflate,br',
+    '    - Host: untrusted.example'
+  ],
+  name: 'Error',
+  code: 'ERR_TLS_CERT_ALTNAME_INVALID'
+}
+Error: C:\Program Files\nodejs\node.exe exited 2
+    at run (<workspace>\scripts\run-browser-tests.cjs:15:36)
+    at suite (<workspace>\scripts\run-browser-tests.cjs:64:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async <workspace>\scripts\run-browser-tests.cjs:80:5

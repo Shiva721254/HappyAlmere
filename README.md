@@ -1,77 +1,48 @@
-# HappyAlmere V0.2 — database-backed discovery
+# HappyAlmere - preserved PostgreSQL integration candidate
 
-Proprietary commercial platform foundation. Local synthetic-data prototype only:
-no real businesses, customer accounts, registration, tracking or payments.
-No license to redistribute this proprietary source is granted.
+This branch reconciles existing develop c2964ee with approved V0.1 main 0e7739d.
+It is a review candidate, not accepted HA-002 implementation. Only synthetic local use.
+The existing database schema/migration and both histories are preserved.
 
-The application uses ASP.NET Core MVC/Razor on .NET 10, PostgreSQL and EF Core.
-Open this Git-root directory in VS Code. The original source folder name is
-retained to avoid an unnecessary directory migration.
+## Run the existing database-backed application
 
-## Git workflow
-
-Private repository: https://github.com/Shiva721254/HappyAlmere
-
-- `main` holds the verified baseline and reviewed stable changes.
-- `develop` is the working branch for ongoing development.
-- Build and test before pushing. Promote verified work through a pull request.
-- Main requires an up-to-date branch, passing `verify` CI and resolved conversations.
-  Admin enforcement is enabled; force pushes and deletion are blocked.
-- No independent approval count is configured until a separate reviewer exists.
-- Never commit secrets, customer information or the confidential business plans.
-
-## Run locally
-
-Prerequisites: .NET SDK 10.0.403, Docker with Linux containers, PowerShell,
-and a trusted ASP.NET HTTPS development certificate.
-
-From the repository root:
+Prerequisites: .NET SDK from global.json, Docker Linux containers, PowerShell,
+trusted HTTPS development certificate, pinned Node/Playwright for browser tests.
+On a fresh isolated synthetic development checkout:
 
 ```powershell
-dotnet dev-certs https --check --trust
-# Only if a trusted certificate is missing:
-dotnet dev-certs https --trust
 dotnet restore HappyAlmere.slnx
 ./scripts/Initialize-LocalDatabase.ps1
-dotnet build HappyAlmere.slnx --configuration Release --no-restore
+dotnet build HappyAlmere.slnx -c Debug --no-restore
+dotnet build HappyAlmere.slnx -c Release --no-restore
 ./scripts/Test-Local.ps1
+npm ci --ignore-scripts
+npm run browser:install
+. ./scripts/Load-LocalEnvironment.ps1
+npm run test:browser
 ./scripts/Start-Local.ps1
 ```
 
-Visit https://localhost:7143. HTTP port 5143 redirects to HTTPS.
-Bootstrap generates ignored local credentials, verified database TLS and a
-read-only runtime connection, then applies the synthetic-data migration.
-The web process never runs migrations. Re-running initialization preserves data.
+Do not initialize a second checkout against existing volumes with unrelated credentials.
+Reuse the existing protected environment configuration for the preserved synthetic
+instance. Never print credentials or remove volumes; tests roll back their fixtures.
+The runtime uses read-only VerifyFull TLS access. No database fallback or app-startup
+migration is added. See [existing database guide](docs/V0.2-DATABASE-DISCOVERY.md).
 
-VS Code: Ctrl+Shift+B builds; F5 starts the HTTPS debugger using the generated
-`.env.runtime`. The tasks menu includes tests and the HTTPS run script.
-The C# extension is required for debugging; C# Dev Kit is recommended.
+## Review and stop boundary
 
-Stop the running app before rebuilding on Windows. In restricted agent
-environments, build with `-m:1 --disable-build-servers` if MSBuild workers fail.
-Docker, certificate private-key access and browser launches may require approved
-execution outside the agent sandbox; never bypass TLS validation.
+[HA-001 closure](docs/reports/HA-001-CLOSE-final-report.md),
+[ARCH-03](docs/reports/HA-001-ARCH-03-final-architectural-review.md),
+[acceptance audit](docs/reports/HA-001-acceptance-audit.md),
+[permanent risks](docs/security/security-risk-register.md), and
+[HA-002 gap analysis](docs/reports/HA-002-existing-implementation-gap-analysis.md).
 
-## Verification
+Do not implement UUID/schema/catalog/role/backup gaps until independent review.
+No authentication, payments, customer data or public deployment. Main and original
+develop are preserved; this branch is not automatically merged into either.
 
-`Test-Local.ps1` runs all 63 foundation and actual PostgreSQL integration tests.
-Missing database configuration is a failure, not a skipped integration suite.
-CI provisions an isolated database using the same scripts.
-
-For optional browser checks, start the HTTPS app and use an existing
-Playwright/Chromium installation:
-
-```text
-node scripts/verify-browser.cjs <absolute-path-to-playwright-or-playwright-core>
-```
-
-The script validates trusted HTTPS, five viewport widths, navigation and search.
-Screenshots are written to ignored `artifacts/`. Node/Playwright are optional QA
-tools, not application runtime dependencies.
-
-See [V0.2 architecture, security and verification](docs/V0.2-DATABASE-DISCOVERY.md).
-Historical records: [V0.1 architecture](docs/ARCHITECTURE.md),
-[V0.1 security](docs/SECURITY.md), [V0.1 verification](docs/V0.1-VERIFICATION.md).
-
-Real customer data and public production deployment remain blocked until identity,
-authorization, database operations and privacy controls are implemented and tested.
+The browser harness retains 42 layouts at seven widths and production security/rate
+checks. Windows local certificate trust remains supported. Integration CI uses Ubuntu
+with actual isolated TLS PostgreSQL and trusted Chromium to exercise the real backend.
+Node/Playwright are development dependencies only. Exact CI and local results are in
+the closure report; previous V0.1 evidence remains historical.

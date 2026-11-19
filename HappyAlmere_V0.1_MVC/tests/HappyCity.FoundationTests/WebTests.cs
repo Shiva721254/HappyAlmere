@@ -1,5 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -40,12 +42,29 @@ public sealed class SecurityProbeController : Controller
     [HttpGet("/test/throw")]
     public IActionResult Throw() => throw new InvalidOperationException("sensitive-test-detail");
 
+    [HttpGet("/test/token")]
+    public IActionResult Token([FromServices] IAntiforgery antiforgery) =>
+        Content(antiforgery.GetAndStoreTokens(HttpContext).RequestToken!);
+
     [HttpPost("/test/unsafe")]
     public IActionResult Unsafe() => Ok();
 }
 
 public sealed class WebTests
 {
+    [Theory]
+    [InlineData("/?q=%00")]
+    [InlineData("/?q=hello%00world")]
+    [InlineData("/?category=%00")]
+    public async Task Database_incompatible_text_is_rejected_at_http_boundary(string path)
+    {
+        await using var factory = new FoundationFactory();
+        using var client = factory.HttpsClient();
+        using var response = await client.GetAsync(path);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        AssertHeaders(response);
+    }
+
     [Theory]
     [InlineData("/", "Haal meer uit")]
     [InlineData("/Home/Business", "Voor ondernemers")]
@@ -169,6 +188,54 @@ public sealed class WebTests
         AssertHeaders(rejected);
         using var privacy = await client.GetAsync("/Home/Privacy");
         Assert.Equal(HttpStatusCode.OK, privacy.StatusCode);
+    }
+
+    [Fact]
+    public async Task Valid_csrf_token_succeeds_but_tampered_token_fails()
+    {
+        await using var factory = new FoundationFactory();
+        using var client = factory.HttpsClient();
+        using var tokenResponse = await client.GetAsync("/test/token");
+        var token = await tokenResponse.Content.ReadAsStringAsync();
+        var cookie = tokenResponse.Headers.GetValues("Set-Cookie").Single();
+        Assert.Contains("secure", cookie, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("httponly", cookie, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("samesite=strict", cookie, StringComparison.OrdinalIgnoreCase);
+        using var valid = await client.PostAsync("/test/unsafe", new FormUrlEncodedContent(
+            new Dictionary<string, string> { ["__RequestVerificationToken"] = token }));
+        Assert.Equal(HttpStatusCode.OK, valid.StatusCode);
+        using var invalid = await client.PostAsync("/test/unsafe", new FormUrlEncodedContent(
+            new Dictionary<string, string> { ["__RequestVerificationToken"] = token + "tampered" }));
+        Assert.Equal(HttpStatusCode.BadRequest, invalid.StatusCode);
+    }
+
+    [Fact]
+    public async Task Rate_limit_isolates_peers_and_ignores_spoofed_forwarding_headers()
+    {
+        await using var factory = new FoundationFactory();
+        using var client = factory.HttpsClient(); // Start the real test pipeline.
+        async Task<HttpContext> Send(string peer, string? forwarded = null) =>
+            await factory.Server.SendAsync(context =>
+            {
+                context.Connection.RemoteIpAddress = IPAddress.Parse(peer);
+                context.Request.Scheme = "https";
+                context.Request.Host = new HostString("localhost", 7143);
+                context.Request.Method = "GET";
+                context.Request.Path = "/";
+                if (forwarded is not null)
+                {
+                    context.Request.Headers["X-Forwarded-For"] = forwarded;
+                    context.Request.Headers["Forwarded"] = "for=" + forwarded;
+                }
+            });
+        for (var i = 0; i < 120; i++)
+            Assert.Equal(200, (await Send("192.0.2.1")).Response.StatusCode);
+        var rejected = await Send("192.0.2.1", "192.0.2.2");
+        Assert.Equal(429, rejected.Response.StatusCode);
+        Assert.True(int.Parse(rejected.Response.Headers.RetryAfter.ToString()) is >= 1 and <= 60);
+        Assert.Contains("script-src 'none'", rejected.Response.Headers.ContentSecurityPolicy.ToString());
+        Assert.Equal(200, (await Send("192.0.2.2")).Response.StatusCode);
+        Assert.Equal(429, (await Send("::ffff:192.0.2.1")).Response.StatusCode);
     }
 
     private static void AssertHeaders(HttpResponseMessage response)
