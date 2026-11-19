@@ -1,3 +1,13 @@
+# Current R02 gap disposition
+
+Use the current 12/18/12 matrices and criteria-linked deferral register in [HA-002-implementation-report.md](HA-002-implementation-report.md). ARCH-03 / Issue #14 identifies verification closure work, not new features. Master AC10 remains partial for private authorization; AC13/17 remain partial for production lifecycle/recovery; AC18 remains pending formal acceptance. Historical classifications below do not override these gates. No proposed deferral is an owner-approved waiver.
+
+# Current gap disposition ? HA-002-R01
+
+The historical gap analysis below is retained. The current 18-criterion evidence matrix is in [HA-002-implementation-report.md](HA-002-implementation-report.md), alongside the distinct Issue #4 and R01 matrices. Trusted synthetic city resolution, translation fallback, supported regional checks, full metadata/recovery comparisons, exact permission denials, committed hierarchy concurrency and actual generated deep-query plans now have remediation implementations/tests. Independent acceptance remains pending under [Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10). Production secret lifecycle and recovery operations remain partial and require explicit later disposition; no silent waiver. No HA-003/004 implementation or governance branch integration occurred.
+
+## Historical analysis (superseded status)
+
 # HA-002 - Existing implementation gap analysis
 
 Scope: source originally on develop at c2964eeff4232dd1f925c63af06f8c97c751b161,
@@ -125,3 +135,49 @@ Do not merge the integration branch into develop/main or implement further datab
 functionality until independent review of this gap analysis. Preserve original develop
 and both parent histories. The supplied master mapping, supported cities and data ownership decisions require
 independent review before implementation. No new business schema is introduced.
+
+
+## HA-002-A recovery/design update (19 November 2026)
+
+The original 18-item assessment above is the historical 0627839 checkpoint. Subsequent
+Issue #4 work demonstrates protected backup and exact isolated restore of the synthetic
+baseline, including negative fixture/archive checks. See [current implementation report](HA-002-implementation-report.md)
+for the distinct AC01-AC12 matrix and [backup runbook](../database/backup-and-recovery.md).
+Master AC17 moves from no restore evidence to **partial**: local synthetic restore is
+proven, but broader backup identity/encryption/retention policy remains incomplete.
+Master AC18 now has backup/migration policy and implementation-report paths; other
+missing ERD/dictionary/security/ADR documentation and independent acceptance remain.
+No UUID/schema/catalog/role/pagination gaps have been silently closed. HA-002-ARCH-01
+is unavailable as a standalone reference, confirmed by owner; master requirements stay authoritative.
+
+
+## Forward-phase update after owner disposition (19 November 2026)
+
+Earlier baseline findings remain historical. Issue #4 HA-DB-D01..D10 authorized the
+isolated forward phase; the implementation report/evidence now demonstrates the
+following. This is not independent acceptance and does not renumber either matrix.
+
+| Master criterion | Current classification | Evidence / remaining scope |
+|---|---|---|
+| HA-002-AC01 | Implemented | Domain/Application/Infrastructure/Web dependencies preserved; no new packages |
+| HA-002-AC02 | Implemented locally | Pinned Docker, separate persistent volumes, verified TLS and loopback; production environment remains unverified |
+| HA-002-AC03 | Implemented | Six catalog tables and UUIDs, discovery extension, reserved legacy mapping, composite translation key |
+| HA-002-AC04 | Implemented locally | Explicit city fields/validations, Almere defaults, inactive-city filtering; settings for future cities must be supplied |
+| HA-002-AC05 | Partial | Normalized unique hostnames and active-primary invariant; tables empty, no live resolver/canonical redirect authorized |
+| HA-002-AC06 | Implemented | Same-city parent FK, slug uniqueness, self/cycle rejection and hierarchy-write serialization |
+| HA-002-AC07 | Implemented storage | Structured address fields, optional same-city district and paired/ranged coordinates; no real geography imported |
+| HA-002-AC08 | Implemented storage | Shared categories, hierarchy, unique slug, explicit order/type/active defaults; no category-admin UI claimed |
+| HA-002-AC09 | Implemented storage | Dutch names copied exactly, unique language/category FK; legacy name retained; no new multilingual UI claimed |
+| HA-002-AC10 | Partial | Public city filtering and relational same-city constraints tested; private authorization remains future scope |
+| HA-002-AC11 | Implemented within measured scope | Bounded projected async keyset, cancellation, literal input; 10k traversal/timing/plan; no production SLA |
+| HA-002-AC12 | Implemented locally | Non-login owner, restricted migration/runtime/backup, dedicated temporary restore and admin; actual negatives |
+| HA-002-AC13 | Partial | VerifyFull, external protected ephemeral credentials, negative TLS, documented rotation; production lifecycle/encryption unverified |
+| HA-002-AC14 | Implemented locally | Immutable initial history, appended forward migration, clean/upgrade/no-op and injected failure rollback; no startup migration |
+| HA-002-AC15 | Implemented boundary | Synthetic-only guard; no Identity/business/payments/live domains/deployment |
+| HA-002-AC16 | Implemented local evidence | 87 tests and existing browser/security/network suites; exact final CI at issue handoff |
+| HA-002-AC17 | Implemented local evidence | Baseline/enriched/migrated backup and fresh restore with row/constraint/index reconciliation; no production RTO/RPO |
+| HA-002-AC18 | Partial | ERD/dictionary/security/ADR/runbooks and evidence updated; independent architectural acceptance and owner disposition pending |
+
+See [implementation report](HA-002-implementation-report.md) for Issue #4 AC01-AC12,
+which remain a distinct assignment set. Unavailable original HA-002-ARCH-01 is not
+recreated; the explicit owner-approved disposition is the forward-phase authority.

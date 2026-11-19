@@ -1,6 +1,34 @@
+## Current HA-002-R02 verification closure
+
+[Issue #14](https://github.com/Shiva721254/HappyAlmere/issues/14) authorizes bounded verification/evidence work only. See [current report](docs/reports/HA-002-implementation-report.md) and [HANDOVER](HANDOVER.md). Applicable privilege/grant-option checks, independent SQL-only definitions and correction-specific rollback/no-op proof extend verification while preserving existing application/migrations/security/thresholds. No merge, deployment, new features or independent acceptance claim. Earlier entries below retain historical evidence.
+
+## HA-002-R01 ? remediation review candidate, 19 November 2026
+
+- Trusted synthetic city-domain resolution and bounded category translation fallback.
+- New forward supported-region and multi-row hierarchy correction; existing migrations retained.
+- Exact SQLSTATE/failpoint verification; expanded restored schema/role comparisons and deny-by-default future table grants.
+- Committed concurrency, metadata parity, actual EF deep-query plans and safe elapsed-only monitoring tests.
+- Current/historical documentation reconciliation and governance integration plan; no merge/deployment or self-acceptance.
+
 # Changelog
 
 Only observed Git history and actual local changes are recorded. Dates use Europe/Amsterdam.
+
+## HA-002-A forward migration - 2026-11-19
+
+- Implement owner-approved six-table catalog and preserved discovery UUID migration without rewriting initial history or modifying the original source database.
+- Add bounded filter-bound keyset pagination and explicit catalog/inactive-city constraints; preserve Dutch discovery content and publication behavior.
+- Rehearse failure rollback, fresh recovery, restricted backup/restore and separated database roles; add relational/performance evidence and CI coverage.
+- Pin original initialization to its baseline; require explicit isolated environment for new application tests. Retain volumes and isolate governance PR #9.
+- Independent acceptance remains pending; no identity/business implementation, merge or deployment.
+
+## HA-002-A recovery/design - 2026-11-19
+
+- Add protected synthetic-only PostgreSQL inventory/backup/isolated restore with exact reconciliation and negative input/archive checks; preserve the source and existing migrations.
+- Verify 68 existing tests and HTTPS/browser regressions against the restored database; add the same recovery gate to CI.
+- Document non-destructive migration mapping for independent review; forward migration, UUID conversion, role changes and pagination remain pending.
+- Correct CI baseline-reference portability and record successful Linux recovery/regression workflows for c238b36.
+- Record owner-confirmed unavailability of standalone HA-002-ARCH-01; use repository specifications without inventing findings.
 
 ## Shared handoff policy - 2026-11-19
 

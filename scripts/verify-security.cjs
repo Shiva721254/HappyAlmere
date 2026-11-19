@@ -52,7 +52,10 @@ function check(name, actual, expected) {
                         await page.screenshot({ path: path.join(output, 'home-' + width + '.png'), fullPage: true });
                         await page.keyboard.press('Tab');
                         check(width + ' skip link focused', await page.locator('.skip').evaluate(e => e === document.activeElement), true);
-                        await page.keyboard.press('Enter');
+                        await Promise.all([
+                            page.waitForURL(url => url.hash === '#main', { timeout: 5000 }),
+                            page.keyboard.press('Enter')
+                        ]);
                         check(width + ' skip target', new URL(page.url()).hash, '#main');
                     }
                 }

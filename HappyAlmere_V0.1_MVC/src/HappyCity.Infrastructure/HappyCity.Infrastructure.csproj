@@ -8,4 +8,7 @@
     <ProjectReference Include="../HappyCity.Application/HappyCity.Application.csproj" />
     <ProjectReference Include="../HappyCity.Domain/HappyCity.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations/CatalogForward.sql" />
+  </ItemGroup>
 </Project>

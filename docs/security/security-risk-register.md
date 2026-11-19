@@ -1,3 +1,13 @@
+## Current R02 verification and proposed risk disposition
+
+Independent [ARCH-03 / Issue #14](https://github.com/Shiva721254/HappyAlmere/issues/14) identifies R-F01 through R-F04 as medium verification/evidence gaps and R-F05 as low documentation synchronization. No new critical/high defect was established. The [current implementation report](../reports/HA-002-implementation-report.md) maps each finding to tests and retains all original matrices. R-F01/R-F05 baseline missing evidence has been reconciled against actual same-head successful runs and the final Issue #10 handoff. R-F02/R-F03/R-F04 now have expanded verification candidates; independent closure remains pending.
+
+Proposed future risk destinations, responsible roles, original criteria and required gates are explicit in that report. Master AC10 private authorization, AC13 production lifecycle and AC17 production recovery remain partial; master AC18 and original acceptance gates remain pending. Proposed HA-003/004/005/006/009/010 deferrals require owner disposition and are not waivers. No production readiness or new feature authorization. Earlier risk history below is preserved.
+
+## Current HA-002-R01 review disposition
+
+Independent HA-002-ARCH-02 findings F01-F10, their severity/classification and authority remain in [Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10). The [current implementation report](../reports/HA-002-implementation-report.md) maps every finding to correction and verification. These remediation candidates do not close risks by self-approval. Production encryption, secret rotation/storage/retention, operational RTO/RPO, capacity and infrastructure controls require explicit HA-009/010 disposition; private resource authorization remains HA-003/004. Existing risk entries below are preserved. No production readiness or compliance claim.
+
 # HappyAlmere permanent security and engineering risk register
 
 Last updated: 19 November 2026 (Europe/Amsterdam). Scope: V0.1, reviewed commit `7b6e082662fb5449cfae0a3586a91488db6ef880`, branch `fix/ha-001-r01`; remediation branch `fix/ha-001-r02`.
@@ -221,3 +231,29 @@ bindings were verified. The NUL-input compatibility regression is resolved by bo
 validation (HTTP 400), without relaxing TLS or other controls. Draft PR #3 and the
 HA-002 gap analysis await independent review. This does not resolve deferred catalog,
 secrets lifecycle, backup/restore or production-access requirements.
+
+
+## HA-002-A recovery/design evidence
+
+Local synthetic backup/restore is now demonstrated; [the implementation report](../reports/HA-002-implementation-report.md)
+records scope, hashes, exact reconciliation, tests and open issue criteria. Archives and
+generated credentials are protected/ignored, never uploaded. Host disk encryption,
+production backup protection and separated backup/migration/owner roles are not claimed.
+SEC-F05/ARCH-F01/PERF-F01 remain open for their residual requirements. A successful
+baseline restore does not demonstrate UUID migration or recovery after its failure.
+
+
+## HA-002-A forward implementation evidence update
+
+Owner authorization: Issue #4 comment 7014717337; acceptance still pending.
+SEC-F05: local role separation, protected ephemeral credentials, verified TLS and
+restricted backup/restore now have execution evidence; rotation procedure documented.
+Production secret lifecycle, host/backup encryption and retention remain unverified.
+PERF-F01: 10,000 synthetic rows, bounded keyset traversal, plans and local timing are
+now measured; no production capacity conclusion. PERF-F02 remains open.
+ARCH-F01: shared catalog/city relationships now implemented/tested in isolation;
+no live domain resolver or private cross-city authorization is claimed. GOV-F01:
+histories remain preserved, governance PR #9 and primary PR #6 remain unmerged.
+No future Identity/business/Data Protection requirement is marked implemented.
+Docker address-pool exhaustion occurred during an extra rehearsal; task-private network
+reuse resolves subnet consumption while preserving independent instances/volumes.

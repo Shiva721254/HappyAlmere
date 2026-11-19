@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "parameters": "--vulnerable --include-transitive",
+  "sources": [
+    "https://api.nuget.org/v3/index.json",
+    "C:/Program Files (x86)/Microsoft SDKs/NuGetPackages/"
+  ],
+  "projects": [
+    {
+      "path": "C:/Users/shiva/Desktop/HappyAlmere/HA-001-R01/artifacts/ha002-a/HappyAlmere_V0.1_MVC/src/HappyCity.Application/HappyCity.Application.csproj"
+    },
+    {
+      "path": "C:/Users/shiva/Desktop/HappyAlmere/HA-001-R01/artifacts/ha002-a/HappyAlmere_V0.1_MVC/src/HappyCity.Domain/HappyCity.Domain.csproj"
+    },
+    {
+      "path": "C:/Users/shiva/Desktop/HappyAlmere/HA-001-R01/artifacts/ha002-a/HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/HappyCity.Infrastructure.csproj"
+    },
+    {
+      "path": "C:/Users/shiva/Desktop/HappyAlmere/HA-001-R01/artifacts/ha002-a/HappyAlmere_V0.1_MVC/src/HappyCity.Web/HappyCity.Web.csproj"
+    },
+    {
+      "path": "C:/Users/shiva/Desktop/HappyAlmere/HA-001-R01/artifacts/ha002-a/HappyAlmere_V0.1_MVC/tests/HappyCity.FoundationTests/HappyCity.FoundationTests.csproj"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "commit": "62b1defdca00989bf363a39057f5558aae8ee3e3",
+  "currentAuthoredFiles": 266,
+  "requiredDocumentation": [
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "README.md",
+    "docs/ARCHITECTURE.md",
+    "docs/DEVELOPMENT.md"
+  ],
+  "projectReferences": {
+    "HappyCity.Application": [
+      "HappyCity.Domain"
+    ],
+    "HappyCity.Domain": [],
+    "HappyCity.Infrastructure": [
+      "HappyCity.Application",
+      "HappyCity.Domain"
+    ],
+    "HappyCity.Web": [
+      "HappyCity.Application",
+      "HappyCity.Infrastructure"
+    ],
+    "HappyCity.FoundationTests": [
+      "HappyCity.Web"
+    ]
+  },
+  "dependencyDirection": "PASS",
+  "jsonParsing": "PASS",
+  "developmentLaunchBindings": "PASS (configuration; actual sockets verified separately)",
+  "credentialScan": {
+    "commitCount": 18,
+    "fileVersionsScanned": 2042,
+    "findings": [],
+    "scope": "Reachable tracked history and current nonignored authored files; no ignored credentials opened or recorded"
+  },
+  "sourceReviewChecks": {
+    "rawHtml": [],
+    "blockingAsync": [],
+    "sqlOrDatabase": [
+      "HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/DatabaseConfiguration.cs",
+      "HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/HappyCityDbContext.cs",
+      "HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/HappyCityDbContextFactory.cs",
+      "HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/20261119000108_InitialDiscovery.Designer.cs",
+      "HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/HappyCityDbContextModelSnapshot.cs",
+      "HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/PostgresDiscoveryRepository.cs",
+      "HappyAlmere_V0.1_MVC/src/HappyCity.Web/Program.cs",
+      "HappyAlmere_V0.1_MVC/tests/HappyCity.FoundationTests/PostgresTests.cs"
+    ],
+    "outboundNetwork": []
+  }
+}

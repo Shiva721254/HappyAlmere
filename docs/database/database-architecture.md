@@ -1,3 +1,7 @@
+> **Current R02 status:** [Issue #14](https://github.com/Shiva721254/HappyAlmere/issues/14) and the [current implementation report](../reports/HA-002-implementation-report.md) govern verification closure. Expanded applicable privilege/grant-option inventory, independent SQL-only contract and correction-specific rollback/full no-op checks are verification-only. All existing migrations and original source remain immutable. Historical status below is superseded. Independent acceptance and explicit owner decisions on proposed production/private deferrals remain pending.
+
+> **Current status (HA-002-R01, 19 November 2026):** The owner-authorized remediation in [Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10) is a review candidate on feature/ha-002-a. Earlier pending-design statements below are historical and superseded by the [current implementation report](../reports/HA-002-implementation-report.md). Existing applied migrations and original database remain preserved. No independent acceptance, merge or deployment is implied. HA-002-ARCH-01 remains unavailable as a standalone verified source.
+
 # HA-002 - Consolidated database architecture
 
 Source: master database architecture supplied in the HA-001-CLOSE clarification on
@@ -160,3 +164,13 @@ behaviour must be reused where compatible. Differences require invariant-based r
 not automatic replacement. No new HA-002 feature implementation is authorized before
 independent gap analysis review. Original develop and approved V0.1 histories remain
 preserved on the dedicated integration branch.
+
+
+## HA-002-A recovery/design evidence (requirements unchanged)
+
+Issue #4 and the owner's clarification authorize a recovery-first sequence. A verified
+synthetic baseline backup/restore is now documented in [backup-and-recovery.md](backup-and-recovery.md).
+The proposed [migration-policy.md](migration-policy.md) maps existing data to this
+architecture and identifies decisions still requiring independent review. It does not
+change these requirements or claim a new schema/UUID conversion has been implemented.
+HA-002-ARCH-01 has no verified standalone record; no detailed findings are invented.

@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "3287994afb0bb3fe7e69f60a6bda689f77c40323",
+  "startedUtc": "2026-11-19T16:27:25.963082+00:00",
+  "sourceGate": "artifacts\\ha002a\\20261119161050-4b5de6\\evidence.json",
+  "checks": {
+    "enrichedBackupRestore": "PASS",
+    "afterBackfillRollback": "PASS",
+    "postFailureFreshRestore": "PASS",
+    "completeRowsAssociationsPublication": "PASS",
+    "allUuidMappingsAndBoundaryIds": "PASS",
+    "secondRunNoOp": "PASS",
+    "cleanCreation": "PASS",
+    "tlsRoleReadsAndEscalationNegatives": "PASS",
+    "restrictedLogicalBackup": "PASS",
+    "dedicatedRestoreIdentityAndRevocation": "PASS",
+    "migratedArchiveAllTablesConstraintsIndexes": "PASS",
+    "nonLoginObjectOwnership": "PASS"
+  },
+  "enrichedCounts": {
+    "Categories": 5,
+    "Cities": 1,
+    "DiscoveryEntries": 8,
+    "__EFMigrationsHistory": 1
+  },
+  "enrichedSha256": "b0a80a835cab69810cc5adaac262cba3f579423876a5c2f54e00050b3e02e4b2",
+  "recoverySeconds": 5.047,
+  "rowDigests": {
+    "Cities": "da2eb7e6813b67d233a4e745a2a3d6a5c8f44709c8268d6e3578eee7743dbad6",
+    "Categories": "91e8603da6334368edd904c23cba93d8b1bd556ad17970356a1939c3b1b58e31",
+    "DiscoveryEntries": "61004d54e9d80c626feb03e113da850df8969243cf1df83366272760ca111f07"
+  },
+  "migrationHistory": [
+    {
+      "MigrationId": "20261119000108_InitialDiscovery",
+      "ProductVersion": "10.0.14"
+    },
+    {
+      "MigrationId": "20261119161305_CatalogForward",
+      "ProductVersion": "10.0.14"
+    }
+  ],
+  "targetContainers": [
+    "d59bdb4cb8b449fc0de2df21b7668e92fee0139a10725d6931ba9b7daa3149d1",
+    "c2b9a9e10f21c31b045baf3d83b0eacc4e25e7c00f355cf1d9335e333dc54e0c",
+    "e858b53f560038ab195680cd9b6f38c46417912cffdc9784ec6d96ab64e01f49",
+    "9d29117aea2941307d4df0d4cca51ac6e132240e279da51a01a2b2d9ed05da01",
+    "f0283da22f5b3aac391cfc5106231d93924fe0476edf38830adb4d1ff0a39f5f"
+  ],
+  "regressionContainer": "9d29117aea2941307d4df0d4cca51ac6e132240e279da51a01a2b2d9ed05da01",
+  "completedUtc": "2026-11-19T16:28:09.142726+00:00",
+  "status": "PASS"
+}

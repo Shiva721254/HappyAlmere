@@ -1,17 +1,101 @@
+# Latest handover: HA-002-R02 verification closure candidate
+
+Branch **feature/ha-002-a**, starting SHA **b4f092ffbbf385f16c4f42aaef117fafc8e56da7**. Owner-authorized [Issue #14](https://github.com/Shiva721254/HappyAlmere/issues/14); keep PR #6 draft. Baseline push 44589464404 and PR 44589477778 both verified successful; prior final Issue #10 handoff exists. These are baseline results, not fresh R02 results.
+
+Changed scope: scripts/verify-forward-migration.py; new verification-only scripts/verify-catalog-contract.sql; one PostgresTests authentication-denial test; existing documentation/evidence. No application, dependency, model or applied migration change. Expanded privileges/grant options, independent SQL-only definitions and correction-specific rollback/full no-op verification passed on fresh isolated synthetic targets: 21 rehearsal checks, 105 .NET tests, 42 responsive cases, 190 functional/security assertions and five rate assertions. Debug/Release and dependency scans passed. Final exact-head CI and independent review remain gates.
+
+Current [implementation report](docs/reports/HA-002-implementation-report.md) contains finding/task traceability, all three original matrices (12/18/12), R02's eight criteria and criteria-linked proposed deferrals with future owners/gates. No production/private requirement is waived. ARCH-01 standalone reference remains unavailable. Exact final containing SHA and push/PR evidence are recorded in Issue #14/PR #6 after synchronization. Independent review and owner disposition remain pending; no merge/deployment.
+
+## Earlier handovers (historical)
+
+# Latest handover ? HA-002-R01
+
+Branch **feature/ha-002-a**; remediation baseline **d3d6a558cccda2d8e437854c46b5cbfe5ab7b9f4**. Authorized by owner and independent [Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10); keep [PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6) draft. No merge/deployment. Current finding/task/three acceptance matrices and exact evidence are maintained in [HA-002 implementation report](docs/reports/HA-002-implementation-report.md). Implementation commit: **b2355c30e9e08686a95b0e97ed672c0798401451** (remote verified). The bounded skip-link timing follow-up and exact final-head CI/re-review submission are recorded in Issue #10/PR #6, the authoritative synchronization ledger.
+
+Implemented: trusted synthetic host resolution; bounded translation lookup; new forward SupportedRegions correction with multi-row hierarchy protection; safe elapsed-only slow-read monitoring; exact negative verification; full restored schema/security/EF physical comparisons; concurrency and actual deep-query tests. Existing two applied migrations remain byte-preserved. Fresh 18-check rehearsal and 104 .NET tests pass; browser 42 responsive/190 security-functional/5 rate checks pass. Dependency scans report zero known vulnerabilities. Scoped secret/history scan passed with zero findings; PR CI 44586738859 passed; push 44586720660 found one skip-fragment timing race, now corrected with an exact bounded navigation wait. Consult Issue #10 for final-head results; do not treat the earlier run as final. Original database/volumes unchanged; only isolated synthetic targets used. No new package dependency, identity/business feature or live domain.
+
+Governance branch docs/ha-gov-001 remains at **871e7a35c95b05b75b047fc1cc048f29e33b7cbc**. Reconciliation plan is in the current report; do not merge/overwrite it. Independent re-review and product-owner decision are required. Production controls remain deferred requirements, not implemented claims. HA-002-ARCH-01 is unavailable; Issue #10 supplies ARCH-02 independently.
+
+The subsequent 63cc36a checkpoint had successful PR CI 44588282832 but push CI 44588270956 exceeded the retained benchmark budget (280.1229ms). Test-only physical baseline preparation and diagnostic retention now address fixture interference; 104 local tests pass. No threshold relaxation or application change. Both failed and successful checkpoints are retained under r01 evidence; final exact-head results are in Issue #10.
+
+## Earlier handover (historical)
+
 # HappyAlmere - implementation handover
 
 Updated: 19 November 2026 (Europe/Amsterdam).
 Repository: private [Shiva721254/HappyAlmere](https://github.com/Shiva721254/HappyAlmere).
-Working/review branch: **integration/ha-001-v02**.
-Review: [draft PR #3](https://github.com/Shiva721254/HappyAlmere/pull/3), unmerged.
+Working branch: **feature/ha-002-a**, from integration baseline 62b1defdca00989bf363a39057f5558aae8ee3e3.
+Active assignment: [Issue #4](https://github.com/Shiva721254/HappyAlmere/issues/4).
+Review: [draft PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6), unmerged; prior integration PR #3 remains separate.
+
+## Latest phase - authorized HA-002-A forward migration
+
+Owner-approved D01-D10 / safeguards: Issue #4 comment 7014717337. Primary branch
+feature/ha-002-a, baseline 3287994; draft PR #6. Six-table catalog/UUID migration,
+keyset pagination, isolated rollback/recovery and separated roles are implemented
+as a review candidate. No merge/deployment or final acceptance. See latest section
+of docs/reports/HA-002-implementation-report.md and its forward evidence directory.
+Original source/volumes, initial migration and main/develop remain preserved.
+Governance PR #9 is separate; keep its indexes/evidence during any later approved integration.
+
+Run against the explicitly selected artifacts/forward/<run>/rehearsal.env; never the
+preserved original .env database. Initialize-LocalDatabase.ps1 creates only the original
+InitialDiscovery baseline. Forward runner requires a successful exact recovery gate,
+creates independent instances/volumes on a task-private network, and retains artifacts.
+No identity/business features. Remaining gates: final remote CI, independent architectural
+acceptance, owner decision. Final commit hashes/CI results are linked in Issue #4/PR #6.
+
+Implementation checkpoint: **4f8a756c1dbf506b77528428a907054cd61a95f0**.
+Push CI 44567576217 and PR CI 44567590442 succeeded (87 tests plus full isolated
+migration/recovery/browser suites); exact links and artifacts are in the latest
+implementation report. Independent acceptance remains pending. This handoff update
+is documentation/evidence only; final containing SHA is recorded in Issue #4/PR #6.
+
+Earlier recovery/design records below are historical and remain preserved.
+
+## Latest task - HA-002-A recovery/design
+
+The owner authorized baseline inventory, backup, isolated restore/integrity and
+non-destructive design. Those phases now have implementation evidence. The source
+schema/data/roles and original migrations are unchanged. Three fresh isolated restores
+reconciled 1 city, 5 categories, 6 discovery entries and applied history. The final
+runner rejects altered synthetic fixtures and a truncated archive before intact restore.
+All owned test containers are stopped; archives/credentials stay protected and ignored.
+
+Fresh restored-baseline verification: Debug/Release zero warnings/errors; 68 tests,
+42 responsive cases, 190 security and five rate assertions pass. NuGet/npm scans clean
+within scope. Verified implementation commit: **c238b3618c732f288726950e5a59a504975dce1e**.
+Both [push CI](https://github.com/Shiva721254/HappyAlmere/actions/runs/44557553382) and
+[PR CI](https://github.com/Shiva721254/HappyAlmere/actions/runs/44557570176) passed,
+including the new isolated recovery gate. Initial e652622 runs failed on a missing
+local develop ref; the correction fetches history and records origin/develop without
+weakening checks. [Draft PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6) targets
+the preserved integration branch. Subsequent documentation-head checks are identified
+in Issue #4/PR #6, never inferred from older runs.
+
+[Implementation report and AC01-AC12 matrix](docs/reports/HA-002-implementation-report.md),
+[backup runbook](docs/database/backup-and-recovery.md),
+[migration design/policy](docs/database/migration-policy.md),
+[sanitized evidence](docs/reports/evidence/HA-002-A/).
+
+HA-002-A remains active and incomplete. No UUID conversion, ownership migration or
+pagination was implemented. Independent review must resolve legacy UUID mapping,
+discovery placement, non-authoritative district/domain/address backfills, role design
+and pagination contract before forward implementation. HA-002-ARCH-01 is unavailable
+as a standalone record, confirmed by the owner; repository architecture is authoritative.
+The detailed report lists changed files, tests, evidence and outstanding criteria.
+
+The earlier integration/closure snapshot below remains historical context. This task's
+implementation commit is identified by Git history and the issue completion/progress
+comment after push; no self-approval, issue closure, main merge or deployment.
 
 ## Shared record and authority
 
 GitHub is the shared source of truth for Codex, ChatGPT and the project owner.
 Update this file and existing progress records after every development task, recording
 actual evidence and approved synchronization. ChatGPT independently reviews through
-GitHub; the owner retains final approval. No new HA-002 features, main merge or
-production deployment is authorized by this handover. See [engineering instructions](AGENTS.md).
+GitHub; the owner retains final approval. Only the current explicitly assigned HA-002-A recovery/design scope is authorized;
+no unreviewed new catalog feature, main merge or production deployment is authorized by this handover. See [engineering instructions](AGENTS.md).
 
 ## Implementation and acceptance snapshot
 
