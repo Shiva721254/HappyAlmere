@@ -2,6 +2,7 @@
 No source mutation. Private archives/credentials are never evidence artifacts.
 """
 import re
+import copy
 import argparse, datetime as dt, hashlib, importlib.util, json, os, secrets, subprocess, time
 from pathlib import Path
 spec=importlib.util.spec_from_file_location("recovery",Path(__file__).with_name("verify-database-recovery.py"))
@@ -78,12 +79,12 @@ def canonical(container):
 'Categories',(SELECT json_agg(x ORDER BY "Id") FROM (SELECT legacy_id AS "Id",name AS "Name",slug AS "Slug" FROM catalog.categories) x),
 'DiscoveryEntries',(SELECT json_agg(x ORDER BY "Id") FROM (SELECT e.legacy_id AS "Id",c.legacy_id AS "CityId",k.legacy_id AS "CategoryId",e.slug AS "Slug",title AS "Title",description AS "Description",district AS "District",icon AS "Icon",is_published AS "IsPublished" FROM discovery.discovery_entries e JOIN catalog.cities c ON c.id=e.city_id JOIN catalog.categories k ON k.id=e.category_id) x));"""))
 
-def migrated_snapshot(container):
+def migrated_snapshot(container, executable_only=False):
     result={}
-    for schema,table in [('catalog','cities'),('catalog','categories'),('catalog','category_translations'),('catalog','city_domains'),('catalog','districts'),('catalog','locations'),('discovery','discovery_entries')]:
+    for schema,table in ([] if executable_only else [('catalog','cities'),('catalog','categories'),('catalog','category_translations'),('catalog','city_domains'),('catalog','districts'),('catalog','locations'),('discovery','discovery_entries')]):
         result[schema+'.'+table]=json.loads(execute(container,f"SELECT coalesce(json_agg(t ORDER BY row_to_json(t)::text),'[]') FROM {schema}.{table} t"))
-    result['constraints']=json.loads(execute(container,"SELECT json_agg(t ORDER BY tab,name) FROM (SELECT c.relname tab,con.conname name,pg_get_constraintdef(con.oid) definition FROM pg_constraint con JOIN pg_class c ON c.oid=con.conrelid JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('catalog','discovery')) t"))
-    result['indexes']=json.loads(execute(container,"SELECT json_agg(t ORDER BY schemaname,tablename,indexname) FROM (SELECT schemaname,tablename,indexname,indexdef FROM pg_indexes WHERE schemaname IN ('catalog','discovery')) t"))
+    if not executable_only:result['constraints']=json.loads(execute(container,"SELECT json_agg(t ORDER BY tab,name) FROM (SELECT c.relname tab,con.conname name,pg_get_constraintdef(con.oid) definition FROM pg_constraint con JOIN pg_class c ON c.oid=con.conrelid JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('catalog','discovery')) t"))
+    if not executable_only:result['indexes']=json.loads(execute(container,"SELECT json_agg(t ORDER BY schemaname,tablename,indexname) FROM (SELECT schemaname,tablename,indexname,indexdef FROM pg_indexes WHERE schemaname IN ('catalog','discovery')) t"))
     queries={
         'columns': "SELECT json_agg(t ORDER BY table_schema,table_name,ordinal_position) FROM (SELECT table_schema,table_name,column_name,ordinal_position,data_type,udt_name,is_nullable,column_default,character_maximum_length,numeric_precision,numeric_scale FROM information_schema.columns WHERE table_schema IN ('catalog','discovery','public')) t",
         'functions': "SELECT json_agg(t ORDER BY schema,name,args) FROM (SELECT n.nspname schema,p.proname name,pg_get_function_identity_arguments(p.oid) args,pg_get_functiondef(p.oid) definition,pg_get_userbyid(p.proowner) owner,p.prosecdef security_definer,p.provolatile volatility,p.proconfig config FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname IN ('catalog','discovery')) t",
@@ -92,23 +93,64 @@ def migrated_snapshot(container):
         'schemaOwnership': "SELECT json_agg(t ORDER BY schema) FROM (SELECT nspname schema,pg_get_userbyid(nspowner) owner FROM pg_namespace WHERE nspname IN ('catalog','discovery','public')) t",
         'history': 'SELECT json_agg(t ORDER BY "MigrationId") FROM public."__EFMigrationsHistory" t'
     }
-    for key,sql in queries.items():result[key]=json.loads(execute(container,sql))
+    for key,sql in queries.items():
+        if not executable_only or key in ['functions','triggers']:result[key]=json.loads(execute(container,sql))
     return result
 
 
-def security_snapshot(container):
+def security_snapshot(container, principals=None):
+    # PostgreSQL 18 pinned by compose: all eight table privileges, including MAINTAIN.
+    if int(execute(container,"SHOW server_version_num")) // 10000 != 18:
+        raise RuntimeError('Re-review privilege inventory for this PostgreSQL major version')
+    names=principals or ['happy_owner','happy_schema_migrator','happy_app','happy_backup','happy_migrator']
+    if any(not re.fullmatch(r'happy_[a-z_]+',name) for name in names):raise RuntimeError('Invalid verification principal')
+    roles=','.join("'"+name+"'" for name in names)
     result={}
     queries={
-        'roles': "SELECT json_agg(t ORDER BY rolname) FROM (SELECT rolname,rolsuper,rolinherit,rolcreaterole,rolcreatedb,rolcanlogin,rolreplication,rolbypassrls FROM pg_roles WHERE rolname IN ('happy_owner','happy_schema_migrator','happy_app','happy_backup','happy_migrator')) t",
-        'membership': "SELECT coalesce(json_agg(t ORDER BY member,role),'[]') FROM (SELECT a.rolname member,b.rolname role,m.admin_option,m.inherit_option,m.set_option FROM pg_auth_members m JOIN pg_roles a ON a.oid=m.member JOIN pg_roles b ON b.oid=m.roleid WHERE a.rolname LIKE 'happy_%' AND a.rolname<>'happy_restore') t",
-        'effectiveTables': "SELECT json_agg(t ORDER BY role,schema,tab) FROM (SELECT r.rolname role,n.nspname schema,c.relname tab,has_table_privilege(r.oid,c.oid,'SELECT') can_select,has_table_privilege(r.oid,c.oid,'INSERT') can_insert,has_table_privilege(r.oid,c.oid,'UPDATE') can_update,has_table_privilege(r.oid,c.oid,'DELETE') can_delete,has_table_privilege(r.oid,c.oid,'TRUNCATE') can_truncate FROM pg_roles r CROSS JOIN pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE r.rolname IN ('happy_owner','happy_schema_migrator','happy_app','happy_backup') AND n.nspname IN ('catalog','discovery','public') AND c.relkind='r') t",
-        'effectiveSchema': "SELECT json_agg(t ORDER BY role,schema) FROM (SELECT r.rolname role,n.nspname schema,has_schema_privilege(r.oid,n.oid,'USAGE') usage,has_schema_privilege(r.oid,n.oid,'CREATE') can_create FROM pg_roles r CROSS JOIN pg_namespace n WHERE r.rolname IN ('happy_owner','happy_schema_migrator','happy_app','happy_backup') AND n.nspname IN ('catalog','discovery','public')) t",
-        'effectiveFunctions': "SELECT json_agg(t ORDER BY role,name) FROM (SELECT r.rolname role,p.proname name,has_function_privilege(r.oid,p.oid,'EXECUTE') can_execute FROM pg_roles r CROSS JOIN pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE r.rolname IN ('happy_owner','happy_schema_migrator','happy_app','happy_backup') AND n.nspname='catalog') t",
-        'effectiveDatabase': "SELECT json_agg(t ORDER BY role) FROM (SELECT rolname role,has_database_privilege(oid,'happyalmere','CONNECT') can_connect,has_database_privilege(oid,'happyalmere','CREATE') can_create,has_database_privilege(oid,'happyalmere','TEMP') can_temp FROM pg_roles WHERE rolname IN ('happy_owner','happy_schema_migrator','happy_app','happy_backup')) t",
-        'defaultAcl': "SELECT coalesce(json_agg(t ORDER BY role,schema,type),'[]') FROM (SELECT pg_get_userbyid(d.defaclrole) role,n.nspname schema,d.defaclobjtype type,d.defaclacl::text grants FROM pg_default_acl d LEFT JOIN pg_namespace n ON n.oid=d.defaclnamespace WHERE pg_get_userbyid(d.defaclrole) IN ('happy_owner','happy_migrator')) t"
+        'roles': f"SELECT json_agg(t ORDER BY rolname) FROM (SELECT rolname,rolsuper,rolinherit,rolcreaterole,rolcreatedb,rolcanlogin,rolreplication,rolbypassrls,rolconnlimit,rolvaliduntil FROM pg_roles WHERE rolname IN ({roles})) t",
+        'membership': f"SELECT coalesce(json_agg(t ORDER BY member,role,grantor),'[]') FROM (SELECT a.rolname member,b.rolname role,pg_get_userbyid(m.grantor) grantor,m.admin_option,m.inherit_option,m.set_option FROM pg_auth_members m JOIN pg_roles a ON a.oid=m.member JOIN pg_roles b ON b.oid=m.roleid WHERE a.rolname IN ({roles})) t",
+        'effectiveTables': f"SELECT json_agg(t ORDER BY role,schema,tab,privilege) FROM (SELECT r.rolname role,n.nspname schema,c.relname tab,p privilege,has_table_privilege(r.oid,c.oid,p) allowed,has_table_privilege(r.oid,c.oid,p||' WITH GRANT OPTION') grantable FROM pg_roles r CROSS JOIN pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace CROSS JOIN unnest(ARRAY['SELECT','INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER','MAINTAIN']) p WHERE r.rolname IN ({roles}) AND n.nspname IN ('catalog','discovery','public') AND c.relkind='r') t",
+        'effectiveColumns': f"SELECT json_agg(t ORDER BY role,schema,tab,col,privilege) FROM (SELECT r.rolname role,n.nspname schema,c.relname tab,a.attname col,p privilege,has_column_privilege(r.oid,c.oid,a.attnum,p) allowed,has_column_privilege(r.oid,c.oid,a.attnum,p||' WITH GRANT OPTION') grantable FROM pg_roles r CROSS JOIN pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace JOIN pg_attribute a ON a.attrelid=c.oid CROSS JOIN unnest(ARRAY['SELECT','INSERT','UPDATE','REFERENCES']) p WHERE r.rolname IN ({roles}) AND n.nspname IN ('catalog','discovery','public') AND c.relkind='r' AND a.attnum>0 AND NOT a.attisdropped) t",
+        'effectiveSchema': f"SELECT json_agg(t ORDER BY role,schema,privilege) FROM (SELECT r.rolname role,n.nspname schema,p privilege,has_schema_privilege(r.oid,n.oid,p) allowed,has_schema_privilege(r.oid,n.oid,p||' WITH GRANT OPTION') grantable FROM pg_roles r CROSS JOIN pg_namespace n CROSS JOIN unnest(ARRAY['USAGE','CREATE']) p WHERE r.rolname IN ({roles}) AND n.nspname IN ('catalog','discovery','public')) t",
+        'effectiveFunctions': f"SELECT json_agg(t ORDER BY role,schema,name,args) FROM (SELECT r.rolname role,n.nspname schema,p.proname name,pg_get_function_identity_arguments(p.oid) args,has_function_privilege(r.oid,p.oid,'EXECUTE') allowed,has_function_privilege(r.oid,p.oid,'EXECUTE WITH GRANT OPTION') grantable FROM pg_roles r CROSS JOIN pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE r.rolname IN ({roles}) AND n.nspname IN ('catalog','discovery')) t",
+        'effectiveDatabase': f"SELECT json_agg(t ORDER BY role,privilege) FROM (SELECT rolname role,p privilege,has_database_privilege(oid,'happyalmere',p) allowed,has_database_privilege(oid,'happyalmere',p||' WITH GRANT OPTION') grantable FROM pg_roles CROSS JOIN unnest(ARRAY['CONNECT','CREATE','TEMP']) p WHERE rolname IN ({roles})) t",
+        'effectiveSequences': f"SELECT coalesce(json_agg(t ORDER BY role,schema,name,privilege),'[]') FROM (SELECT r.rolname role,n.nspname schema,c.relname name,p privilege,has_sequence_privilege(r.oid,c.oid,p) allowed,has_sequence_privilege(r.oid,c.oid,p||' WITH GRANT OPTION') grantable FROM pg_roles r CROSS JOIN pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace CROSS JOIN unnest(ARRAY['USAGE','SELECT','UPDATE']) p WHERE r.rolname IN ({roles}) AND n.nspname IN ('catalog','discovery','public') AND c.relkind='S') t",
+        'defaultAcl': "SELECT coalesce(json_agg(t ORDER BY role,schema,type),'[]') FROM (SELECT pg_get_userbyid(d.defaclrole) role,n.nspname schema,d.defaclobjtype type,d.defaclacl::text grants FROM pg_default_acl d LEFT JOIN pg_namespace n ON n.oid=d.defaclnamespace WHERE pg_get_userbyid(d.defaclrole) IN ('happy_owner','happy_migrator')) t",
+        'objectAcl': "SELECT coalesce(json_agg(t ORDER BY kind,schema,name,col,grantor,grantee,privilege_type,is_grantable),'[]') FROM (SELECT o.kind,o.schema,o.name,o.col,pg_get_userbyid(x.grantor) grantor,CASE WHEN x.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(x.grantee) END grantee,x.privilege_type,x.is_grantable FROM (SELECT 'relation' kind,n.nspname schema,c.relname name,'' col,c.relacl acl FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('catalog','discovery','public') UNION ALL SELECT 'column',n.nspname,c.relname,a.attname,a.attacl FROM pg_attribute a JOIN pg_class c ON c.oid=a.attrelid JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('catalog','discovery','public') AND a.attnum>0 AND NOT a.attisdropped UNION ALL SELECT 'function',n.nspname,p.proname||'('||pg_get_function_identity_arguments(p.oid)||')','',p.proacl FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname IN ('catalog','discovery') UNION ALL SELECT 'schema',nspname,nspname,'',nspacl FROM pg_namespace WHERE nspname IN ('catalog','discovery','public') UNION ALL SELECT 'database','','happyalmere','',datacl FROM pg_database WHERE datname='happyalmere') o CROSS JOIN LATERAL aclexplode(o.acl) x WHERE x.grantee=0 OR pg_get_userbyid(x.grantee)<>'happy_restore') t"
     }
     for key,sql in queries.items():result[key]=json.loads(execute(container,sql))
     return result
+
+
+def complete_state(container):
+    return {'dataMetadataHistory':migrated_snapshot(container),'security':security_snapshot(container)}
+
+
+def executable_metadata(container):
+    snapshot=migrated_snapshot(container,executable_only=True)
+    result={key:snapshot[key] for key in ['functions','triggers']}
+    # Canonicalize formatting only; preserve quoted SQL strings verbatim.
+    for row in result['functions']:
+        row['definition']=re.sub(r"'(?:''|[^'])*'|\s+",lambda m:m[0] if m[0].startswith("'") else ' ',row['definition']).strip()
+    return result
+
+
+def assert_sql_contract(reference, actual):
+    if reference!=actual:raise RuntimeError('Independent SQL-only definition contract mismatch')
+
+
+def verify_revoked_restore(container):
+    execute(container,'ALTER ROLE happy_restore NOLOGIN; REVOKE happy_owner FROM happy_restore; REVOKE CONNECT ON DATABASE happyalmere FROM happy_restore;')
+    state=security_snapshot(container,['happy_restore'])
+    if any(state['roles'][0][flag] for flag in ['rolcanlogin','rolsuper','rolcreaterole','rolcreatedb','rolreplication','rolbypassrls']) or state['membership']:raise RuntimeError('Restore role authority remains')
+    if any(row['grantable'] or (row['allowed'] and (row['schema'],row['privilege'])!=('public','USAGE')) for row in state['effectiveSchema']):raise RuntimeError('Restore schema authority remains')
+    for kind in ['effectiveTables','effectiveColumns','effectiveFunctions','effectiveDatabase','effectiveSequences']:
+        if any(row['allowed'] or row['grantable'] for row in state[kind]):raise RuntimeError('Restore resource authorization remains: '+kind)
+    if execute(container,"SELECT count(*) FROM pg_stat_activity WHERE usename='happy_restore'")!='0':raise RuntimeError('Restore sessions remain')
+    # Model a surviving identity without granting LOGIN or owner membership again.
+    for statement in ['SET ROLE happy_owner','SELECT * FROM catalog.cities','SELECT * FROM public."__EFMigrationsHistory"']:
+        execute(container,'SET SESSION AUTHORIZATION happy_restore; '+statement,expected_state='42501')
+    return state
 
 
 def relational_metadata(container):
@@ -192,8 +234,8 @@ def main():
     os.environ['HA_FORWARD_NETWORK']=selected
 
     original='HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/'
-    for name in ['20261119000108_InitialDiscovery.cs','20261119000108_InitialDiscovery.Designer.cs','20261119161305_CatalogForward.cs','20261119161305_CatalogForward.Designer.cs','CatalogForward.sql']:
-        expected=r.run('git','show','d3d6a558cccda2d8e437854c46b5cbfe5ab7b9f4:'+original+name)
+    for name in ['20261119000108_InitialDiscovery.cs','20261119000108_InitialDiscovery.Designer.cs','20261119161305_CatalogForward.cs','20261119161305_CatalogForward.Designer.cs','CatalogForward.sql','20261119175842_SupportedRegions.cs','20261119175842_SupportedRegions.Designer.cs']:
+        expected=r.run('git','show','b4f092ffbbf385f16c4f42aaef117fafc8e56da7:'+original+name)
         if (ROOT/original/name).read_text(encoding='utf-8-sig').replace('\r\n','\n') != expected.lstrip('\ufeff').replace('\r\n','\n'):raise RuntimeError('Original migration changed')
     gate_path=(ROOT/args.gate).resolve(); gate=json.loads(gate_path.read_text())
     if not gate['gate'].startswith('PASS:') or gate_path.parent.parent != (ROOT/'artifacts/ha002a').resolve(): raise RuntimeError('Validated local recovery gate required')
@@ -247,7 +289,25 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         if migrated_snapshot(prior_restore)!=prior_snapshot:raise RuntimeError('Pre-correction migrated backup/restore mismatch')
         evidence['checks']['preCorrectionMigratedBackupRestore']='PASS'
         evidence['preCorrectionBackupSha256']=hashlib.sha256(prior_archive).hexdigest()
-        execute(target,(directory/'correction.sql').read_text(encoding='utf-8-sig'),'happy_schema_migrator',env['MIGRATION_PASSWORD'],'-c role=happy_owner');grants(target)
+        grants(prior_restore)
+        pre_correction=complete_state(target)
+        if complete_state(prior_restore)!=pre_correction:raise RuntimeError('Pre-correction restored complete state mismatch')
+        correction=(directory/'correction.sql').read_text(encoding='utf-8-sig')
+        if correction.count('COMMIT;')!=1 or not correction.lstrip().startswith('START TRANSACTION;'):raise RuntimeError('Unexpected correction transaction envelope')
+        fault="DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM pg_constraint WHERE conname='cities_supported_region') OR NOT EXISTS(SELECT 1 FROM public.\"__EFMigrationsHistory\" WHERE \"MigrationId\"='20261119175842_SupportedRegions') THEN RAISE EXCEPTION 'Correction probe prerequisite missing'; END IF; RAISE EXCEPTION 'Controlled correction failure after constraints and history' USING ERRCODE='P0001'; END $$;"
+        execute(target,correction.replace('COMMIT;',fault+'\nCOMMIT;'),'happy_schema_migrator',env['MIGRATION_PASSWORD'],'-c role=happy_owner',expected_state='P0001',expected_reason='Controlled correction failure after constraints and history')
+        if complete_state(target)!=pre_correction:raise RuntimeError('Correction rollback changed complete state')
+        # Fresh target created AFTER the correction-specific failure from protected pre-correction archive.
+        correction_recovery,crenv,crinfo=new_target(directory,'correction-recovery',args.port+7);targets.append(correction_recovery);roles(correction_recovery,crenv)
+        r.docker('exec','-i',correction_recovery,'pg_restore','-U','happy_migrator','--role=happy_owner','-d','happyalmere','--no-owner','--no-acl','--single-transaction','--exit-on-error',input=prior_archive,binary=True)
+        grants(correction_recovery)
+        if complete_state(correction_recovery)!=pre_correction:raise RuntimeError('Correction recovery complete state mismatch')
+        execute(target,correction,'happy_schema_migrator',env['MIGRATION_PASSWORD'],'-c role=happy_owner');grants(target)
+        execute(correction_recovery,correction,'happy_schema_migrator',crenv['MIGRATION_PASSWORD'],'-c role=happy_owner');grants(correction_recovery)
+        if complete_state(correction_recovery)!=complete_state(target):raise RuntimeError('Correction recovery reapplication mismatch')
+        evidence['checks']['correctionSpecificFailureRollbackRecovery']='PASS: P0001 after constraints/history; complete state rollback, fresh restore and reapplication'
+        evidence['correctionPreStateDigest']=r.digest(pre_correction)
+
 
         after=canonical(target)
         for name in after:
@@ -263,8 +323,10 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         history=json.loads(execute(target,'SELECT json_agg(t ORDER BY "MigrationId") FROM public."__EFMigrationsHistory" t;'))
         if len(history)!=3 or history[0]!=before['rows']['__EFMigrationsHistory'][0]:raise RuntimeError('Migration history changed')
         evidence['migrationHistory']=history
+        no_op_before=complete_state(target)
         r.run('dotnet','ef','database','update','--project',project,'--configuration','Release','--no-build',env=process)
-        if canonical(target)!=after: raise RuntimeError('Repeat migration changed content')
+        if complete_state(target)!=no_op_before: raise RuntimeError('Repeat migration changed complete state')
+        evidence['noOpStateDigest']=r.digest(no_op_before)
         evidence['checks']['secondRunNoOp']='PASS'
         clean,cenv,cinfo=new_target(directory,'clean',args.port+3);targets.append(clean);roles(clean,cenv)
         execute(clean,(directory/'clean.sql').read_text(encoding='utf-8-sig'),'happy_schema_migrator',cenv['MIGRATION_PASSWORD'],'-c role=happy_owner');grants(clean)
@@ -275,6 +337,24 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         execute(reference,(directory/'ef-model.sql').read_text(encoding='utf-8-sig'),'happy_schema_migrator',ref_env['MIGRATION_PASSWORD'],'-c role=happy_owner')
         expected_model=relational_metadata(reference)
         extras=compare_model(expected_model,relational_metadata(target));compare_model(expected_model,relational_metadata(clean))
+        contract=(ROOT/'scripts/verify-catalog-contract.sql').read_text()
+        execute(reference,contract,'happy_schema_migrator',ref_env['MIGRATION_PASSWORD'],'-c role=happy_owner')
+        expected_contract={'relational':relational_metadata(reference),'executable':executable_metadata(reference)}
+        for instance in [target,clean,correction_recovery]:
+            assert_sql_contract(expected_contract,{'relational':relational_metadata(instance),'executable':executable_metadata(instance)})
+        # Negative controls: correct names must not hide wrong definitions or identity.
+        for kind,field in [('columns','is_nullable'),('indexes','indexdef'),('indexes','schemaname'),('constraints','definition')]:
+            changed=copy.deepcopy(expected_contract);changed['relational'][kind][0][field]='deliberate mismatch'
+            try:assert_sql_contract(expected_contract,changed)
+            except RuntimeError:pass
+            else:raise RuntimeError('SQL contract negative control failed')
+        for kind,field in [('functions','definition'),('triggers','definition')]:
+            changed=copy.deepcopy(expected_contract);changed['executable'][kind][0][field]='deliberate mismatch'
+            try:assert_sql_contract(expected_contract,changed)
+            except RuntimeError:pass
+            else:raise RuntimeError('Executable contract negative control failed')
+        evidence['sqlOnlyContractSha256']=hashlib.sha256(contract.encode()).hexdigest()
+        evidence['checks']['independentSqlOnlyDefinitionsAndMutationGuards']='PASS'
         evidence['sqlOnlyInventory']=extras
         evidence['checks']['efPhysicalDefinitionsCleanAndUpgrade']='PASS'
         verify_role_controls(target,env)
@@ -302,12 +382,15 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         grants(final_restore)
         verify_role_controls(final_restore,fenv)
         compare_model(expected_model,relational_metadata(final_restore))
+        assert_sql_contract(expected_contract,{'relational':relational_metadata(final_restore),'executable':executable_metadata(final_restore)})
         if security_snapshot(final_restore)!=security_snapshot(target):raise RuntimeError('Restored effective privileges/memberships mismatch')
         if execute(final_restore,'SELECT current_user','happy_restore',restore_password)!='happy_restore':raise RuntimeError('Restore identity positive control failed')
         for statement in ['CREATE ROLE denied','SET ROLE happy_migrator','ALTER ROLE happy_restore SUPERUSER']:
             execute(final_restore,statement,'happy_restore',restore_password,expected_state='42501')
-        execute(final_restore,'ALTER ROLE happy_restore NOLOGIN; REVOKE happy_owner FROM happy_restore;')
-        if execute(final_restore,"SELECT rolcanlogin OR pg_has_role('happy_restore','happy_owner','MEMBER') FROM pg_roles WHERE rolname='happy_restore'")!='f':raise RuntimeError('Restore identity revocation failed')
+        revoked=verify_revoked_restore(final_restore)
+        evidence['revokedRestoreAuthorization']=revoked
+        if security_snapshot(final_restore)!=security_snapshot(target):raise RuntimeError('Final post-revocation common privilege mismatch')
+        evidence['checks']['completePrivilegesGrantOptionsAndRevocation']='PASS (authentication denial also required by PostgresTests)'
         evidence['checks']['dedicatedRestoreIdentityAndRevocation']='PASS'
         evidence['checks']['migratedArchiveAllTablesConstraintsIndexes']='PASS'
         evidence['checks']['restoredColumnsFunctionsTriggersHistoryOwnershipEffectivePrivileges']='PASS'
@@ -315,10 +398,15 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         ownership=execute(target,"SELECT count(*) FROM pg_tables WHERE schemaname IN ('catalog','discovery') AND tableowner <> 'happy_owner'")
         if ownership!='0':raise RuntimeError('Object ownership separation failed')
         evidence['checks']['nonLoginObjectOwnership']='PASS'
+        scope=json.loads(execute(target,"SELECT json_build_object('sequences',(SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('catalog','discovery','public') AND c.relkind='S'),'largeObjects',(SELECT count(*) FROM pg_largeobject_metadata),'foreignServers',(SELECT count(*) FROM pg_foreign_server),'foreignTables',(SELECT count(*) FROM pg_foreign_table),'rowPolicies',(SELECT count(*) FROM pg_policy),'customDomainsEnums',(SELECT count(*) FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace WHERE n.nspname IN ('catalog','discovery','public') AND t.typtype IN ('d','e')),'roleSettings',(SELECT count(*) FROM pg_db_role_setting))"))
+        if any(scope.values()):raise RuntimeError('Re-review declared privilege/object exclusions')
+        evidence['inapplicableObjectCounts']=scope
+
 
         # Use the clean isolated instance for existing six-record regression tests.
         clean_dir=directory/'clean';clean_dir.mkdir();r.private_write(clean_dir/'postgres.crt',r.docker('exec',clean,'cat','/var/lib/postgresql-tls/server.crt'))
-        r.private_write(directory/'rehearsal.env','ConnectionStrings__HappyCity='+connection(clean_dir,args.port+3,'happy_app',cenv['HAPPY_APP_PASSWORD'])+'\nHAPPYCITY_MIGRATION_CONNECTION='+connection(clean_dir,args.port+3,'happy_schema_migrator',cenv['MIGRATION_PASSWORD'])+';Options=-c role=happy_owner\n')
+        restored_dir=directory/'restored';restored_dir.mkdir();r.private_write(restored_dir/'postgres.crt',r.docker('exec',final_restore,'cat','/var/lib/postgresql-tls/server.crt'))
+        r.private_write(directory/'rehearsal.env','ConnectionStrings__HappyCity='+connection(clean_dir,args.port+3,'happy_app',cenv['HAPPY_APP_PASSWORD'])+'\nHAPPYCITY_MIGRATION_CONNECTION='+connection(clean_dir,args.port+3,'happy_schema_migrator',cenv['MIGRATION_PASSWORD'])+';Options=-c role=happy_owner\nHAPPYCITY_REVOKED_RESTORE_CONNECTION='+connection(restored_dir,args.port+4,'happy_restore',restore_password)+'\nHAPPYCITY_RESTORE_CONTROL_CONNECTION='+connection(restored_dir,args.port+4,'happy_app',fenv['HAPPY_APP_PASSWORD'])+'\n')
         evidence['targetContainers']=targets;evidence['regressionContainer']=clean;evidence['completedUtc']=dt.datetime.now(dt.timezone.utc).isoformat()
         evidence['status']='PASS';r.private_write(directory/'evidence.json',json.dumps(evidence,indent=2)+'\n')
         print(json.dumps({'status':'PASS','evidence':str(directory.relative_to(ROOT)/'evidence.json'),'environment':str(directory.relative_to(ROOT)/'rehearsal.env'),'checks':evidence['checks']},indent=2))

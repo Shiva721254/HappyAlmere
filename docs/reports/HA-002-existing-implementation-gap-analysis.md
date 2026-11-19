@@ -1,3 +1,7 @@
+# Current R02 gap disposition
+
+Use the current 12/18/12 matrices and criteria-linked deferral register in [HA-002-implementation-report.md](HA-002-implementation-report.md). ARCH-03 / Issue #14 identifies verification closure work, not new features. Master AC10 remains partial for private authorization; AC13/17 remain partial for production lifecycle/recovery; AC18 remains pending formal acceptance. Historical classifications below do not override these gates. No proposed deferral is an owner-approved waiver.
+
 # Current gap disposition ? HA-002-R01
 
 The historical gap analysis below is retained. The current 18-criterion evidence matrix is in [HA-002-implementation-report.md](HA-002-implementation-report.md), alongside the distinct Issue #4 and R01 matrices. Trusted synthetic city resolution, translation fallback, supported regional checks, full metadata/recovery comparisons, exact permission denials, committed hierarchy concurrency and actual generated deep-query plans now have remediation implementations/tests. Independent acceptance remains pending under [Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10). Production secret lifecycle and recovery operations remain partial and require explicit later disposition; no silent waiver. No HA-003/004 implementation or governance branch integration occurred.

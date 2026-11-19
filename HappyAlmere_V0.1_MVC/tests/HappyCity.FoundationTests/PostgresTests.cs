@@ -21,6 +21,22 @@ public sealed class PostgresTests
         new(new DbContextOptionsBuilder<HappyCityDbContext>().UseNpgsql(Connection(migration)).Options);
 
     [Fact]
+    public async Task Retired_restore_identity_cannot_authenticate_over_verified_tls()
+    {
+        // Positive control proves the independently restored endpoint and certificate work.
+        var control = DatabaseConfiguration.RequireVerifiedTls(Environment.GetEnvironmentVariable("HAPPYCITY_RESTORE_CONTROL_CONNECTION"));
+        await using var allowed = new NpgsqlConnection(control);
+        await allowed.OpenAsync();
+        await using var check = new NpgsqlCommand("SELECT current_user = 'happy_app' AND ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()", allowed);
+        Assert.Equal(true, await check.ExecuteScalarAsync());
+        var retired = DatabaseConfiguration.RequireVerifiedTls(Environment.GetEnvironmentVariable("HAPPYCITY_REVOKED_RESTORE_CONNECTION"));
+        await using var denied = new NpgsqlConnection(retired);
+        var error = await Assert.ThrowsAsync<PostgresException>(() => denied.OpenAsync());
+        Assert.Equal("28000", error.SqlState);
+        Assert.Equal("role \"happy_restore\" is not permitted to log in", error.MessageText);
+    }
+
+    [Fact]
     public async Task Migrations_are_current_and_repeatable()
     {
         await using var database = Database(true);

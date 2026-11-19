@@ -1,3 +1,131 @@
+# Current status: HA-002-R02 verification closure candidate
+
+Independent authority: [HA-002-ARCH-03 / Issue #14](https://github.com/Shiva721254/HappyAlmere/issues/14), owner-authorized bounded verification/evidence assignment. Starting head **b4f092ffbbf385f16c4f42aaef117fafc8e56da7**, branch **feature/ha-002-a**, [draft PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6). This section supersedes earlier status narratives without erasing evidence. No new application features, migration edits, dependency changes, original DB operations, merge or deployment. Independent acceptance and owner disposition remain separate gates. ARCH-01 standalone provenance remains unavailable.
+
+## Evidence refresh and reconciliation
+
+Before editing, refreshed the actual PR head, Issue #10 comments and Actions results. Same-head [push 44589464404](https://github.com/Shiva721254/HappyAlmere/actions/runs/44589464404) and [PR 44589477778](https://github.com/Shiva721254/HappyAlmere/actions/runs/44589477778) both succeeded. The [final Issue #10 handoff](https://github.com/Shiva721254/HappyAlmere/issues/10#issuecomment-7018705182) and updated PR description already exist. Therefore R-F01/R-F05's review-time missing evidence is reconciled; it was not a demonstrated failure. Baseline logs show 104 .NET passed, zero failures/skips. PR artifacts show 42 responsive cases, 190 functional/security assertions, five rate assertions, 18 rehearsal checks, retained p95 144.412ms and actual-query maximum p95 197.9095ms. Actual historical checkout hashes: push b4f092ffbbf385f16c4f42aaef117fafc8e56da7; PR synthetic merge checkout 02f5c0b934deada4658c5db8ec7f50bb43af414e (observed in checkout raw logs). No branch merge was performed. These are historical baseline evidence, not fresh R02 execution. Earlier failed runs remain below and in R01 artifacts.
+
+## Five findings/tasks: implementation and test traceability
+
+| Finding / task | Verification change | Evidence and disposition |
+|---|---|---|
+| R-F01 / R02-01 | Reconcile existing same-head push/PR success; require both workflows again at final R02 head | Refreshed baseline runs above. Final SHA/job links and actual counts recorded in Issue #14 after synchronization; no queued run described as passed |
+| R-F02 / R02-02 | security_snapshot covers all PostgreSQL 18 table privileges including REFERENCES/TRIGGER/MAINTAIN; all applicable column privileges; grant options; raw object/column ACL grantors/grantees including PUBLIC; role attributes, memberships/admin/inherit/set options; schema/database/function/sequence effective access | Complete common-principal comparison on migrated versus restored targets; verify_revoked_restore tests final NOLOGIN/no memberships/no protected effective rights, no surviving sessions, owner and protected reads denied with exact 42501. PostgresTests.Retired_restore_identity_cannot_authenticate_over_verified_tls requires exact 28000 and expected role-disabled reason after positive endpoint/TLS control |
+| R-F03 / R02-03 | scripts/verify-catalog-contract.sql explicitly defines SQL-only expectations independent of observed target catalogs; execute only on independent EF reference | Compare full relational identities/definitions and functions/triggers against clean, upgraded, correction-recovered and migrated-restored paths. Six deliberate definition/identity mutations must fail. No valid compatibility objects removed |
+| R-F04 / R02-04 | Inject a harness-only P0001 into generated SupportedRegions SQL before its sole COMMIT, after new constraints/history are demonstrably present | Compare complete pre/post data, columns/defaults, constraints/indexes, functions/triggers, owners, history and security; independently restore protected pre-correction archive after failure, compare, then successfully apply correction. Repeat EF update must preserve the same complete state |
+| R-F05 / R02-05 | Reuse current report/HANDOVER and reconcile all three original matrices plus R02 checklist; preserve historical evidence | Final GitHub handoff links exact containing commit, workflow jobs and proposed deferrals. PR #6 stays draft; governance PR #9 untouched |
+
+## Scope of applicable privilege verification
+
+Pinned PostgreSQL major version is 18; a different major fails the inventory guard for review. Privilege vocabulary and grant-option checks follow [PostgreSQL access inquiry functions](https://www.postgresql.org/docs/18/functions-info.html) and [privilege rules](https://www.postgresql.org/docs/18/ddl-priv.html). Table: SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER, MAINTAIN. Column: SELECT, INSERT, UPDATE, REFERENCES. Sequence: USAGE, SELECT, UPDATE. Schema: USAGE/CREATE. Database: CONNECT/CREATE/TEMP. Function: EXECUTE, schema/name/signature qualified. All applicable effective checks include grantability; direct ACL comparisons retain grantor, grantee and is_grantable. PUBLIC ACLs and inherited access are not omitted. Roles include the baseline administrator, non-login owner, migrator, runtime and backup, with credential values deliberately excluded.
+
+The restored temporary identity is intentionally absent from the source instance. Compare it separately after revocation: NOLOGIN, no memberships, no data/column/function/database/sequence rights or grant options, no surviving restore sessions; simulate the retired session identity for exact owner/read denials without granting LOGIN again. An actual Npgsql connection attempt with its formerly working credential must return 28000 with the expected disabled-role reason. Positive runtime access to the same restored TLS endpoint excludes outage/certificate/wrong-host false positives. Public schema USAGE may remain inherited from PUBLIC; it grants no protected relation access. NOLOGIN is a connection boundary, not a substitute for removing memberships/resource grants; CONNECT is also revoked. No production key/credential lifecycle claim.
+
+Fresh passwords differ intentionally and are never compared, printed or committed. Database-wide superuser internals, built-in types/system schemas and PostgreSQL maintenance internals are outside application restore scope. Application sequence, large-object, FDW/server, row-policy, custom domain/enum and role-setting counts are asserted zero (sequences are additionally queried generically). Future presence fails the scope guard for review. Implicit table row types follow compared table definitions; no custom type privileges are claimed verified. Exclusions are submitted for reviewer disposition, not self-approved waivers.
+
+## Independent SQL-only contract and correction safety
+
+The frozen verification contract records reviewed b4f092f expectations from D01/D09, InitialDiscovery/CatalogForward compatibility definitions and SupportedRegions hierarchy correction. It is authored as separate literal DDL, not regenerated from clean/upgrade/restored snapshots during verification. Reviewers can inspect expected nullable integer legacy columns, seven exact UUID/legacy/expression indexes, three functions and five trigger bindings. Reference creation uses the EF-generated schema plus this test-only contract; application migration code is not executed to produce SQL-only expectations. Canonical PostgreSQL output compares table/schema identity, type/nullability/defaults, uniqueness/order/predicate, function identity/body/owner/security/volatility/config and trigger binding/enabled state. Only whitespace outside SQL string literals is normalized in function definitions. Contract checksum is recorded. Its conformance to approved expectations is subject to independent re-review.
+
+All seven applied InitialDiscovery, CatalogForward and SupportedRegions source/designer/SQL files are checked against b4f092f before any rehearsal. The model snapshot and application sources are unchanged. The correction failpoint modifies only an in-memory copy of generated SQL in a fresh isolated target, never a migration file or original database. Exact P0001 marker follows successful constraint/history prerequisites. Protected pre-correction backup has already been independently restored before this fault; a separate new recovery target is created after it. Full state equality includes effective privileges and raw ACLs, not merely canonical application rows. Timestamps and credentials retain their documented scopes. Logical state excludes volatile statistics/transaction IDs/session locks, which are not restored application objects.
+
+## Updated matrix A: original Issue #4 (12)
+
+Technical evidence below is submitted for independent review; it is not final acceptance.
+
+| ID | Disposition | Evidence / gate |
+|---|---|---|
+| AC01 | Supported locally | Original source/history preserved; seven immutable migration checks |
+| AC02 | Supported locally | Reused verified original-source archive; fresh protected enriched/pre-correction/restricted backups |
+| AC03 | Locally verified; review pending | Complete restored state/privilege comparison and retired identity tests |
+| AC04 | Locally verified; review pending | Independent SQL-only definitions plus EF reference, clean/upgrade/restore |
+| AC05 | Supported locally | Existing UUID boundary/full mapping reconciliation retained |
+| AC06 | Supported locally | Original content, relationship and publication equality retained |
+| AC07 | Locally verified; review pending | Complete-state repeat/no-op comparison |
+| AC08 | Locally verified; review pending | Expanded exact privilege, membership/grant-option and retirement checks |
+| AC09 | Supported locally | Verified TLS, protected secrets, scans; production lifecycle separate |
+| AC10 | Local scope only | Unchanged 10k/250ms, application/browser regressions; final-head CI required |
+| AC11 | Locally verified; review pending | Original and correction-specific failpoints, rollback and independent recovery |
+| AC12 | Pending | Independent final acceptance and owner decision |
+
+## Updated matrix B: master HA-002 (18)
+
+| ID | Disposition | Evidence / gate |
+|---|---|---|
+| HA-002-AC01 | Supported | Existing layered architecture unchanged |
+| HA-002-AC02 | Supported locally | Separate synthetic volumes/instances, loopback, TLS |
+| HA-002-AC03 | Locally verified; review pending | Independent SQL-only contract, EF/physical definitions |
+| HA-002-AC04 | Supported locally | Existing city/region/active-state checks retained |
+| HA-002-AC05 | Supported synthetically | Existing trusted .test resolution; live activation deferred proposal |
+| HA-002-AC06 | Supported locally | Existing district hierarchy/concurrency tests retained |
+| HA-002-AC07 | Supported locally | Existing structured location/same-city/coordinate checks retained |
+| HA-002-AC08 | Supported locally | Existing shared category hierarchy tests retained |
+| HA-002-AC09 | Supported locally | Existing translation fallback/bounds/FK tests retained |
+| HA-002-AC10 | Partial | Public city integrity demonstrated; private authorization proposed HA-003/004, not waived |
+| HA-002-AC11 | Supported locally | Unchanged bounded queries and controlled benchmark; production concurrency deferred proposal |
+| HA-002-AC12 | Locally verified; review pending | Complete applicable privilege/ACL/retirement comparisons |
+| HA-002-AC13 | Partial | Local TLS verified; production hostname/secret/key lifecycle outstanding |
+| HA-002-AC14 | Locally verified; review pending | Immutable migrations and correction-specific rollback/full no-op |
+| HA-002-AC15 | Supported | Synthetic-only boundaries preserved |
+| HA-002-AC16 | Locally verified; review pending | Actual PostgreSQL tests, fresh final-head push/PR required |
+| HA-002-AC17 | Partial | Expanded local restoration evidence; production encryption/retention/RPO/RTO outstanding |
+| HA-002-AC18 | Pending | Current documents/evidence supplied; independent acceptance/owner disposition |
+
+## Updated matrix C: HA-002-R01 (12)
+
+| ID | Disposition | Evidence / gate |
+|---|---|---|
+| R01-AC01 | Supported mapping | All original ten findings retain traceability; no automatic formal closure |
+| R01-AC02 | Supported locally | Synthetic host tests unchanged |
+| R01-AC03 | Supported locally | Exact SQLSTATE/reason and negative-verifier controls retained |
+| R01-AC04 | Supported locally | Original failpoint retained; correction-specific proof added |
+| R01-AC05 | Locally verified; review pending | Complete applicable restored privilege/metadata comparison |
+| R01-AC06 | Supported locally | Committed hierarchy and multi-row cases retained |
+| R01-AC07 | Locally verified; review pending | Actual query evidence retained; independent SQL-only definitions added |
+| R01-AC08 | Supported locally | Translation/future-table denial tests retained |
+| R01-AC09 | Supported locally | Immutable migration bytes/data/history checks |
+| R01-AC10 | Locally verified; review pending | Fresh final-head local/remote results required |
+| R01-AC11 | Supported by scoped evidence | Isolated execution only; source/main/develop/integration/governance preserved |
+| R01-AC12 | Pending disposition | Prior re-review submitted; final independent acceptance remains pending |
+
+## Proposed deferrals: explicit owner decision still required
+
+| Original criteria | Remaining requirement / reason | Proposed milestone and responsible role | Required gate |
+|---|---|---|---|
+| Master AC10; Issue #4 AC12 | Private account authorization absent by current scope | HA-003 / Issue #12; identity implementer + security architect | Authorization tests and owner approval before private accounts |
+| Master AC10; Issue #4 AC12 | Private business resource authorization absent by current scope | HA-004 / Issue #13; business implementer + security architect | Ownership/resource-isolation review before private business operations |
+| Master AC05/13 | Live domain, trusted proxy and TLS lifecycle not exercised by synthetic hosts | HA-006/009; hosting/security owner | Verified domain/proxy/certificate design before activation |
+| Master AC13 | Production secret rotation/storage/key lifecycle not implemented | HA-009/010; operations/security owner | Rotation, access, recovery and incident procedures before production |
+| Master AC17 | Production backup encryption/retention and RPO/RTO not established | HA-009/010; database/operations owner | Protected restore drill and approved measured objectives before production |
+| Master AC11/16; Issue #4 AC10 | Concurrent/long-running capacity unknown; current measurements sequential/local | HA-005/009/010; performance/operations owner | Representative staging load/maintenance tests and approved thresholds |
+| Master AC02/13/17/18 | Production infrastructure operational readiness outside synthetic development scope | HA-009/010; infrastructure/security owner | Independent operational review and explicit release approval |
+
+These destinations are proposals from ARCH-03, not owner-approved waivers. A deferred requirement is not a passed requirement. Public release remains prohibited. No implementation of these future features under R02.
+
+## R02 eight-criterion evidence checklist
+
+| ID | Verification evidence / remaining gate |
+|---|---|
+| R02-AC01 | Baseline CI reconciled; exact final R02 push/PR results must be recorded in Issue #14 |
+| R02-AC02 | Complete applicable privilege/grant-option inventory, retired identity authentication/authorization controls; explicit exclusions above submitted for review |
+| R02-AC03 | Independent literal SQL-only contract, four execution paths, six mismatch guards; reviewer checks expected-definition provenance |
+| R02-AC04 | Exact correction marker, complete rollback, fresh restore/reapplication and full no-op comparisons |
+| R02-AC05 | Original 12/18/12 matrices above preserve identifiers, limitations and formal gates |
+| R02-AC06 | Criteria-linked proposed deferrals with owners/milestones/gates; no waiver |
+| R02-AC07 | Immutable applied migrations, original source/volumes, thresholds/security and existing functionality preserved |
+| R02-AC08 | Final exact-SHA independent re-review request after verification; no merge/deployment/self-acceptance |
+
+## Fresh R02 execution record
+
+Fresh local verification passed: **105 .NET tests, zero failures/skips; 21 isolated rehearsal checks; 42 responsive cases; 190 functional/security assertions; five rate assertions**. Debug/Release builds completed with zero warnings/errors; restore succeeded. NuGet direct/transitive and npm scans reported zero known vulnerabilities. Each browser suite verified loopback listeners and rejected six non-loopback probes over three interfaces, with certificate validation retained. Actual-query local p95 range 1.3918-20.747ms; retained 10k benchmark p95 45.9925ms, unchanged limit 250ms. Sanitized evidence is in [evidence/HA-002-A/r02](evidence/HA-002-A/r02/README.md). Final containing SHA, submitted/tested checkout hashes and push/PR results are published in the Issue #14 synchronization ledger after execution; CI success is not independent acceptance.
+
+Commands: `dotnet build HappyAlmere.slnx -c Release --no-restore`; `dotnet build HappyAlmere.slnx -c Debug --no-restore`; `python scripts/verify-forward-migration.py --gate artifacts/ha002a/20261119161050-4b5de6/evidence.json --port 55550`; `scripts/Test-Local.ps1 -EnvironmentFile <printed rehearsal.env>` (performs restore/Release build/test); load that environment then `npm run test:browser`; `dotnet package list --project HappyAlmere.slnx --vulnerable --include-transitive --format json`; `npm audit --json`; `python scripts/verify-source.py`; `git diff --check`. Source archive gate reused with validated checksum, not claimed as a fresh original-source backup. All new targets have separate volumes and loopback bindings.
+
+First rehearsal stopped because executable-reference metadata reader incorrectly requested migration history from the EF-only reference database, which intentionally has none. Reader corrected to inspect only functions/triggers for that comparison. The failed attempt is not counted as passing evidence. Existing application and applied migrations were not changed. Final containing SHA and CI evidence are recorded in the Issue #14 synchronization ledger. Supplemental post-revocation schema/admin-capability assertions were executed on the same isolated restored target; authorization snapshot and full common privilege comparison remained identical. Scoped source/history scan passed with zero matches; no ignored credentials were opened or published.
+
+## Historical R01 record (status superseded; evidence preserved)
+
 # Current implementation ? HA-002-R01 remediation candidate
 
 Authority: independently supplied [HA-002-ARCH-02 / Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10), owner-authorized bounded remediation, 19 November 2026. Baseline **d3d6a558cccda2d8e437854c46b5cbfe5ab7b9f4**, branch **feature/ha-002-a**, [draft PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6). This section supersedes historical implementation/pending-design statements below. It records implementing-agent evidence, **not independent acceptance**. HA-002-ARCH-01 remains unavailable as a verified standalone reference.
