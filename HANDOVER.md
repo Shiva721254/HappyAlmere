@@ -1,3 +1,28 @@
+# Latest handover — HA-GOV-R01 documentation reconciliation
+
+Branch **docs/ha-gov-r01**, exact starting integration **719dbcc6f0d05f9d2f338f74b89cec8991a3aa6f**. [Assignment #23](https://github.com/Shiva721254/HappyAlmere/issues/23), [recorded owner authorization](https://github.com/Shiva721254/HappyAlmere/issues/23#issuecomment-7022146146). Only eleven Markdown paths and unchanged ephemeral GitHub Actions synthetic CI are authorized. This branch is a review candidate, not governance acceptance. The final containing commit SHA, remote verification, new draft PR and actual push/PR results are the post-push synchronization ledger in Issue #23; no self-referential SHA or historical test substitution.
+
+## Current baseline and authority
+
+Accepted HA-002 **6da4b25e7a291e08b8fb0feab1b75ff22e55d0e0**, [ARCH-04](https://github.com/Shiva721254/HappyAlmere/issues/21) and [owner decision](https://github.com/Shiva721254/HappyAlmere/issues/21#issuecomment-7021312167), integrated through PR #6 at 719dbcc with parents 62b1def and 6da4b25, identical tree 7965cf8397c7ff5b9345da8333b5bc179424be4e. [INT-G11](https://github.com/Shiva721254/HappyAlmere/issues/22#issuecomment-7022022047) passed; G08 retains HTTP403 administrative visibility limitation; G12 pending. PR #3 remains expanded draft into main, #1 historical open, #9 historical conflicting draft at 871e7a3. Preserve all refs and original data/migrations.
+
+## Completed candidate work and evidence routes
+
+Eleven documents only: README/AGENTS/CHANGELOG/HANDOVER/risk register reconciled, PROJECT_STATUS/ROADMAP/TASKS/DECISIONS/ACCEPTANCE/docs README introduced. [Documentation inventory](docs/README.md) records retained/updated/superseded content, actual validation commands/results and immutable-tree checks. [Tasks](TASKS.md) maps all ten tasks; [acceptance](ACCEPTANCE.md) individually maps original 12/master18/R01 twelve/R02 eight, original governance10/reconciliation14 and integration 12. [Decisions](DECISIONS.md) retains twelve ADRs, approved D01–10/eight safeguards and actual owner provenance. [Risk register](docs/security/security-risk-register.md) retains all eight approved future gates and original criteria/roles. Earlier evidence files are unchanged.
+
+Historical baseline CI: push 44610653646 and PR 44610669585 succeeded,105 passed / 0 failed / 0 skipped each; not fresh governance results. Fresh candidate CI must demonstrate unchanged restore/build/database/recovery/privilege/performance/audit/browser/network stages, exact push checkout and PR synthetic parents, actual artifact contents and 250 ms p95 budget. No local database operation is permitted by this task. Final exact-head results are published directly in Issue #23/new draft PR after execution; queued/failed/skipped runs are never passed. On any failing verification stop/report; no runtime remediation under docs-only scope.
+
+## Restart and next action
+
+1. Inspect git status, branch/HEAD, remote refs and Issue #23 authorization/latest handoff. Confirm exact target719dbcc, source provenance and protected branch SHAs in PROJECT_STATUS. Stop on unexpected movement or unsafe unrelated work.
+2. Read docs/README, PROJECT_STATUS, TASKS, DECISIONS, ACCEPTANCE and risk register; old reports below are historical, not current task permissions. GitHub owner decision/comment attribution is authoritative; no private chat dependency.
+3. Complete/inspect mandatory exact-head CI and submit candidate evidence through the new draft PR into integration/ha-001-v02. Request independent ChatGPT review of all 24 governance criteria; stop. Do not close #5/#9 or any assignment.
+4. GOV-G07 independent review, G08 owner acceptance, G09 separate merge authority, G10 post-integration verification and INT-G12 remain pending. No main merge, new feature commissioning, procurement or production deployment. HA-MASTER-EXEC-01 remains proposed planning.
+
+Known limits: standalone ARCH-01 unavailable; master18 numbering consolidated from supplied sections; production/private criteria partial with approved deferrals, not waived. STRATO-first and pre-release signing prerequisites retained. No customer data. Historical statements below retain their original wording and are superseded by the attributed current decisions above.
+
+## Historical handovers — preserved verbatim below
+
 # Latest handover: HA-002-R02 verification closure candidate
 
 Branch **feature/ha-002-a**, starting SHA **b4f092ffbbf385f16c4f42aaef117fafc8e56da7**. Owner-authorized [Issue #14](https://github.com/Shiva721254/HappyAlmere/issues/14); keep PR #6 draft. Baseline push 44589464404 and PR 44589477778 both verified successful; prior final Issue #10 handoff exists. These are baseline results, not fresh R02 results.

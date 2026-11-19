@@ -1,3 +1,48 @@
+# Current risk and known-issues disposition — HA-GOV-R01
+
+Documentation date 19 November 2026. This is the canonical KNOWN_ISSUES register. [ARCH-04](https://github.com/Shiva721254/HappyAlmere/issues/21) resolved ten original and five residual technical findings within the accepted development scope; [owner decision](https://github.com/Shiva721254/HappyAlmere/issues/21#issuecomment-7021312167) accepted exact 6da4b25e7a291e08b8fb0feab1b75ff22e55d0e0 and eight future deferrals. Historical pending wording below is preserved, superseded only by these attributed scoped dispositions. No universal security certification or production readiness.
+
+## Approved future obligations
+
+The table retains original criteria, risk reason, responsible roles and gates from ARCH-04. **DEF-01–08 are now owner-approved deferrals** under comment 7021312167, not passed requirements, waivers, feature permission or legal exemptions. Role assignments require named accountable people before execution. Affected functionality remains unavailable until mandatory gates are met. Master AC10/13/17 remain partial for private/production scope; acceptance formalities were dispositioned separately.
+
+| ID | Outstanding requirement / reason | Original linkage | Destination and responsible role | Future mandatory gate |
+|---|---|---|---|---|
+| DEF-01 | Private customer authorization absent by current scope | Master AC10; #4 AC12 | HA-003 #12, identity implementer/security reviewer | Account resource authorization tests before private accounts |
+| DEF-02 | Private business authorization absent by scope | Master AC10; #4 AC12 | HA-004 #13, business implementer/security reviewer | Ownership/delegation/isolation before private business operations |
+| DEF-03 | Live domain/trusted proxy/TLS not exercised by synthetic hosts | Master AC05/13 | HA-006 #16 / HA-009 #19, hosting/security owner | Actual approved domain/proxy/certificate verification before activation |
+| DEF-04 | Production secret storage/rotation/key lifecycle absent | Master AC13 | HA-009/010 #19/#20, operations/security owner | Verified rotation/access/recovery/incident policies before production |
+| DEF-05 | Production backup encryption and retention absent | Master AC17 | HA-009/010, DB/operations owner | Independent encrypted retained copies and restore proof before production |
+| DEF-06 | Production measured RPO/RTO absent | Master AC17 | HA-009/010, DB/operations owner | Approved objectives and measured protected recovery exercise |
+| DEF-07 | Concurrent/sustained capacity unknown; current sequential | Master AC11/16; #4 AC10 | HA-005 #15 / HA-009/010, performance/operations owner | Representative staging load/maintenance, approved thresholds |
+| DEF-08 | Production infrastructure/security/operations outside synthetic scope | Master AC02/13/17/18 | HA-009/010, infrastructure/security owner | Independent operational readiness and specific release authorization |
+
+## Governance reconciliation risks
+
+Source Issue #23; severity is governance/integration classification, not a newly reproduced production vulnerability. All remain controlled risks pending independent verification; documentation alone does not resolve them.
+
+| ID | Severity / impact | Responsible role | Required action and current evidence |
+|---|---|---|---|
+| GOV-R01-R01 | High: stale status overwrites acceptance | Codex / reviewer | Use #21 owner + #22 INT-G11; current indexes supersede historical snapshots |
+| GOV-R01-R02 | High: decision provenance lost | Codex / reviewer | Preserve 871e7a3 and original reports/decisions; three-way comparison |
+| GOV-R01-R03 | High: deferrals falsely marked passed | Owner / reviewer | Eight explicit mandatory gates above; private/production remains partial |
+| GOV-R01-R04 | High: unauthorized feature execution | Owner / implementer | TASKS labels published designs only; no executable future assignment |
+| GOV-R01-R05 | Critical: accepted migrations changed | Implementer / migration coordinator | All non-allowlisted blobs/modes equal; no DB access |
+| GOV-R01-R06 | Critical: CI controls weakened | Implementer / reviewer | Workflow/tests/thresholds unchanged; on failure stop/report |
+| GOV-R01-R07 | Critical: accidental main merge | Repository maintainer / owner | PR #3 stays draft; no merge authority; exact ref preservation |
+| GOV-R01-R08 | Medium: duplicate canonical records | Documentation maintainer | Eleven responsibilities, reuse register, no KNOWN_ISSUES duplicate |
+| GOV-R01-R09 | High: sensitive disclosure | Implementer / security reviewer | Scoped credential-pattern review, sanitized results only; no archives/credentials |
+| GOV-R01-R10 | High: self-acceptance | ChatGPT / product owner | GOV-G07–10 and INT-G12 pending; submit and stop |
+| GOV-TRC-001 | Provenance gap: ARCH-01 unavailable | Owner / reviewer | Retain reconstructed #4 attribution; recover authenticated reference if available, never invent |
+| GOV-STATE-001 | Closed #5 mistaken for acceptance | Owner | Preserve closure history; new candidate has separate review/acceptance, no automatic issue action |
+| GOV-PLAN-001 | Designs mistaken for approved critical path | Owner / architect | #11–20 published; HA-MASTER-EXEC-01 proposed, migration coordination unresolved |
+| GOV-COORD-001 | Historical #9 overwrites later DB evidence | Codex / reviewer | Fresh branch from 719dbcc, five-path reconciliation; old PR preserved |
+| GOV-VIS-001 | Administrative protection visibility limited | Owner / repository administrator | INT-G08 HTTP403 disposition retained; no claim full settings verified or permission to bypass |
+
+[Acceptance](../../ACCEPTANCE.md) carries original criterion dispositions; [tasks](../../TASKS.md) assigns next actions. Existing SEC/PERF/UI/ARCH/GOV findings below remain historical with continuing applicable future obligations. Future new schemas, routines, privileges or PostgreSQL versions require new inventory; accepted zero-count exclusions are not permanent exemptions.
+
+## Historical risk records — preserved verbatim below
+
 ## Current R02 verification and proposed risk disposition
 
 Independent [ARCH-03 / Issue #14](https://github.com/Shiva721254/HappyAlmere/issues/14) identifies R-F01 through R-F04 as medium verification/evidence gaps and R-F05 as low documentation synchronization. No new critical/high defect was established. The [current implementation report](../reports/HA-002-implementation-report.md) maps each finding to tests and retains all original matrices. R-F01/R-F05 baseline missing evidence has been reconciled against actual same-head successful runs and the final Issue #10 handoff. R-F02/R-F03/R-F04 now have expanded verification candidates; independent closure remains pending.
