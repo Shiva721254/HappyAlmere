@@ -48,8 +48,6 @@ jobs:
           # avoids the current-user untrusted-root consent dialog; validation stays on.
           certutil.exe -f -addstore Root artifacts/ci/localhost.crt
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          certutil.exe -user -f -addstore Root artifacts/ci/localhost.crt
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           dotnet dev-certs https --check --trust
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - run: npm run test:browser
