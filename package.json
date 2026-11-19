@@ -1,0 +1,17 @@
+{
+  "name": "happyalmere-browser-verification",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Development-only HTTPS regression tooling; not an application runtime dependency.",
+  "engines": { "node": ">=24 <26" },
+  "scripts": {
+    "browser:install": "playwright install chromium",
+    "test:browser": "node scripts/run-browser-tests.cjs",
+    "test:responsive": "node scripts/verify-browser.cjs",
+    "test:security": "node scripts/verify-security.cjs functional",
+    "test:rate": "node scripts/verify-security.cjs rate"
+  },
+  "devDependencies": {
+    "playwright": "1.65.1"
+  }
+}

@@ -2,6 +2,15 @@
 
 Only observed Git history and actual local changes are recorded. Dates use Europe/Amsterdam.
 
+## Unreleased - HA-001-R02 - 2026-11-19
+- Verify actual loopback listeners and local non-loopback connection rejection; clarify that Host filtering and noindex do not isolate a network service.
+- Pin development-only Playwright/Chromium tooling with an npm lockfile and repeatable trusted-HTTPS Windows harness.
+- Preserve responsive/security/rate coverage and add a Windows browser CI job with immutable action pins and read-only repository permissions.
+- Format compressed Razor, CSS and configuration without changing application behaviour.
+- Record the independent audit's 15 findings, future milestones and acceptance decisions in a permanent risk register.
+- Verify the actual successful GitHub run for submitted R01 commit 7b6e082; revised R02 remote execution remains pending authorized push.
+- No HA-002/HA-003, merge, public deployment or final V0.1 approval.
+
 ## Unreleased - HA-001-R01 - 2026-11-19
 - Re-execute builds, 33 foundation tests, live security/rate checks and expanded 42-layout browser regression; publish separate fresh evidence and preserve failed sandbox attempts.
 - Verify the HappyAlmere GitHub remote and retain independent review/owner approval gates.

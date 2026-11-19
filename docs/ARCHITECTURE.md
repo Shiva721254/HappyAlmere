@@ -83,3 +83,13 @@ flex/grid children have min-width:0. No global overflow hiding is used.
 Rate limiting partitions by normalized transport peer with no forwarded-header trust,
 retaining the original per-bucket count/window and zero queue. See SECURITY.md for
 NAT/proxy and public-hosting limitations. No dependency direction or framework changed.
+
+## HA-001-R02 independent review remediation
+
+The existing layered MVC architecture is accepted in principle by the independent
+review; no rewrite is authorized or performed. Razor/CSS/configuration edits are
+formatting only. Browser QA now has a private development-only npm package and
+lockfile; no JavaScript dependency enters the application or .NET project graph.
+The Windows local/CI harness preserves trusted HTTPS and verifies actual loopback
+sockets. Planned multi-city and persistence requirements remain unimplemented and
+are tracked in [the risk register](security/security-risk-register.md).

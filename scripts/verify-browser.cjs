@@ -1,6 +1,5 @@
-// Uses an existing Playwright installation; no browser/runtime dependency is added to the app.
-// Run: node scripts/verify-browser.cjs <path-to-playwright-or-playwright-core>
-const { chromium } = require(process.argv[2] || 'playwright');
+// Run npm ci and npm run browser:install first; application runtime has no Node dependency.
+const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 

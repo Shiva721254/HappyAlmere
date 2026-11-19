@@ -15,3 +15,8 @@ to resolve errors. Audit direct and transitive dependencies before acceptance an
 review .NET security patches regularly. Production requires an independently
 reviewed threat model, identity/authorization, secure database operations, trusted
 proxy configuration, monitoring, privacy controls and recovery testing.
+
+R02 records actual loopback bindings and local non-loopback connection rejection.
+AllowedHosts and noindex are not network access controls. See the permanent
+[risk register](docs/security/security-risk-register.md) for all independent findings,
+future milestones and pending acceptance decisions.

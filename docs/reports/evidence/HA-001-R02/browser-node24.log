@@ -1,0 +1,185 @@
+A trusted certificate was found: 0EF1B53EC9D4426651329A0769310D0608E6443C - CN=localhost - Valid from 2026-02-09 13:55:10Z to 2027-02-09 13:55:10Z - IsHttpsDevelopmentCertificate: true - IsExportable: true
+A valid HTTPS certificate is already present.
+{
+    "suite":  "responsive",
+    "result":  "PASS",
+    "listeners":  [
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  7143
+                      },
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  5143
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  7143
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  5143
+                      }
+                  ],
+    "nonLoopbackInterfacesProbed":  3,
+    "nonLoopbackConnectionsRejected":  6,
+    "limitation":  "Local interface probes and process socket inventory; not an external firewall or public deployment test."
+}
+{
+  "result": "PASS",
+  "widths": [
+    320,
+    375,
+    430,
+    768,
+    1024,
+    1440,
+    1920
+  ],
+  "links": 8,
+  "checks": [
+    "trusted HTTPS",
+    "no horizontal overflow",
+    "keyboard skip link",
+    "navigation",
+    "search",
+    "empty state",
+    "category retained",
+    "no browser errors"
+  ]
+}
+{
+    "suite":  "functional",
+    "result":  "PASS",
+    "listeners":  [
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  7243
+                      },
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  5243
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  7243
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  5243
+                      }
+                  ],
+    "nonLoopbackInterfacesProbed":  3,
+    "nonLoopbackConnectionsRejected":  6,
+    "limitation":  "Local interface probes and process socket inventory; not an external firewall or public deployment test."
+}
+{
+  "summary": {
+    "passed": 190,
+    "failed": 0
+  },
+  "failures": [],
+  "timings": [
+    {
+      "ttfbMs": 1.4000000059604645,
+      "loadMs": 8.099999994039536,
+      "domContentLoadedMs": 7.699999988079071,
+      "htmlBytes": 4882,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 4170
+        }
+      ]
+    },
+    {
+      "ttfbMs": 1.199999988079071,
+      "loadMs": 7.299999982118607,
+      "domContentLoadedMs": 6.699999988079071,
+      "htmlBytes": 4882,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 4170
+        }
+      ]
+    },
+    {
+      "ttfbMs": 1.2000000178813934,
+      "loadMs": 7.200000017881393,
+      "domContentLoadedMs": 6.600000023841858,
+      "htmlBytes": 4882,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 4170
+        }
+      ]
+    },
+    {
+      "ttfbMs": 1.0999999940395355,
+      "loadMs": 6.799999982118607,
+      "domContentLoadedMs": 6.5,
+      "htmlBytes": 4882,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 4170
+        }
+      ]
+    },
+    {
+      "ttfbMs": 1.199999988079071,
+      "loadMs": 9.5,
+      "domContentLoadedMs": 8.699999988079071,
+      "htmlBytes": 4882,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 4170
+        }
+      ]
+    }
+  ],
+  "privacyLatency": {
+    "samples": 50,
+    "medianMs": 1.169499999999971,
+    "p95Ms": 1.6534999999994398,
+    "minMs": 1.0242000000007465,
+    "maxMs": 2.782100000000355
+  }
+}
+{
+    "suite":  "rate",
+    "result":  "PASS",
+    "listeners":  [
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  7243
+                      },
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  5243
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  7243
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  5243
+                      }
+                  ],
+    "nonLoopbackInterfacesProbed":  3,
+    "nonLoopbackConnectionsRejected":  6,
+    "limitation":  "Local interface probes and process socket inventory; not an external firewall or public deployment test."
+}
+{
+  "summary": {
+    "passed": 5,
+    "failed": 0
+  },
+  "failures": [],
+  "timings": []
+}
+PASS: responsive, production security, rate limiting and actual network bindings.

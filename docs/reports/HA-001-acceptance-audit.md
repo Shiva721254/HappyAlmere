@@ -1,5 +1,35 @@
 # HA-001-R01: current V0.1 acceptance audit
 
+## Current HA-001-R02 independent audit remediation
+
+19 November 2026: [R02 report](HA-001-R02-independent-audit-remediation.md) supersedes
+R01 execution summaries for the current branch `fix/ha-001-r02`, based on reviewed
+commit `7b6e082662fb5449cfae0a3586a91488db6ef880`. Architecture is accepted in principle;
+R02 has not received final independent closure or product-owner V0.1 approval.
+
+Fresh results: Debug/Release zero warnings/errors; 33 tests passed; 42 responsive
+layouts at seven widths; 190 production security plus five rate assertions passed;
+21/21 formatting screenshots identical; actual listeners only 127.0.0.1/::1 and six
+non-loopback connection attempts rejected per suite. npm/NuGet known-vulnerability
+scans and bounded credential review found no findings. All 15 independent findings
+are tracked in the [permanent risk register](../security/security-risk-register.md).
+
+| Criteria | Current R02 assessment |
+|---|---|
+| AC01?AC12 | PASS within the documented local synthetic scope. R02 does not claim a fresh interactive VS Code run; earlier IDE evidence remains historical. Dependency graph and launch configuration rechecked. |
+| AC13 | PARTIAL: independent review of R01 supplied; review/closure of this R02 version pending. |
+| AC14 | PARTIAL: documented future requirements/open risks remain; architecture approval is not blanket residual-risk acceptance. |
+| AC15 | NOT TESTED: formal product-owner V0.1 approval remains pending. |
+
+Total: **12 PASS, 2 PARTIAL, 0 FAIL, 1 NOT TESTED**. Submitted R01 commit's actual
+[GitHub workflow](https://github.com/Shiva721254/HappyAlmere/actions/runs/44515481629)
+passed; revised R02 browser CI is **NOT RUN pending authorized push**. That unexecuted
+check remains explicit under QA-F02. No HA-002/HA-003, main merge, develop modification,
+customer-data collection or public deployment is authorized by this assessment.
+
+Everything below is preserved historical R01 evidence; its counts and completion
+statements do not replace the R02 report or imply final acceptance.
+
 ## Latest continuation verification
 
 Fresh build, test, browser, security and dependency evidence is recorded in [the continuation verification ledger](evidence/HA-001-R01-refresh/README.md). Release/Debug: zero warnings/errors; 33 tests passed; 190 browser/security and 5 limiter assertions passed; expanded browser regression passed 42 layouts across seven widths and eight destinations. Two sandbox HTTPS failures and the successful approved rerun are recorded. Recovery checkpoint: `c22c76bfbf7303f9f3349fe8d8c55bd4cfb7b7d2`. Remote verified as `Shiva721254/HappyAlmere`. Technical checks complete within scope; AC13/AC14/AC15 human gates remain pending.

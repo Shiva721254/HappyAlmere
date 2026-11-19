@@ -41,22 +41,28 @@ The solution contains application and full MVC pipeline tests using xUnit and
 Microsoft.AspNetCore.Mvc.Testing. Runtime projects have no additional package dependencies.
 The root GitHub workflow restores, builds and tests Release.
 
-For optional browser smoke tests, start the HTTPS app, then use an existing
-Playwright/Chromium installation:
+Browser regression tooling is a development-only dependency. On Windows, install
+Node 24.22.3 (pinned in `.node-version`; Node 25 is also supported locally), then:
 
-```text
-node scripts/verify-browser.cjs <absolute-path-to-playwright-or-playwright-core>
+```powershell
+npm ci --ignore-scripts
+npm run browser:install
+npm audit --audit-level=high
+# Stop any manually started test server first; Release must be built.
+npm run test:browser
 ```
 
-The script keeps certificate validation enabled, checks all seven required viewport widths,
-navigation, keyboard skip access and search, and writes screenshots to ignored
-`artifacts/`. Node/Playwright are QA tools, not application runtime requirements.
-Browser verification is separate from CI's .NET integration tests.
+The harness starts and stops its own loopback-only servers, retains TLS certificate
+validation, checks actual listeners and non-loopback connection rejection, and runs
+42 responsive cases plus production security and rate-limit regressions. Results
+and screenshots go to ignored `artifacts/`. No absolute Playwright path is needed.
+The Windows browser CI job uses the same commands; the Linux .NET job remains.
+See [development instructions](docs/DEVELOPMENT.md) for setup and CI limitations.
 
 See [architecture](docs/ARCHITECTURE.md), [security review](docs/SECURITY.md), and
 [V0.1 verification report](docs/V0.1-VERIFICATION.md).
 
-## HA-001-R01 remediation checkout
+## HA-001-R02 remediation checkout
 
 This branch is based on V0.1 commit ebc99a0. The original develop branch already
 contains separate V0.2 work and is intentionally untouched. Open this worktree root
@@ -68,8 +74,9 @@ long-category text, with screenshots and document/viewport measurements in artif
 See [development instructions](docs/DEVELOPMENT.md), [engineering rules](AGENTS.md),
 [security](SECURITY.md), [changelog](CHANGELOG.md),
 [acceptance audit](docs/reports/HA-001-acceptance-audit.md) and
-[remediation report](docs/reports/HA-001-R01-remediation-report.md).
+[R02 remediation report](docs/reports/HA-001-R02-independent-audit-remediation.md) and
+[permanent risk register](docs/security/security-risk-register.md).
 V0.1 acceptance remains subject to architect recommendation and product-owner approval.
 
-Fresh continuation results: [verification ledger](docs/reports/evidence/HA-001-R01-refresh/README.md). Browser coverage includes
+Historical R01 continuation results: [verification ledger](docs/reports/evidence/HA-001-R01-refresh/README.md). Browser coverage includes
 42 layouts across seven widths, including combined maximum-length query/category input.

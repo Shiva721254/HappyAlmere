@@ -2,7 +2,7 @@
 
 ## Enforced and tested
 
-- Localhost launch bindings and AllowedHosts allowlist.
+- Localhost launch bindings; actual loopback socket inventory and non-loopback local-interface probes in R02. AllowedHosts separately validates HTTP Host headers.
 - HTTPS redirection; production HSTS (localhost is intentionally excluded by ASP.NET).
 - CSP: self-only resources, no scripts, no objects, no framing, self-only form actions.
 - X-Content-Type-Options, X-Frame-Options, restrictive Permissions-Policy.
@@ -55,3 +55,26 @@ accessibility audit, load test or certification of OWASP compliance.
 - [ASP.NET Core integration testing](https://learn.microsoft.com/aspnet/core/test/integration-tests?view=aspnetcore-10.0)
 - [ASP.NET Core rate limiting](https://learn.microsoft.com/aspnet/core/performance/rate-limit?view=aspnetcore-10.0)
 - [ASP.NET Core antiforgery](https://learn.microsoft.com/aspnet/core/security/anti-request-forgery?view=aspnetcore-10.0)
+
+## SEC-F01 local deployment boundary
+
+The normal launch profile and VS Code launch use `https://localhost:7143` and
+`http://localhost:5143`. Kestrel binds localhost to loopback (127.0.0.1 and ::1).
+The repeatable browser harness inspects every listening socket of the test server
+process and fails on any non-loopback address. It also tests this machine's non-loopback
+IPv4 interfaces; this is local boundary evidence, not an external firewall audit.
+
+AllowedHosts is an HTTP Host allowlist, **not a network access control**. A remote
+client could send an allowed Host value if the listener were exposed. X-Robots-Tag
+and HTML noindex are crawler instructions, **not access control**. HTTPS encrypts
+traffic but does not authorize users. The local boundary depends on loopback sockets
+and absence of forwarding/tunnels; other local users/processes can reach it.
+Do not override URLs with `0.0.0.0`, `[::]`, `*`, `+` or a LAN/public address. No public
+exposure, customer data or production use is authorized.
+
+Permanent findings, classifications, milestones, ownership and acceptance decisions:
+[security and engineering risk register](security/security-risk-register.md).
+Future identity, secret storage, Data Protection and database requirements in that
+register are not represented as implemented V0.1 capabilities.
+
+Reference: [Kestrel endpoint binding](https://learn.microsoft.com/aspnet/core/fundamentals/servers/kestrel/endpoints?view=aspnetcore-10.0).

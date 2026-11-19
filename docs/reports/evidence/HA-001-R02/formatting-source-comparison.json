@@ -1,0 +1,34 @@
+[
+  {
+    "path": "HappyAlmere_V0.1_MVC/src/HappyCity.Web/Views/Home/Business.cshtml",
+    "nonWhitespaceIdentical": true
+  },
+  {
+    "path": "HappyAlmere_V0.1_MVC/src/HappyCity.Web/Views/Home/Error.cshtml",
+    "nonWhitespaceIdentical": true
+  },
+  {
+    "path": "HappyAlmere_V0.1_MVC/src/HappyCity.Web/Views/Home/Index.cshtml",
+    "nonWhitespaceIdentical": true
+  },
+  {
+    "path": "HappyAlmere_V0.1_MVC/src/HappyCity.Web/Views/Home/Privacy.cshtml",
+    "nonWhitespaceIdentical": true
+  },
+  {
+    "path": "HappyAlmere_V0.1_MVC/src/HappyCity.Web/Views/Shared/_DiscoveryCard.cshtml",
+    "nonWhitespaceIdentical": true
+  },
+  {
+    "path": "HappyAlmere_V0.1_MVC/src/HappyCity.Web/Views/Shared/_Layout.cshtml",
+    "nonWhitespaceIdentical": true
+  },
+  {
+    "path": "HappyAlmere_V0.1_MVC/src/HappyCity.Web/Views/_ViewStart.cshtml",
+    "nonWhitespaceIdentical": true
+  },
+  {
+    "path": "HappyAlmere_V0.1_MVC/src/HappyCity.Web/wwwroot/css/site.css",
+    "nonWhitespaceIdentical": true
+  }
+]

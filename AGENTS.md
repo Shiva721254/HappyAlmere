@@ -25,4 +25,4 @@
 - Restore, build and execute relevant unit/integration and HTTPS browser tests after corrections. Check transitive vulnerabilities and dependency direction. Record exact commands, counts and failures; never reuse old results as fresh evidence.
 - Keep README.md, SECURITY.md, CHANGELOG.md and architecture/development documentation accurate. Record remaining risks and unexecuted checks explicitly.
 - Major architectural changes, destructive operations, expenses and deployment require explicit approval. Ordinary scoped corrections remain authorized by the assignment.
-- Stop after HA-001-R01. Independent architect recommendation and explicit product-owner V0.1 approval must precede further V0.2 development. Never approve governance gates on their behalf.
+- HA-001-R02 is the authorized continuation of the independent audit remediation. Stop after HA-001-R02. Independent architect recommendation and explicit product-owner V0.1 approval must precede HA-002/HA-003 or further V0.2 development. Never approve governance gates on their behalf.

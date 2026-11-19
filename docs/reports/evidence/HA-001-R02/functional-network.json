@@ -1,0 +1,25 @@
+{
+    "suite":  "functional",
+    "result":  "PASS",
+    "listeners":  [
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  7243
+                      },
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  5243
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  7243
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  5243
+                      }
+                  ],
+    "nonLoopbackInterfacesProbed":  3,
+    "nonLoopbackConnectionsRejected":  6,
+    "limitation":  "Local interface probes and process socket inventory; not an external firewall or public deployment test."
+}
