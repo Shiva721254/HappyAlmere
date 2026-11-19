@@ -38,7 +38,14 @@ jobs:
       - run: npm run browser:install
       - run: dotnet restore HappyAlmere.slnx
       - run: dotnet build HappyAlmere.slnx -c Release --no-restore
-      - run: dotnet dev-certs https --trust
+      - name: Trust the ephemeral runner certificate without an interactive dialog
+        run: |
+          New-Item -ItemType Directory -Force artifacts/ci | Out-Null
+          dotnet dev-certs https --export-path artifacts/ci/localhost.cer
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Import-Certificate -FilePath artifacts/ci/localhost.cer -CertStoreLocation Cert:\CurrentUser\Root | Out-Null
+          dotnet dev-certs https --check --trust
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - run: npm run test:browser
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         if: ${{ !cancelled() }}
