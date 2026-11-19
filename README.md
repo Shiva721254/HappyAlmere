@@ -4,6 +4,12 @@ This branch reconciles existing develop c2964ee with approved V0.1 main 0e7739d.
 It is a review candidate, not accepted HA-002 implementation. Only synthetic local use.
 The existing database schema/migration and both histories are preserved.
 
+## Documentation and current status
+
+Use the [documentation index](docs/README.md) to locate canonical current and historical
+records, and [PROJECT_STATUS.md](PROJECT_STATUS.md) for evidence/approval distinctions.
+HA-002-A remains primary; HA-GOV-001 is a separate documentation-only review branch.
+
 ## Shared implementation record
 
 Start with [HANDOVER.md](HANDOVER.md) for the current branch, implementation checkpoints,

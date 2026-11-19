@@ -2,6 +2,13 @@
 
 Only observed Git history and actual local changes are recorded. Dates use Europe/Amsterdam.
 
+## HA-GOV-001 documentation - 2026-11-19
+
+- Add canonical documentation/status/roadmap/task/decision/acceptance indexes and reuse existing requirements, risk, handover and execution reports.
+- Separate reported implementation, verified execution, independent review and owner approval; record missing ARCH-01 provenance and pre-existing Issue #5 closed-state discrepancy.
+- Keep HA-002-A primary and untouched on its own branch; no source/database architecture/runtime/workflow change or database operation.
+- Document review/update/restart protocol and audit only documentation; governance runtime CI intentionally skipped, not claimed passed.
+
 ## HA-002-A recovery/design - 2026-11-19
 
 - Add protected synthetic-only PostgreSQL inventory/backup/isolated restore with exact reconciliation and negative input/archive checks; preserve the source and existing migrations.

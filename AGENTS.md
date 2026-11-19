@@ -41,3 +41,10 @@
 - Issue #4 and the owner's clarification authorize inventory, protected backup, isolated restore/integrity and non-destructive migration design on feature/ha-002-a. Reconcile against repository architecture; HA-002-ARCH-01 has no verified standalone reference and must not be invented.
 - Record the recovery gate before any primary-key, ownership or existing-structure changes. Escalate ambiguous migration mappings in Issue #4 for independent review. All twelve acceptance criteria remain active; baseline restore is not forward-migration completion.
 - Report progress, actual test results, commits and criterion-level evidence directly in Issue #4. Preserve main/develop/source data and all prior approval/deployment restrictions.
+
+
+## HA-GOV-001 documentation coordination and restart
+- Read docs/README.md for canonical locations, PROJECT_STATUS.md for current status, TASKS.md for ownership/dependencies, DECISIONS.md for provenance and ACCEPTANCE.md for criterion sources. Reuse the existing permanent risk register as KNOWN_ISSUES; never create a competing architecture or acceptance definition.
+- HA-002-A remains primary. HA-GOV-001 is separately authorized documentation-only work on docs/ha-gov-001 from 3287994; do not edit application source, database architecture/design, schemas, migrations, runtime/workflow configuration, dependencies or permissions, or execute database operations under this assignment.
+- Keep governance changes isolated from the active HA-002-A branch; inspect overlapping documentation before later owner-authorized integration. Independent review and explicit owner acceptance/merge/deploy authority remain separate from implementation/CI/issue state.
+- At restart refresh actual GitHub refs, issue comments, PR reviews/checks and local changes. Record unavailable originals and unapproved roadmap proposals explicitly; closed/completed issue UI is not acceptance evidence. Report governance evidence and GOV-AC01 through 10 disposition in Issue #5 without self-approval.

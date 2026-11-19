@@ -2,9 +2,37 @@
 
 Updated: 19 November 2026 (Europe/Amsterdam).
 Repository: private [Shiva721254/HappyAlmere](https://github.com/Shiva721254/HappyAlmere).
-Working branch: **feature/ha-002-a**, from integration baseline 62b1defdca00989bf363a39057f5558aae8ee3e3.
+Primary implementation branch: **feature/ha-002-a**, from integration baseline 62b1defdca00989bf363a39057f5558aae8ee3e3.
 Active assignment: [Issue #4](https://github.com/Shiva721254/HappyAlmere/issues/4).
-Review: [draft PR #3](https://github.com/Shiva721254/HappyAlmere/pull/3), unmerged.
+Primary review: [draft PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6), unmerged.
+Earlier integration review: [draft PR #3](https://github.com/Shiva721254/HappyAlmere/pull/3), unmerged.
+
+## Governance side task and restart instructions
+
+HA-GOV-001 is documentation-only on **docs/ha-gov-001**, based on primary checkpoint
+**3287994afb0bb3fe7e69f60a6bda689f77c40323**. It does not change feature/ha-002-a,
+application/database architecture or its implementation evidence. See
+[canonical index](docs/README.md), [current status](PROJECT_STATUS.md),
+[tasks/coordination](TASKS.md), [roadmap](ROADMAP.md), [decisions](DECISIONS.md) and
+[acceptance navigation](ACCEPTANCE.md). Existing risk register is KNOWN_ISSUES.
+
+To restart safely: inspect git status/branch/HEAD and remote refs; read current Issue #4
+and Issue #5 comments, PR #6 and the governance PR; consult PROJECT_STATUS and the
+canonical evidence reports. Do not rely on private chat or closed issue state for
+approval. Issue #5 was already closed before implementation evidence; its state needs
+owner reconciliation. HA-002-ARCH-01 remains an unavailable standalone original.
+
+HA-002-A remains primary and incomplete. Continue only within its actual authorization
+and design-review boundary. Governance is not a new blocker to already approved work.
+Review overlapping documentation before future integration; no automatic merge/reset.
+For this documentation task, only Markdown links/scope/consistency/secret checks are
+executed. No fresh application/database tests are claimed; inherited CI is skipped to
+avoid database operations, and pending checks are not passes. Final documentation SHA,
+PR and audit results are recorded in Issue #5 after synchronization. Owner retains
+final acceptance/merge/deployment authority.
+
+The following implementation snapshot is retained as evidence at the primary
+checkpoint; PROJECT_STATUS is the canonical current milestone status summary.
 
 ## Latest task - HA-002-A recovery/design
 

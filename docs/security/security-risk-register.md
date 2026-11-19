@@ -231,3 +231,21 @@ generated credentials are protected/ignored, never uploaded. Host disk encryptio
 production backup protection and separated backup/migration/owner roles are not claimed.
 SEC-F05/ARCH-F01/PERF-F01 remain open for their residual requirements. A successful
 baseline restore does not demonstrate UUID migration or recovery after its failure.
+
+
+## Governance provenance and coordination blockers (HA-GOV-001)
+
+This existing register is the canonical KNOWN_ISSUES equivalent; no competing root
+risk file is created. Entries below are documentation/governance observations, not
+new independently classified security vulnerabilities or architecture changes.
+
+| ID | Blocker / impact | Owner role | Status and next action | Evidence |
+|---|---|---|---|---|
+| GOV-TRC-001 | Standalone HA-002-ARCH-01 unavailable; original detailed findings cannot be authenticated | Product owner and independent reviewer | Open provenance gap; provide a verified original reference if recovered, otherwise retain explicit reconstructed status; do not fabricate text or block already authorized recovery/design solely on its absence | [Issue #4 clarification](https://github.com/Shiva721254/HappyAlmere/issues/4#issuecomment-7013554143), [decision index](../../DECISIONS.md) |
+| GOV-STATE-001 | Issue #5 already closed/completed before implementation evidence; UI could be mistaken for acceptance | Product owner | State discrepancy open; reconcile issue state with actual documentation review/approval. Codex does not reopen/close or infer approval | [Issue #5](https://github.com/Shiva721254/HappyAlmere/issues/5), [status](../../PROJECT_STATUS.md) |
+| GOV-PLAN-001 | Proposed milestone numbering may duplicate/defer existing requirements, especially multi-city HA-006 versus HA-002 | Product owner and independent reviewer | Unapproved proposal; confirm roadmap IDs/dependencies without overwriting master requirements | [Roadmap](../../ROADMAP.md) |
+| GOV-COORD-001 | Governance and primary work share documentation paths; careless integration could overwrite newer HA-002-A evidence | Implementer/repository maintainer, owner for merge approval | Separate branch based on fixed 3287994; no concurrent primary edits; review overlapping README/HANDOVER/AGENTS/CHANGELOG/register hunks before any future authorized integration | [Task ownership](../../TASKS.md) |
+
+Primary technical blockers and their impact/roles remain in the existing findings and
+HA-002-A implementation matrix. Governance indexes do not close UUID/catalog/role/
+pagination/recovery-failure criteria or grant acceptance. Keep HA-002-A primary.
