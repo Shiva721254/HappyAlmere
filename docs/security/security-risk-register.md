@@ -302,3 +302,27 @@ histories remain preserved, governance PR #9 and primary PR #6 remain unmerged.
 No future Identity/business/Data Protection requirement is marked implemented.
 Docker address-pool exhaustion occurred during an extra rehearsal; task-private network
 reuse resolves subnet consumption while preserving independent instances/volumes.
+## HA-003-A candidate risk tracking
+
+[Issue #26](https://github.com/Shiva721254/HappyAlmere/issues/26) supplies the following prospective risks; [#28](https://github.com/Shiva721254/HappyAlmere/issues/28) approves bounded controls, not production acceptance. All fifteen remain tracked through implementation verification and independent HA-003-A-ARCH-01. Owner is accountable; Codex implements/tests; ChatGPT reviews. Evidence: [Identity foundation](../database/identity-foundation.md), [acceptance](../../ACCEPTANCE.md). No risk is closed by source presence alone.
+
+| ID | Risk | Severity | Control |
+|---|---|---|---|
+| IAM-R01 | Existing migration history overwritten | Critical | separate coordinated history |
+| IAM-R02 | Credential data exposed to discovery | Critical | explicit grants/negative tests |
+| IAM-R03 | Runtime migration authority | Critical | separate migration credentials |
+| IAM-R04 | Duplicate accounts | High | physical uniqueness/concurrency |
+| IAM-R05 | UUID namespace conflict | High | explicit UUIDv4 |
+| IAM-R06 | Incompatible dependencies | High | exact version review/builds |
+| IAM-R07 | Premature auth exposure | High | endpoint inventory/HTTP regression |
+| IAM-R08 | Uncontrolled admin account | Critical | no privileged bootstrap A |
+| IAM-R09 | Credential logs/artifacts | Critical | redacted synthetic evidence |
+| IAM-R10 | Account concurrency errors | High | framework concurrency tests |
+| IAM-R11 | Backup excludes identity | Critical | approved scope/actual restore |
+| IAM-R12 | Global roles confused with scoped authority | High | explicit resource boundaries |
+| IAM-R13 | Cross-context consistency failure | High | no speculative dependencies |
+| IAM-R14 | Discovery regression | High | preserve accepted tests |
+| IAM-R15 | Foundation mistaken for full authentication | High | explicit scope/release gates |
+Proposed risks, not findings of existing vulnerabilities.
+
+PRE-F01–08 compatibility controls: explicit context commands; scoped coordinated backups; runtime child environment allowlist; exact two Identity sequences; separate context/factory/history/snapshot; separate protected runtime config preserving debugger contract; explicit physical mapping; unchanged original recovery gate. Remaining package/CI/time-budget/startup/fixture-isolation risks require fresh execution. IAM-G05 package checks passed; production Data Protection, sessions, sensitive token protection, real accounts and all DEF-01–08 obligations remain deferred. Administrative visibility limitations and prior risk acceptance scopes below remain unchanged.

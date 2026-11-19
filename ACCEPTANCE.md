@@ -1,5 +1,64 @@
 # Acceptance traceability
 
+## HA-003-A current candidate acceptance (not independent acceptance)
+
+Sources: [#26 original criteria](https://github.com/Shiva721254/HappyAlmere/issues/26), [#28 approved compatibility additions](https://github.com/Shiva721254/HappyAlmere/issues/28), [IAM-G04](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023159754). Exact baseline `216df25c5656a979fcf67dfe3a16d07d7d66f154`; branch `feature/ha-003-a`. [Technical contract/runbook](docs/database/identity-foundation.md). Criteria retain separate identities and no automatic acceptance from authorization.
+
+| ID | Requirement | Actual evidence route | Current disposition |
+|---|---|---|---|
+| IAM-A-AC01 | Baseline/authority | IAM-G04 + IAM-G05 comments; git ancestry/path audit | Preflight verified |
+| IAM-A-AC02 | Compatible reviewed dependencies | Identity EF 10.0.14; EF/Npgsql graph; Debug/Release + NuGet audit | Local verified; CI pending |
+| IAM-A-AC03 | UUID accounts/roles and mappings | IdentityPersistenceTests; independent SQL contract | Local verified; exact-head CI pending |
+| IAM-A-AC04 | Infrastructure/layer boundaries | Preserved source verifier; unchanged project references | Local verified |
+| IAM-A-AC05 | Dedicated history/physical schema | IdentityMigrationTests; runner independent contract | Local verified; exact-head CI pending |
+| IAM-A-AC06 | Existing foundation preservation | Original 105 tests; protected blobs; runner original-state snapshots | Local verified; exact-head CI pending |
+| IAM-A-AC07 | Least privilege | IdentityPrivilegeTests; runner full ACL/role/sequence matrix | Local verified; exact-head CI pending |
+| IAM-A-AC08 | Exact denials and controls | 42501/28000 checks with live TLS positive controls; contract mismatch controls | Local verified; exact-head CI pending |
+| IAM-A-AC09 | Actual relational invariants | IdentityPersistenceTests on actual PostgreSQL | Local verified; exact-head CI pending |
+| IAM-A-AC10 | Clean/upgrade/no-op/recovery | verify-identity-foundation.py full state comparison | Local verified; exact-head CI pending |
+| IAM-A-AC11 | Fresh original/new regressions and CI | Original suite default-off; full suite enabled; browser; push and PR CI | Pending |
+| IAM-A-AC12 | Scope/docs/review submission | No auth surface; 34-path maximum; draft PR/handover | Pending submission; acceptance reserved |
+| IAM-EXEC-AC01 | INT-G12/exact baseline | Issue #27 comment7022990043, exact216df25 | Verified |
+| IAM-EXEC-AC02 | Seven functional + history | Independent SQL + actual metadata, IdentityMigrationTests | Local verified; exact-head CI pending |
+| IAM-EXEC-AC03 | Complete physical contract | Column/PK/FK/index/ownership/sequence snapshots and mismatch controls | Local verified; exact-head CI pending |
+| IAM-EXEC-AC04 | Concurrent email uniqueness | Concurrent_normalized_email_insert_is_rejected_by_database | Local verified; exact-head CI pending |
+| IAM-EXEC-AC05 | Framework hashing/concurrency | Framework_managers_round_trip_hash_normalize_and_cascade_all_stores; Stale_framework_concurrency_stamp_rejects_update | Local verified; exact-head CI pending |
+| IAM-EXEC-AC06 | Explicit DML/sequence rights | Full table/column/sequence effective privileges and actual framework operations | Local verified; exact-head CI pending |
+| IAM-EXEC-AC07 | Discovery/backup exclusion | Positive_control_precedes_exact_authorization_denial and runner | Local verified; exact-head CI pending |
+| IAM-EXEC-AC08 | Applied migration preservation | Protected blobs; original-state/history snapshots and original no-op tests | Local verified; exact-head CI pending |
+| IAM-EXEC-AC09 | Identity-inclusive restoration | Coordinated shared-state restore and retired login tests | Local verified; exact-head CI pending |
+| IAM-EXEC-AC10 | No public auth routes | IdentityArchitectureTests endpoint cases; no sign-in/cookie service | Local verified (account-route/DI tests) |
+| IAM-EXEC-AC11 | Allowlist/no secrets/production | Scope diff; source/history scan; task-owned isolated resources | 34/34 approved paths; local scan passed; final CI pending |
+| IAM-EXEC-AC12 | Exact-head handoff/review | New draft PR + actual push/PR logs/artifacts + review request | Pending |
+
+### Scenario-to-test traceability
+
+| Scenarios | Concrete verification |
+|---|---|
+| IAM-T01–03 | IdentityArchitectureTests.Enabled_services_resolve_without_sign_in_or_cookie_schemes |
+| IAM-T04 | Unchanged verify-source.py dependency direction |
+| IAM-T05–08,10–14,16–19,21–23 | IdentityPersistenceTests framework managers/physical role invariants |
+| IAM-T09 | Concurrent_normalized_email_insert_is_rejected_by_database (one save, one23505) |
+| IAM-T15 | Stale_framework_concurrency_stamp_rejects_update |
+| IAM-T20 | Physical_constraints_reject_exact_invalid_operation (23503) |
+| IAM-T24–28 | IdentityPrivilegeTests exact42501 with positive TLS controls |
+| IAM-T29 | Runner private_probe actual denied access, finally removed |
+| IAM-T30–34 | Runner clean/upgrade/full no-op/controlledP0001/fresh recovery/coordinated restore |
+| IAM-T35 | Original105 tests disabled/enabled, browser harness, account endpoint404 tests |
+| IAM-T36 | NuGet/npm audits, preserved source/history verifier, final scoped review |
+| IAM-PRE-T01 | Both explicit factories used by runner and original tooling |
+| IAM-PRE-T02 | Original105 tests with flagfalse, default-off service test |
+| IAM-PRE-T03 | Enabled_invalid_configuration_fails_closed |
+| IAM-PRE-T04–07 | IdentityPrivilegeTests and runner role/backup denial matrix |
+| IAM-PRE-T08 | Framework claims create; exact sequence ACLs, setval/backup nextval42501 |
+| IAM-PRE-T09 | Actual_child_processes_exclude_privileged_environment, both Node and PowerShell |
+| IAM-PRE-T10 | Runner both-history/full-state restoration |
+| IAM-PRE-T11 | Retired_identity_restore_login_denied_after_live_tls_control (Npgsql28000) |
+| IAM-PRE-T12 | Persistence_does_not_publish_account_endpoints; no SignInManager/scheme |
+
+All 36 original +12 compatibility scenarios are retained; grouped rows identify shared tests, not reduced criteria. Original parent IAM-AC01–12 (#7) remain distinct: A contributes persistence/layer/security/threat-test foundations only. Lifecycle/recovery endpoints, scoped roles/resource authorization, web/native sessions, MFA, business ownership, production secrets/audit/privacy and complete independent identity acceptance remain later gates. IAM-G01–05 prerequisites verified; G06–09 candidate verification/submission pending; G10–12 independent review, owner candidate acceptance and separately authorized integration remain pending. No parent HA-003 completion is claimed.
+
+
 Canonical cross-milestone index. Definitions remain in original sources; no renumbering or replacement. Documentation date 19 November 2026. [Status](PROJECT_STATUS.md) summarizes milestones; [risk register](docs/security/security-risk-register.md) owns outstanding obligations.
 
 ## Evidence and authority

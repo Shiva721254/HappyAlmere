@@ -266,7 +266,7 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         process=dict(os.environ,HAPPYCITY_MIGRATION_CONNECTION=migration)
         project='HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure'
         for label,start in [('forward','20261119000108_InitialDiscovery'),('clean','0')]:
-            r.run('dotnet','ef','migrations','script',start,'--project',project,'--configuration','Release','--no-build','--output',str(directory/(label+'.sql')),env=process)
+            r.run('dotnet','ef','migrations','script',start,'--project',project,'--context','HappyCityDbContext','--configuration','Release','--no-build','--output',str(directory/(label+'.sql')),env=process)
         forward=(directory/'forward.sql').read_text(encoding='utf-8-sig')
         before_failure=r.inventory(target)
         execute(target,forward,'happy_schema_migrator',env['MIGRATION_PASSWORD'],'-c role=happy_owner -c happycity.fail_after_backfill=on',expected_state='P0001',expected_reason='Controlled migration failure after backfill')
@@ -278,8 +278,8 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         evidence['recoverySeconds']=round(time.monotonic()-start,3);evidence['checks']['postFailureFreshRestore']='PASS'
         # Rehearse R01 against the already-applied CatalogForward checkpoint,
         # with a protected exact migrated backup/restore gate before correction.
-        r.run('dotnet','ef','migrations','script','20261119000108_InitialDiscovery','20261119161305_CatalogForward','--project',project,'--configuration','Release','--no-build','--output',str(directory/'prior-forward.sql'),env=process)
-        r.run('dotnet','ef','migrations','script','20261119161305_CatalogForward','--project',project,'--configuration','Release','--no-build','--output',str(directory/'correction.sql'),env=process)
+        r.run('dotnet','ef','migrations','script','20261119000108_InitialDiscovery','20261119161305_CatalogForward','--project',project,'--context','HappyCityDbContext','--configuration','Release','--no-build','--output',str(directory/'prior-forward.sql'),env=process)
+        r.run('dotnet','ef','migrations','script','20261119161305_CatalogForward','--project',project,'--context','HappyCityDbContext','--configuration','Release','--no-build','--output',str(directory/'correction.sql'),env=process)
         execute(target,(directory/'prior-forward.sql').read_text(encoding='utf-8-sig'),'happy_schema_migrator',env['MIGRATION_PASSWORD'],'-c role=happy_owner');grants(target)
         prior_snapshot=migrated_snapshot(target)
         prior_archive=r.docker('exec',target,'pg_dump','-U','happy_migrator','-d','happyalmere','-Fc',binary=True)
@@ -324,7 +324,7 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         if len(history)!=3 or history[0]!=before['rows']['__EFMigrationsHistory'][0]:raise RuntimeError('Migration history changed')
         evidence['migrationHistory']=history
         no_op_before=complete_state(target)
-        r.run('dotnet','ef','database','update','--project',project,'--configuration','Release','--no-build',env=process)
+        r.run('dotnet','ef','database','update','--project',project,'--context','HappyCityDbContext','--configuration','Release','--no-build',env=process)
         if complete_state(target)!=no_op_before: raise RuntimeError('Repeat migration changed complete state')
         evidence['noOpStateDigest']=r.digest(no_op_before)
         evidence['checks']['secondRunNoOp']='PASS'
@@ -333,7 +333,7 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         if len(canonical(clean)['DiscoveryEntries'])!=6:raise RuntimeError('Clean path fixture mismatch')
         evidence['checks']['cleanCreation']='PASS'
         reference,ref_env,ref_info=new_target(directory,'ef-model',args.port+5);targets.append(reference);roles(reference,ref_env)
-        r.run('dotnet','ef','dbcontext','script','--project',project,'--configuration','Release','--no-build','--output',str(directory/'ef-model.sql'),env=process)
+        r.run('dotnet','ef','dbcontext','script','--project',project,'--context','HappyCityDbContext','--configuration','Release','--no-build','--output',str(directory/'ef-model.sql'),env=process)
         execute(reference,(directory/'ef-model.sql').read_text(encoding='utf-8-sig'),'happy_schema_migrator',ref_env['MIGRATION_PASSWORD'],'-c role=happy_owner')
         expected_model=relational_metadata(reference)
         extras=compare_model(expected_model,relational_metadata(target));compare_model(expected_model,relational_metadata(clean))

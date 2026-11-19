@@ -30,6 +30,6 @@ docker compose cp postgres:/var/lib/postgresql-tls/server.crt artifacts/postgres
 if ($LASTEXITCODE -ne 0) { throw 'Could not copy the public development certificate.' }
 dotnet tool restore
 if ($LASTEXITCODE -ne 0) { throw 'EF tooling restore failed.' }
-dotnet ef database update 20261119000108_InitialDiscovery --project HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure --configuration Release
+dotnet ef database update 20261119000108_InitialDiscovery --project HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure --context HappyCityDbContext --configuration Release
 if ($LASTEXITCODE -ne 0) { throw 'Migration failed.' }
 Write-Output 'Preserved baseline is ready. Run the recovery and isolated forward rehearsal before application tests.'

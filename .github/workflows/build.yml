@@ -34,11 +34,26 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $forward = Get-ChildItem artifacts/forward/*/rehearsal.env | Sort-Object FullName | Select-Object -Last 1
           "HAPPYCITY_FORWARD_ENV_FILE=$($forward.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+      - name: Original regression suite with Identity foundation disabled
+        shell: pwsh
+        run: |
+          . ./scripts/Load-LocalEnvironment.ps1 -EnvironmentFile $env:HAPPYCITY_FORWARD_ENV_FILE
+          $env:IdentityFoundation__Enabled = 'false'
+          $env:HAPPYCITY_EVIDENCE_DIRECTORY = Join-Path (Get-Location) 'artifacts/identity-disabled-tests'
+          dotnet test HappyAlmere.slnx -c Release --no-build -m:1 --filter 'FullyQualifiedName!~HappyCity.FoundationTests.Identity' --logger trx
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Isolated Identity contract, privileges and coordinated recovery
+        shell: pwsh
+        run: |
+          python3 scripts/verify-identity-foundation.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $identity = Get-ChildItem artifacts/identity/*/tests.env | Sort-Object FullName | Select-Object -Last 1
+          "HAPPYCITY_IDENTITY_ENV_FILE=$($identity.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
       - name: Foundation and migrated PostgreSQL tests
         shell: pwsh
         run: |
           $env:HAPPYCITY_EVIDENCE_DIRECTORY = Join-Path (Get-Location) 'artifacts/forward-tests'
-          ./scripts/Test-Local.ps1 -EnvironmentFile $env:HAPPYCITY_FORWARD_ENV_FILE
+          ./scripts/Test-Local.ps1 -EnvironmentFile $env:HAPPYCITY_IDENTITY_ENV_FILE
       - run: dotnet list HappyAlmere.slnx package --vulnerable --include-transitive
       - run: npm ci --ignore-scripts
       - run: npm audit --audit-level=high
@@ -59,7 +74,7 @@ jobs:
       - name: Trusted HTTPS PostgreSQL browser, responsive, security and network tests
         shell: pwsh
         run: |
-          . ./scripts/Load-LocalEnvironment.ps1 -EnvironmentFile $env:HAPPYCITY_FORWARD_ENV_FILE
+          . ./scripts/Load-LocalEnvironment.ps1 -EnvironmentFile $env:HAPPYCITY_IDENTITY_ENV_FILE
           npm run test:browser
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
@@ -72,6 +87,9 @@ jobs:
             artifacts/forward-tests/performance.json
             artifacts/forward-tests/r01-query-plans.json
             artifacts/ha002a/*/evidence.json
+            artifacts/identity/*/evidence.json
+            artifacts/identity-disabled-tests/performance.json
+            artifacts/identity-disabled-tests/r01-query-plans.json
             artifacts/responsive-results.json
             artifacts/*-*.png
             artifacts/r02/browser/*-results.json
@@ -86,5 +104,12 @@ jobs:
             foreach ($container in $evidence.targetContainers) {
               $info = docker inspect $container | ConvertFrom-Json
               if ($info.Config.Labels.'com.docker.compose.project' -like 'ha002f-*') { docker stop $container }
+            }
+          }
+          foreach ($file in Get-ChildItem artifacts/identity/*/evidence.json -ErrorAction SilentlyContinue) {
+            $evidence = Get-Content $file.FullName -Raw | ConvertFrom-Json
+            foreach ($container in $evidence.targetContainers) {
+              $info = docker inspect $container | ConvertFrom-Json
+              if ($info.Config.Labels.'com.docker.compose.project' -like 'ha002f-iam-*') { docker stop $container }
             }
           }
