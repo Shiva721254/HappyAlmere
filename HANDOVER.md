@@ -6,6 +6,8 @@ Implemented: trusted synthetic host resolution; bounded translation lookup; new 
 
 Governance branch docs/ha-gov-001 remains at **871e7a35c95b05b75b047fc1cc048f29e33b7cbc**. Reconciliation plan is in the current report; do not merge/overwrite it. Independent re-review and product-owner decision are required. Production controls remain deferred requirements, not implemented claims. HA-002-ARCH-01 is unavailable; Issue #10 supplies ARCH-02 independently.
 
+The subsequent 63cc36a checkpoint had successful PR CI 44588282832 but push CI 44588270956 exceeded the retained benchmark budget (280.1229ms). Test-only physical baseline preparation and diagnostic retention now address fixture interference; 104 local tests pass. No threshold relaxation or application change. Both failed and successful checkpoints are retained under r01 evidence; final exact-head results are in Issue #10.
+
 ## Earlier handover (historical)
 
 # HappyAlmere - implementation handover

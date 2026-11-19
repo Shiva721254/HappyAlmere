@@ -107,7 +107,11 @@ public sealed class CatalogTests
     [Fact]
     public async Task Representative_keyset_workload_is_bounded_and_meets_local_budget()
     {
-        await using var db = Database(); await using var tx = await db.Database.BeginTransactionAsync();
+        await using var db = Database();
+        // Other rollback fixtures leave dead tuples/statistics in these shared isolated tables.
+        // Establish the same clean physical baseline regardless of xUnit execution order.
+        await db.Database.ExecuteSqlRawAsync("VACUUM (ANALYZE) catalog.cities, catalog.categories, discovery.discovery_entries");
+        await using var tx = await db.Database.BeginTransactionAsync();
         await db.Database.ExecuteSqlRawAsync("""
             INSERT INTO discovery.discovery_entries(id,city_id,category_id,slug,title,description,district,icon,is_published)
             SELECT gen_random_uuid(),'00000001-0000-8000-8000-000000000001','00000002-0000-8000-8000-000000000001',
@@ -126,13 +130,14 @@ public sealed class CatalogTests
         var all = new HashSet<string>(); string? cursor = null;
         do { var page = await repo.FindPageAsync(filter, 100, cursor); foreach (var item in page.Items) Assert.True(all.Add(item.Title)); cursor = page.NextCursor; } while (cursor is not null);
         Assert.Equal(10000, all.Count);
-        var p95 = times.Order().ElementAt(28); Assert.True(p95 <= 250, $"Local p95 {p95}ms exceeds 250ms budget");
+        var p95 = times.Order().ElementAt(28);
         var conn = db.Database.GetDbConnection();
         await using var cmd = conn.CreateCommand(); cmd.Transaction = db.Database.CurrentTransaction!.GetDbTransaction();
         cmd.CommandText = "EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT id,title FROM discovery.discovery_entries WHERE city_id='00000001-0000-8000-8000-000000000001' AND is_published ORDER BY (legacy_id IS NULL),legacy_id,id LIMIT 100";
         var plan = (string)(await cmd.ExecuteScalarAsync())!;
         var directory = Environment.GetEnvironmentVariable("HAPPYCITY_EVIDENCE_DIRECTORY");
         if (directory is not null) { Directory.CreateDirectory(directory); await File.WriteAllTextAsync(Path.Combine(directory, "performance.json"), System.Text.Json.JsonSerializer.Serialize(new { rows = 10000, samples = times, p95Milliseconds = p95, thresholdMilliseconds = 250, distinctTraversed = all.Count, plan, scope = "Local sequential synthetic transaction; not production load capacity" })); }
+        Assert.True(p95 <= 250, $"Local p95 {p95}ms exceeds 250ms budget");
     }
 
     [Fact]

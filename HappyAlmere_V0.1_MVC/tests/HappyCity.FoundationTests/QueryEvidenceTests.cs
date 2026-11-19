@@ -48,6 +48,7 @@ public sealed class QueryEvidenceTests
         var capture = new Capture();
         var connection = DatabaseConfiguration.RequireVerifiedTls(Environment.GetEnvironmentVariable("HAPPYCITY_MIGRATION_CONNECTION"));
         await using var db = new HappyCityDbContext(new DbContextOptionsBuilder<HappyCityDbContext>().UseNpgsql(connection).AddInterceptors(capture).Options);
+        await db.Database.ExecuteSqlRawAsync("VACUUM (ANALYZE) catalog.cities, catalog.categories, discovery.discovery_entries");
         await using var tx = await db.Database.BeginTransactionAsync();
         await db.Database.ExecuteSqlRawAsync("""
             INSERT INTO catalog.cities(id,slug,name,country_code,default_language,time_zone,is_active) VALUES
@@ -65,6 +66,7 @@ public sealed class QueryEvidenceTests
             """);
         var repo = new PostgresDiscoveryRepository(db);
         var evidence = new List<object>();
+        var worstP95 = 0d;
         foreach (var filter in new[] { new DiscoveryFilter("almere", null, "R01 synthetic"), new DiscoveryFilter("almere", "activiteiten", "needle synthetic"), new DiscoveryFilter("r01-other", null, "R01 synthetic"), new DiscoveryFilter("r01-inactive", null, "R01 synthetic"), new DiscoveryFilter("almere", "r01-inactive", null) })
         {
             string? cursor = null; var checkpoints = new List<string?> { null }; var titles = new HashSet<string>();
@@ -86,11 +88,12 @@ public sealed class QueryEvidenceTests
                 await using var plan = new NpgsqlCommand("EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) " + captured.Sql, (NpgsqlConnection)db.Database.GetDbConnection(), (NpgsqlTransaction)tx.GetDbTransaction());
                 plan.Parameters.AddRange(captured.Parameters.Select(p => p.Clone()).ToArray());
                 var planJson = (string)(await plan.ExecuteScalarAsync())!;
-                var p95 = times.Order().ElementAt(28); Assert.True(p95 <= 250, $"Local workload p95 {p95} exceeds 250ms");
+                var p95 = times.Order().ElementAt(28); worstP95 = Math.Max(worstP95, p95);
                 evidence.Add(new { syntheticScenario = new { filter.CitySlug, filter.Category, filter.Query }, pageIndex = index, pages = checkpoints.Count, distinctRows = titles.Count, p95Milliseconds = p95, thresholdMilliseconds = 250, samples = times, sql = captured.Sql, parameterTypes = captured.Parameters.Select(p => new { p.ParameterName, Type = p.NpgsqlDbType.ToString() }), plan = JsonDocument.Parse(planJson).RootElement.Clone() });
             }
         }
         using var cancelled = new CancellationTokenSource(); cancelled.Cancel(); await Assert.ThrowsAnyAsync<OperationCanceledException>(() => repo.FindPageAsync(new DiscoveryFilter("almere", null, null), 50, null, cancelled.Token));
         var directory = Environment.GetEnvironmentVariable("HAPPYCITY_EVIDENCE_DIRECTORY"); if (directory is not null) { Directory.CreateDirectory(directory); await File.WriteAllTextAsync(Path.Combine(directory, "r01-query-plans.json"), JsonSerializer.Serialize(new { rows = 10000, scope = "Actual EF commands and bound synthetic parameters, local sequential workload; not production SLA", workloads = evidence }, new JsonSerializerOptions { WriteIndented = true })); }
+        Assert.True(worstP95 <= 250, $"Local workload p95 {worstP95} exceeds 250ms");
     }
 }
