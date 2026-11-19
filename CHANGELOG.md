@@ -1,3 +1,14 @@
+# Governance and integration chronology — 19 November 2026
+
+These entries add observed events; older chronological records below are preserved unchanged. Documentation dates do not invent decision dates.
+
+- HA-GOV-001 historical submission 871e7a3 from 3287994 created eleven Markdown navigation/governance records, intentionally skipped database CI under its old scope, and remained draft PR #9; not accepted by Issue #5 closure.
+- HA-002-R02 at 6da4b25 received independent ARCH-04 review and [owner development acceptance](https://github.com/Shiva721254/HappyAlmere/issues/21#issuecomment-7021312167) with all eight mandatory future deferrals. Three private/production criteria remain partial.
+- PR #6 integrated through ordinary two-parent merge719dbcc; accepted tree 7965cf8 preserved. [INT-G11](https://github.com/Shiva721254/HappyAlmere/issues/22#issuecomment-7022022047) confirms both integrated workflows passed; G08 administrative visibility limitation and G12 governance gate remain.
+- HA-GOV-R01: [owner-authorized](https://github.com/Shiva721254/HappyAlmere/issues/23#issuecomment-7022146146) reconstruction of eleven Markdown paths on docs/ha-gov-r01 from exact719dbcc, preserving application/migrations/evidence and historical branch. Adds current status, roadmap, tasks, decision/acceptance indexes and canonical navigation; reconciles five overlapping documents. Fresh unchanged push/PR synthetic CI required, results in Issue #23/new draft PR. No feature, local DB, merge or deployment changes.
+
+## Prior chronological records (historical)
+
 ## Current HA-002-R02 verification closure
 
 [Issue #14](https://github.com/Shiva721254/HappyAlmere/issues/14) authorizes bounded verification/evidence work only. See [current report](docs/reports/HA-002-implementation-report.md) and [HANDOVER](HANDOVER.md). Applicable privilege/grant-option checks, independent SQL-only definitions and correction-specific rollback/no-op proof extend verification while preserving existing application/migrations/security/thresholds. No merge, deployment, new features or independent acceptance claim. Earlier entries below retain historical evidence.
