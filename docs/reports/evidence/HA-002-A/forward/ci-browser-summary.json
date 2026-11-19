@@ -1,7 +1,8 @@
 {
   "responsive-results.json": {
     "result": "PASS",
-    "caseCount": 0
+    "caseCount": 42,
+    "browser": "159.0.8154.6"
   },
   "functional-results.json": {
     "passed": 190,
