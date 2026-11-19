@@ -1,5 +1,11 @@
 # HA-001-R01: current V0.1 acceptance audit
 
+## Latest continuation verification
+
+Fresh build, test, browser, security and dependency evidence is recorded in [the continuation verification ledger](evidence/HA-001-R01-refresh/README.md). Release/Debug: zero warnings/errors; 33 tests passed; 190 browser/security and 5 limiter assertions passed; expanded browser regression passed 42 layouts across seven widths and eight destinations. Two sandbox HTTPS failures and the successful approved rerun are recorded. Recovery checkpoint: `c22c76bfbf7303f9f3349fe8d8c55bd4cfb7b7d2`. Remote verified as `Shiva721254/HappyAlmere`. Technical checks complete within scope; AC13/AC14/AC15 human gates remain pending.
+
+The sections below preserve the earlier remediation execution and its historical counts; use the linked ledger for this continuation.
+
 Date: 19 November 2026 (Europe/Amsterdam). Implementation checkpoint: `c13f2232e331be5ba5d4ab7ab7cec84783a3eed1`.
 Branch: `fix/ha-001-r01`. Remediation root: `C:/Users/shiva/Desktop/HappyAlmere/HA-001-R01`.
 

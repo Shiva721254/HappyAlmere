@@ -3,6 +3,8 @@
 Only observed Git history and actual local changes are recorded. Dates use Europe/Amsterdam.
 
 ## Unreleased - HA-001-R01 - 2026-11-19
+- Re-execute builds, 33 foundation tests, live security/rate checks and expanded 42-layout browser regression; publish separate fresh evidence and preserve failed sandbox attempts.
+- Verify the HappyAlmere GitHub remote and retain independent review/owner approval gates.
 - Correct long accepted text wrapping and intrinsic flex/grid sizing without hiding page overflow.
 - Centralize category identifiers and reuse the application search-length limit in Razor.
 - Partition discovery rate limits by normalized transport IP, preserving 120/minute and zero queue; supply Retry-After when available and ignore spoofed forwarding headers.

@@ -34,3 +34,6 @@ long-category cases; native navigation remains visible and wraps, with no script
 hamburger menu to exercise. Avoid running many discovery probes against one peer
 without resetting/waiting for its 120/minute rate window; never raise limits to pass QA.
 Raw evidence belongs in ignored artifacts/; publish only sanitized reviewed records.
+
+Fresh continuation results: [verification ledger](reports/evidence/HA-001-R01-refresh/README.md). Browser coverage includes
+42 layouts across seven widths, including combined maximum-length query/category input.

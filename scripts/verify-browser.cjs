@@ -30,12 +30,17 @@ const fs = require('node:fs');
             assert.equal(await page.locator('.skip').evaluate(element => element.getBoundingClientRect().left >= 0), true);
             fs.mkdirSync('artifacts', { recursive: true });
             await page.screenshot({ path: 'artifacts/home-' + width + '.png', fullPage: true });
-            for (const route of ['/', '/Home/Business', '/Home/Privacy', '/?q=does-not-exist', '/?category=' + 'W'.repeat(30)]) {
+            for (const route of ['/', '/Home/Business', '/Home/Privacy', '/?q=does-not-exist', '/?category=' + 'W'.repeat(30),
+                '/?q=' + 'W'.repeat(100) + '&category=' + 'W'.repeat(30)]) {
                 assert.equal((await page.goto(base + route)).status(), 200);
                 const geometry = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
                 layouts.push({ route, ...geometry });
                 assert.equal(geometry.document <= geometry.viewport, true, `Overflow at ${width}: ${route}`);
-                if (route.includes('category='))
+                if (route.startsWith('/?q=' + 'W'.repeat(100))) {
+                    assert.equal(await page.locator('#q').inputValue(), 'W'.repeat(100));
+                    assert.equal(await page.locator('#q').getAttribute('maxlength'), '100');
+                    await page.screenshot({ path: `artifacts/combined-boundary-${width}.png`, fullPage: true });
+                } else if (route.includes('category='))
                     await page.screenshot({ path: `artifacts/boundary-${width}.png`, fullPage: true });
             }
             await page.goto(base);

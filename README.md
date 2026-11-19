@@ -70,3 +70,6 @@ See [development instructions](docs/DEVELOPMENT.md), [engineering rules](AGENTS.
 [acceptance audit](docs/reports/HA-001-acceptance-audit.md) and
 [remediation report](docs/reports/HA-001-R01-remediation-report.md).
 V0.1 acceptance remains subject to architect recommendation and product-owner approval.
+
+Fresh continuation results: [verification ledger](docs/reports/evidence/HA-001-R01-refresh/README.md). Browser coverage includes
+42 layouts across seven widths, including combined maximum-length query/category input.

@@ -1,0 +1,76 @@
+{
+  "summary": {
+    "passed": 190,
+    "failed": 0
+  },
+  "failures": [],
+  "timings": [
+    {
+      "ttfbMs": 1.9000000059604645,
+      "loadMs": 9.5,
+      "domContentLoadedMs": 7.699999988079071,
+      "htmlBytes": 4222,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 2982
+        }
+      ]
+    },
+    {
+      "ttfbMs": 1.7000000178813934,
+      "loadMs": 8.700000017881393,
+      "domContentLoadedMs": 7.5999999940395355,
+      "htmlBytes": 4222,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 2982
+        }
+      ]
+    },
+    {
+      "ttfbMs": 1.800000011920929,
+      "loadMs": 8.800000011920929,
+      "domContentLoadedMs": 8,
+      "htmlBytes": 4222,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 2982
+        }
+      ]
+    },
+    {
+      "ttfbMs": 1.800000011920929,
+      "loadMs": 8,
+      "domContentLoadedMs": 7.0999999940395355,
+      "htmlBytes": 4222,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 2982
+        }
+      ]
+    },
+    {
+      "ttfbMs": 1.699999988079071,
+      "loadMs": 9.099999994039536,
+      "domContentLoadedMs": 7.799999982118607,
+      "htmlBytes": 4222,
+      "resources": [
+        {
+          "name": "/css/site.css",
+          "bytes": 2982
+        }
+      ]
+    }
+  ],
+  "privacyLatency": {
+    "samples": 50,
+    "medianMs": 1.9695000000001528,
+    "p95Ms": 4.195499999999811,
+    "minMs": 1.0417000000006738,
+    "maxMs": 4.977600000000166
+  }
+}
