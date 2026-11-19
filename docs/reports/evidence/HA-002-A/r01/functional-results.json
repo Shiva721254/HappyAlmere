@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-19T18:18:07.315Z",
+  "timestamp": "2026-11-19T18:28:02.870Z",
   "mode": "functional",
   "checks": [
     {
@@ -1350,9 +1350,9 @@
   ],
   "timings": [
     {
-      "ttfbMs": 7.799999982118607,
-      "loadMs": 23.80000001192093,
-      "domContentLoadedMs": 22.400000005960464,
+      "ttfbMs": 5.700000017881393,
+      "loadMs": 13.200000017881393,
+      "domContentLoadedMs": 12.300000011920929,
       "htmlBytes": 4796,
       "resources": [
         {
@@ -1362,9 +1362,9 @@
       ]
     },
     {
-      "ttfbMs": 10,
-      "loadMs": 25.399999976158142,
-      "domContentLoadedMs": 24.299999982118607,
+      "ttfbMs": 5.9000000059604645,
+      "loadMs": 13.799999982118607,
+      "domContentLoadedMs": 12.900000005960464,
       "htmlBytes": 4796,
       "resources": [
         {
@@ -1374,9 +1374,9 @@
       ]
     },
     {
-      "ttfbMs": 8.199999988079071,
-      "loadMs": 21.69999998807907,
-      "domContentLoadedMs": 20.69999998807907,
+      "ttfbMs": 5.699999988079071,
+      "loadMs": 14.700000017881393,
+      "domContentLoadedMs": 14.300000011920929,
       "htmlBytes": 4796,
       "resources": [
         {
@@ -1386,9 +1386,9 @@
       ]
     },
     {
-      "ttfbMs": 7.399999976158142,
-      "loadMs": 18.299999982118607,
-      "domContentLoadedMs": 17.19999998807907,
+      "ttfbMs": 5.5999999940395355,
+      "loadMs": 14.199999988079071,
+      "domContentLoadedMs": 13.199999988079071,
       "htmlBytes": 4796,
       "resources": [
         {
@@ -1398,9 +1398,9 @@
       ]
     },
     {
-      "ttfbMs": 7.299999982118607,
-      "loadMs": 22.200000017881393,
-      "domContentLoadedMs": 21.400000005960464,
+      "ttfbMs": 6.399999976158142,
+      "loadMs": 17.5,
+      "domContentLoadedMs": 16.400000005960464,
       "htmlBytes": 4796,
       "resources": [
         {
@@ -1424,7 +1424,7 @@
   "headers": {
     "/": {
       "content-type": "text/html; charset=utf-8",
-      "date": "Thu, 19 Nov 2026 18:18:14 GMT",
+      "date": "Thu, 19 Nov 2026 18:28:08 GMT",
       "transfer-encoding": "chunked",
       "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
       "x-content-type-options": "nosniff",
@@ -1436,7 +1436,7 @@
     "/css/site.css": {
       "content-length": "3912",
       "content-type": "text/css",
-      "date": "Thu, 19 Nov 2026 18:18:14 GMT",
+      "date": "Thu, 19 Nov 2026 18:28:08 GMT",
       "accept-ranges": "bytes",
       "etag": "\"1dd783a1fec5fc8\"",
       "last-modified": "Thu, 19 Nov 2026 15:24:53 GMT",
@@ -1449,7 +1449,7 @@
     },
     "/not-found": {
       "content-length": "0",
-      "date": "Thu, 19 Nov 2026 18:18:14 GMT",
+      "date": "Thu, 19 Nov 2026 18:28:08 GMT",
       "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
       "x-content-type-options": "nosniff",
       "x-frame-options": "DENY",
@@ -1459,7 +1459,7 @@
     },
     "/Home/Error": {
       "content-type": "text/html; charset=utf-8",
-      "date": "Thu, 19 Nov 2026 18:18:14 GMT",
+      "date": "Thu, 19 Nov 2026 18:28:08 GMT",
       "cache-control": "no-store,no-cache",
       "pragma": "no-cache",
       "transfer-encoding": "chunked",
@@ -1472,7 +1472,7 @@
     },
     "/.env": {
       "content-length": "0",
-      "date": "Thu, 19 Nov 2026 18:18:14 GMT",
+      "date": "Thu, 19 Nov 2026 18:28:08 GMT",
       "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
       "x-content-type-options": "nosniff",
       "x-frame-options": "DENY",
@@ -1482,7 +1482,7 @@
     },
     "/appsettings.json": {
       "content-length": "0",
-      "date": "Thu, 19 Nov 2026 18:18:14 GMT",
+      "date": "Thu, 19 Nov 2026 18:28:08 GMT",
       "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
       "x-content-type-options": "nosniff",
       "x-frame-options": "DENY",
@@ -1492,7 +1492,7 @@
     },
     "/test/throw": {
       "content-length": "0",
-      "date": "Thu, 19 Nov 2026 18:18:14 GMT",
+      "date": "Thu, 19 Nov 2026 18:28:08 GMT",
       "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
       "x-content-type-options": "nosniff",
       "x-frame-options": "DENY",
@@ -1502,7 +1502,7 @@
     },
     "/test/unsafe": {
       "content-length": "0",
-      "date": "Thu, 19 Nov 2026 18:18:14 GMT",
+      "date": "Thu, 19 Nov 2026 18:28:08 GMT",
       "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
       "x-content-type-options": "nosniff",
       "x-frame-options": "DENY",
@@ -1512,7 +1512,7 @@
     },
     "/test/token": {
       "content-length": "0",
-      "date": "Thu, 19 Nov 2026 18:18:14 GMT",
+      "date": "Thu, 19 Nov 2026 18:28:08 GMT",
       "content-security-policy": "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
       "x-content-type-options": "nosniff",
       "x-frame-options": "DENY",
@@ -1524,14 +1524,14 @@
   "badHostHeaders": {
     "content-length": "334",
     "content-type": "text/html",
-    "date": "Thu, 19 Nov 2026 18:18:14 GMT"
+    "date": "Thu, 19 Nov 2026 18:28:08 GMT"
   },
   "privacyLatency": {
     "samples": 50,
-    "medianMs": 2.686099999998987,
-    "p95Ms": 4.335199999999531,
-    "minMs": 2.069999999999709,
-    "maxMs": 5.006599999998798
+    "medianMs": 1.5421999999998661,
+    "p95Ms": 2.4298999999991793,
+    "minMs": 1.268699999999626,
+    "maxMs": 3.4979000000002998
   },
   "summary": {
     "passed": 190,
