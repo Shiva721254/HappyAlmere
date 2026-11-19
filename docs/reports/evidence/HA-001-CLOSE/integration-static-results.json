@@ -1,6 +1,6 @@
 {
-  "commit": "c2964eeff4232dd1f925c63af06f8c97c751b161",
-  "currentAuthoredFiles": 226,
+  "commit": "ee9651b75613df4a200adea83e409100011a636c",
+  "currentAuthoredFiles": 232,
   "requiredDocumentation": [
     "AGENTS.md",
     "CHANGELOG.md",
@@ -30,10 +30,10 @@
   "jsonParsing": "PASS",
   "developmentLaunchBindings": "PASS (configuration; actual sockets verified separately)",
   "credentialScan": {
-    "commitCount": 4,
-    "fileVersionsScanned": 176,
+    "commitCount": 15,
+    "fileVersionsScanned": 1495,
     "findings": [],
-    "scope": "V0.1 reachable tracked history and current nonignored authored files; no ignored credentials opened or recorded"
+    "scope": "Reachable tracked history and current nonignored authored files; no ignored credentials opened or recorded"
   },
   "sourceReviewChecks": {
     "rawHtml": [],

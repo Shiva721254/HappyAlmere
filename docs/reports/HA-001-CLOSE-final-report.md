@@ -150,3 +150,65 @@ enabled. These are local boundary probes, not public deployment/firewall certifi
 NuGet direct/transitive and npm scans found no known vulnerabilities at execution.
 Sanitized results are committed under docs/reports/evidence/HA-001-CLOSE/integration-*.
 Remote integration CI and final Git identifiers follow after synchronization.
+
+## Reproducible verification and repository handoff
+
+Commands executed in the isolated integration checkout:
+
+```powershell
+dotnet restore HappyAlmere.slnx
+dotnet build HappyAlmere.slnx -c Debug --no-restore
+dotnet build HappyAlmere.slnx -c Release --no-restore
+# Load the existing protected local environment; never print its values.
+# The existing database container was started, not recreated or reinitialized.
+dotnet test HappyAlmere.slnx -c Release --no-build --logger trx --results-directory artifacts/close/test-results-final
+npm ci --ignore-scripts
+npm run test:browser
+dotnet list HappyAlmere.slnx package --vulnerable --include-transitive --format json
+npm audit --json
+python scripts/verify-source.py
+git diff --check
+```
+
+Merged-history credential-pattern scan: 1,495 tracked file versions plus current
+authored files, no findings; dependency direction and JSON/launch-profile checks pass.
+Pattern scanning is not a comprehensive guarantee of secret absence. Reviewed added
+source/evidence excludes ignored credentials, private keys, raw server logs and
+customer data. Existing Infrastructure implementation, entity models and migrations
+have an empty diff against original develop; retained source is not newly developed.
+The changed-file inventory is integration-changed-files.json beside the evidence.
+
+Reconciliation merge ee9651b75613df4a200adea83e409100011a636c has parents
+c2964eeff4232dd1f925c63af06f8c97c751b161 and
+0e7739d3f72f08b095c3316e6680053ae99915f6. Both ancestry checks pass.
+Remote main/develop/integration refs were verified after push. Draft review PR:
+https://github.com/Shiva721254/HappyAlmere/pull/3
+Original PR #1 is untouched. A complete reconciled-history Git bundle was verified
+locally under ignored artifacts/close. The task-started database container is stopped
+again; both persistent volumes remain. No owned test listeners remain on the four
+HTTP/HTTPS test ports or database host port. No public deployment occurred.
+
+## Remote integration verification and final disposition
+
+Successful PR workflow for reconciliation ee9651b75613df4a200adea83e409100011a636c:
+https://github.com/Shiva721254/HappyAlmere/actions/runs/44545198166
+Ubuntu 24.04 Debug/Release: zero warnings/errors. Actual PostgreSQL tests: 68 passed,
+zero failed/skipped, five seconds. Browser: 42 layouts, 190 security assertions,
+five rate assertions, trusted HTTPS and actual Linux loopback/network checks passed.
+NuGet/npm vulnerability checks and source scan passed. The integration-ci.json
+records exact workflow/job URLs and step conclusions; integration-linux-* contains
+actual downloaded browser results. GitHub's test merge includes the submitted head.
+
+Duplicate push run 44545139293 remained in browser dependency installation after
+the complete same-commit PR workflow passed. It was deliberately cancelled to avoid
+redundant resource consumption; it is not counted as a pass or an application failure.
+The final documentation-only commit is synchronized on the same review branch;
+its exact SHA and final GitHub status are reported in the handoff and PR checks.
+
+HA-001 foundation closure is complete within the explicitly approved local synthetic
+scope. Reconciliation and gap analysis are ready for independent review in draft
+PR #3, not merged into develop/main. Remaining blockers concern HA-002 acceptance:
+reviewed catalog/UUID/schema migration design, missing catalog entities/invariants,
+role separation/secret lifecycle, performance evidence, required implementation
+documentation and a demonstrated protected backup/restore. No new feature work
+may begin before independent gap review. Future risk deadlines remain in force.

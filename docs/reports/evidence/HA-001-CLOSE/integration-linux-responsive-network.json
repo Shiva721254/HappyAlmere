@@ -1,0 +1,26 @@
+{
+  "suite": "responsive",
+  "result": "PASS",
+  "platform": "linux",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 7143
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 5143
+    },
+    {
+      "LocalAddress": "::1",
+      "LocalPort": 5143
+    },
+    {
+      "LocalAddress": "::1",
+      "LocalPort": 7143
+    }
+  ],
+  "nonLoopbackInterfacesProbed": 2,
+  "nonLoopbackConnectionsRejected": 4,
+  "limitation": "Local process socket inventory and IPv4 interface probes, not public perimeter certification."
+}

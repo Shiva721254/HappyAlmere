@@ -45,3 +45,7 @@ The existing develop branch contains bc79fb9 (branch workflow documentation) and
 c2964ee (V0.2 database discovery), both dated 2026-11-19. HA-001-R01 branches from
 ebc99a0 and does not include or modify those changes. Their existence does not
 establish formal V0.1 acceptance. No development history or approval is inferred.
+
+- HA-001-CLOSE reconciliation: 68 local and remote PostgreSQL-backed tests, 42
+  responsive cases, 190 security assertions and five rate assertions passed; NUL
+  input now returns 400 before database I/O. Draft PR #3 awaits independent review.

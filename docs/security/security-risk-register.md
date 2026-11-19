@@ -4,7 +4,7 @@ Last updated: 19 November 2026 (Europe/Amsterdam). Scope: V0.1, reviewed commit 
 
 Authority: the owner's HA-001-R02 assignment and supplied **HA-001-ARCH-02 Independent Audit Findings Supplement**. SEC-F02?F06, PERF-F01?F02, UI-F01?F02, ARCH-F01 and GOV-F01 retain the supplied classifications, severity and deadlines. SEC-F01, QA-F01, QA-F02 and CODE-F01 were specified in the assignment without formal severity values; their provisional engineering priorities below are explicitly not attributed to the independent reviewer.
 
-The owner now temporarily accepts documented residual risks for local synthetic-data development only under HA-001-CLOSE. V0.1's remote-CI condition is satisfied by run 44541406736 for the CI-corrected descendant a174aa7 (application/tests unchanged from cbe2def). Final PR-head checks still gate merge. This is not public deployment authorization or acceptance for production/customer data. Original per-finding R02 decisions below are historical; this limited owner decision supersedes their local acceptance-pending wording. Resolution milestones remain binding. Future requirements are not claims of currently exploitable defects or implemented capabilities. R02 stops before HA-002/HA-003. Responsible roles are assignments to roles, not claims that named people accepted them.
+The owner now temporarily accepts documented residual risks for local synthetic-data development only under HA-001-CLOSE. V0.1's remote-CI condition is satisfied by run 44541406736 for the CI-corrected descendant a174aa7 (application/tests unchanged from cbe2def). Final foundation PR-head Ubuntu/Windows checks passed and PR #2 merged normally. This is not public deployment authorization or acceptance for production/customer data. Original per-finding R02 decisions below are historical; this limited owner decision supersedes their local acceptance-pending wording. Resolution milestones remain binding. Future requirements are not claims of currently exploitable defects or implemented capabilities. R02 stops before HA-002/HA-003. Responsible roles are assignments to roles, not claims that named people accepted them.
 
 Source shorthand: `Web/`, `Application/`, `Infrastructure/` resolve under `HappyAlmere_V0.1_MVC/src/HappyCity.*`; `tests/` resolves under `HappyAlmere_V0.1_MVC/`. Other paths are repository-relative. R01 evidence is historical; fresh evidence and exact commands are in [the R02 report](../reports/HA-001-R02-independent-audit-remediation.md).
 
@@ -214,3 +214,10 @@ PR #2 completed after checks; original develop c2964ee is preserved and integrat
 has its own branch. Integration/gap-analysis acceptance remains subject to independent
 review, not automatic approval of existing V0.2 capabilities. ARCH-F01/PERF-F01/SEC-F05
 master gaps remain tracked; no production or private-data authorization is inferred.
+
+Integration local verification: 68 tests, 42 layouts, 190 security and five rate
+assertions passed against PostgreSQL; loopback-only HTTP/HTTPS and database port
+bindings were verified. The NUL-input compatibility regression is resolved by bounded
+validation (HTTP 400), without relaxing TLS or other controls. Draft PR #3 and the
+HA-002 gap analysis await independent review. This does not resolve deferred catalog,
+secrets lifecycle, backup/restore or production-access requirements.
