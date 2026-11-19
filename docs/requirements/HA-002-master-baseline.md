@@ -56,3 +56,8 @@ outbox, analytics and audit. Favorites must use enforceable references; do not c
 duplicate custom authentication framework. These are deferred, not current missing-feature
 implementation assignments. No authentication, payments, scraping, real customer data,
 public deployment, production load tests or wholesale inventory creation is authorized.
+
+
+Canonical expanded consolidation: [database-architecture.md](../database/database-architecture.md).
+Acceptance mapping: [18 consolidated criteria](HA-002-acceptance-criteria.md).
+This earlier digest remains for provenance; the new documents do not imply implementation acceptance.

@@ -46,3 +46,13 @@ checks. Windows local certificate trust remains supported. Integration CI uses U
 with actual isolated TLS PostgreSQL and trusted Chromium to exercise the real backend.
 Node/Playwright are development dependencies only. Exact CI and local results are in
 the closure report; previous V0.1 evidence remains historical.
+
+
+Database review specifications (consolidated from the owner-supplied requirements):
+
+- [Database architecture](docs/database/database-architecture.md)
+- [18 HA-002 acceptance criteria](docs/requirements/HA-002-acceptance-criteria.md)
+- [Evidence-based 18-criterion gap analysis](docs/reports/HA-002-existing-implementation-gap-analysis.md)
+
+These specifications describe the intended architecture, not completed implementation
+or HA-002 approval. Independent review of draft PR #3 precedes new feature work.

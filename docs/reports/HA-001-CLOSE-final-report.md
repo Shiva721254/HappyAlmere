@@ -212,3 +212,28 @@ reviewed catalog/UUID/schema migration design, missing catalog entities/invarian
 role separation/secret lifecycle, performance evidence, required implementation
 documentation and a demonstrated protected backup/restore. No new feature work
 may begin before independent gap review. Future risk deadlines remain in force.
+
+## Supplied specification persistence and acceptance mapping follow-up
+
+19 November 2026: at the owner's request, persisted the independent ARCH-03 decision
+with its review-time matrix, and expanded the supplied HA-002 master into
+`docs/database/database-architecture.md` and
+`docs/requirements/HA-002-acceptance-criteria.md`. The 18-item numbering is explicitly
+identified as a consolidation of supplied ADRs/sections, not a fabricated original
+numbering or new architectural approval. Every criterion has a source/evidence-based
+disposition in `docs/reports/HA-002-existing-implementation-gap-analysis.md`:
+4 implemented, 8 partial, 4 missing, 1 conflicting and 1 unverified.
+
+This follow-up changes documentation only; recorded 68-test/browser results remain
+attributed to their executed commits and workflow URLs. Existing schema, queries,
+migrations, branches and data are not rebuilt or deleted. Foundation merge and
+preserved develop identifiers above remain unchanged. The follow-up stays on
+integration/ha-001-v02 and draft PR #3 for independent review; CI for its final commit
+is verified through the PR checks and recorded in the handoff, not presumed here.
+
+Documentation verification passed: exactly 18 criterion definitions and matching
+classification rows; all relative links in the four review/specification documents
+resolve. `git diff --check` passed. Fresh `python scripts/verify-source.py` passed
+with no credential-pattern findings; evidence is specification-static-results.json.
+Application, tests, scripts, infrastructure and workflow diffs against ec5bcfd are
+empty. Prior runtime results are not misrepresented as newly executed local tests.

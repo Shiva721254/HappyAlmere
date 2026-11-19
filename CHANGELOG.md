@@ -49,3 +49,7 @@ establish formal V0.1 acceptance. No development history or approval is inferred
 - HA-001-CLOSE reconciliation: 68 local and remote PostgreSQL-backed tests, 42
   responsive cases, 190 security assertions and five rate assertions passed; NUL
   input now returns 400 before database I/O. Draft PR #3 awaits independent review.
+
+- Persisted the supplied independent ARCH-03 decision and consolidated HA-002 database
+  specification/18 acceptance criteria at the requested paths. Updated the gap analysis
+  with per-criterion source and recorded runtime evidence; no database feature changes.

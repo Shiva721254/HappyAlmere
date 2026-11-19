@@ -1,6 +1,8 @@
-# HA-001-ARCH-03 - Review provenance and owner authorization
+# HA-001-ARCH-03 - Final independent architectural review
 
 Date: 19 November 2026 (Europe/Amsterdam).
+
+**Provenance: independently supplied review decision.**
 
 This records the authoritative HA-001-ARCH-03 review supplied by the product owner
 during HA-001-CLOSE on 19 November 2026. It is an attributed record, not a new
@@ -18,6 +20,8 @@ The same instruction authorizes investigation/correction of CI failures, regress
 verification, closure reporting and a gap analysis of the existing database implementation.
 It does not authorize additional database features, authentication, payments, public
 deployment, real customer data, force-pushes or bypassing branch protection.
+
+## Subsequent implementation record (not part of the independent decision)
 
 The original R02 CI run 44528299025 passed Ubuntu verification but its Windows job
 was cancelled after an unattended trust dialog. This is not a successful exact-SHA
@@ -46,3 +50,38 @@ retains its acceptance conditions and limitations.
 Review limitations: static source/configuration/repository/evidence inspection only;
 no independent runtime rerun, comprehensive penetration test or production-readiness
 certification. The reviewer made no repository edits or merges.
+
+## Supplied review acceptance matrix
+
+This is the review-time assessment of cbe2deff565c84f775a7fecd6f298b9421bd91a6,
+not a new assessment of the reconciled PostgreSQL implementation.
+
+| ID | Requirement | Independently supplied assessment |
+|---|---|---|
+| AC01 | Correct project root and solution configuration | PASS |
+| AC02 | Correct architectural dependencies | PASS |
+| AC03 | Successful compilation | PASS |
+| AC04 | Application running over HTTPS | PASS within local scope |
+| AC05 | Homepage and navigation verified | PASS |
+| AC06 | Search and filtering verified | PASS |
+| AC07 | Responsive design verified | PASS |
+| AC08 | Applicable security controls reviewed | PASS within local scope |
+| AC09 | Dependency vulnerabilities checked | PASS within recorded scan scope |
+| AC10 | Automated tests executed | PASS locally |
+| AC11 | Project documentation completed | PASS |
+| AC12 | Git recovery checkpoint established | PASS |
+| AC13 | Independent implementation report review | PASS within reviewed scope |
+| AC14 | Remaining risks accepted or resolved | Owner accepted temporary local-development risks; record formal disposition |
+| AC15 | Product owner approval | Conditional approval; final closure requires successful remote CI |
+
+The independent recommendation was to proceed with HA-001-CLOSE, verify both Ubuntu
+and Windows jobs, preserve branch protection, record owner authorization, merge the
+verified foundation, reconcile V0.2 on a dedicated branch, execute regressions and
+prepare the existing-implementation gap analysis. Do not commission another broad
+remediation cycle unless a specific new blocking defect is demonstrated. Do not add
+HA-002 features until the gap analysis receives independent review.
+
+The [consolidated database specification](../database/database-architecture.md) and
+[18-item acceptance consolidation](../requirements/HA-002-acceptance-criteria.md)
+record the supplied HA-002 requirements separately. They are not decisions made by
+this V0.1 review, and the consolidation does not create a new approval.
