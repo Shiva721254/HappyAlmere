@@ -1,15 +1,26 @@
-name: V0.1 foundation
+name: HappyAlmere verification
 on: [push, pull_request]
 permissions:
   contents: read
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           global-json-file: global.json
       - run: dotnet restore HappyAlmere.slnx
       - run: dotnet build HappyAlmere.slnx --configuration Release --no-restore
-      - run: dotnet test HappyAlmere.slnx --configuration Release --no-build --logger trx
+      - name: Initialize isolated TLS PostgreSQL and apply migrations
+        shell: pwsh
+        run: ./scripts/Initialize-LocalDatabase.ps1
+      - name: Foundation and real PostgreSQL integration tests
+        shell: pwsh
+        run: ./scripts/Test-Local.ps1
+      - name: Stop local database
+        if: always()
+        run: docker compose down

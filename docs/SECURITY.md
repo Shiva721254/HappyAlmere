@@ -1,5 +1,9 @@
 # V0.1 security review
 
+Historical V0.1 baseline. The [V0.2 database review](V0.2-DATABASE-DISCOVERY.md)
+adds verified database TLS, runtime least privilege and database tests. Identity
+and customer-data release gates below still apply.
+
 ## Enforced and tested
 
 - Localhost launch bindings and AllowedHosts allowlist.

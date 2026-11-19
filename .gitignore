@@ -9,3 +9,6 @@
 *.user
 artifacts/
 node_modules/
+*.key
+HappyAlmere_V0.1_MVC/HappyAlmere_Master_Business_Plan.md
+HappyAlmere_V0.1_MVC/HappyAlmere_Master_Business_Plan.pdf

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using HappyCity.Application;
 
 namespace HappyCity.FoundationTests;
 
@@ -19,7 +21,11 @@ public sealed class FoundationFactory : WebApplicationFactory<Program>
             }));
         // Probe actions exist only in the test assembly, never the production application.
         builder.ConfigureServices(services =>
-            services.AddControllersWithViews().AddApplicationPart(typeof(SecurityProbeController).Assembly));
+        {
+            services.RemoveAll<IDiscoveryRepository>();
+            services.AddSingleton<IDiscoveryRepository, DemoDiscoveryRepository>();
+            services.AddControllersWithViews().AddApplicationPart(typeof(SecurityProbeController).Assembly);
+        });
     }
 
     public HttpClient HttpsClient() => CreateClient(new WebApplicationFactoryClientOptions

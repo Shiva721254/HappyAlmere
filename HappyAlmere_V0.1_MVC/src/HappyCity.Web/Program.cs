@@ -3,6 +3,7 @@ using HappyCity.Infrastructure;
 using HappyCity.Web.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
@@ -14,7 +15,9 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.SameSite = SameSiteMode.Strict;
 });
-builder.Services.AddSingleton<IDiscoveryRepository, DemoDiscoveryRepository>();
+builder.Services.AddDbContext<HappyCityDbContext>(options => options.UseNpgsql(
+    DatabaseConfiguration.RequireVerifiedTls(builder.Configuration.GetConnectionString("HappyCity"))));
+builder.Services.AddScoped<IDiscoveryRepository, PostgresDiscoveryRepository>();
 builder.Services.AddScoped<IDiscoveryService, DiscoveryService>();
 builder.Services.AddRateLimiter(options =>
 {

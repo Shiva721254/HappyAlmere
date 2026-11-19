@@ -1,12 +1,10 @@
-# HappyAlmere V0.1 — MVC foundation
+# HappyAlmere source
 
-The solution, shared build settings, VS Code configuration and CI workflow now
-live one directory above this folder, at the Git root.
+This folder name is retained from V0.1. Active development is V0.2 on develop.
 
-See the [root README](../README.md) for build, test and HTTPS launch commands.
-See [architecture](../docs/ARCHITECTURE.md), [security review](../docs/SECURITY.md)
-and [verification results](../docs/V0.1-VERIFICATION.md) for the verified scope.
+Use the [root README](../README.md) for setup, tests and HTTPS launch.
+See [V0.2 documentation](../docs/V0.2-DATABASE-DISCOVERY.md) for PostgreSQL/EF Core,
+migration procedures, security boundaries and verification.
 
-This remains a local prototype with synthetic content. Do not enter real customer
-information. No database, accounts, registration or payments are implemented.
-V0.2 has not started.
+Only synthetic content is stored. No real customer information, accounts,
+registration or payments are implemented.

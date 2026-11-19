@@ -11,7 +11,8 @@ public sealed class HomeController(IDiscoveryService discovery) : Controller
     public async Task<IActionResult> Index(string? category, string? q, CancellationToken cancellationToken)
     {
         DiscoveryFilter filter;
-        try { filter = new DiscoveryFilter(category, q); }
+        // This deployment serves Almere. Request parameters cannot override the city.
+        try { filter = new DiscoveryFilter("almere", category, q); }
         catch (ArgumentException) { return BadRequest(); }
 
         var items = await discovery.FindAsync(filter, cancellationToken);

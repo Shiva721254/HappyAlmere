@@ -50,6 +50,10 @@
         <p>Geen resultaten. Probeer een andere zoekterm.</p>
         <a asp-action="Index">Alle voorbeelden</a>
     }
+    @if (Model.Items.Count == HappyCity.Application.DiscoveryFilter.MaximumResults)
+    {
+        <p>De eerste 100 resultaten worden getoond. Verfijn je zoekterm of kies een categorie.</p>
+    }
 </section>
 <section class="wrap section">
     <div class="business-banner">

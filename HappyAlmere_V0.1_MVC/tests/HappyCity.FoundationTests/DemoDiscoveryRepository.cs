@@ -1,7 +1,7 @@
 using HappyCity.Application;
 using HappyCity.Domain;
 
-namespace HappyCity.Infrastructure;
+namespace HappyCity.FoundationTests;
 
 public sealed class DemoDiscoveryRepository : IDiscoveryRepository
 {
@@ -19,6 +19,8 @@ public sealed class DemoDiscoveryRepository : IDiscoveryRepository
     {
         ArgumentNullException.ThrowIfNull(filter);
         cancellationToken.ThrowIfCancellationRequested();
+        if (filter.CitySlug != "almere")
+            return Task.FromResult<IReadOnlyList<DiscoveryItem>>(Array.Empty<DiscoveryItem>());
         IReadOnlyList<DiscoveryItem> results = Items
             .Where(x => filter.Category is null || x.Category.Equals(filter.Category, StringComparison.OrdinalIgnoreCase))
             .Where(x => filter.Query is null || $"{x.Title} {x.Description} {x.District}".Contains(filter.Query, StringComparison.OrdinalIgnoreCase))

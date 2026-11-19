@@ -1,5 +1,8 @@
 # V0.1 architecture
 
+Historical V0.1 baseline. See [V0.2 database discovery](V0.2-DATABASE-DISCOVERY.md)
+for the current persistence implementation and its approved scope.
+
 ## Existing workspace review
 
 Before editing, all 23 original authored files were read: four project files,
