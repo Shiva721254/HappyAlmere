@@ -160,3 +160,13 @@ behaviour must be reused where compatible. Differences require invariant-based r
 not automatic replacement. No new HA-002 feature implementation is authorized before
 independent gap analysis review. Original develop and approved V0.1 histories remain
 preserved on the dedicated integration branch.
+
+
+## HA-002-A recovery/design evidence (requirements unchanged)
+
+Issue #4 and the owner's clarification authorize a recovery-first sequence. A verified
+synthetic baseline backup/restore is now documented in [backup-and-recovery.md](backup-and-recovery.md).
+The proposed [migration-policy.md](migration-policy.md) maps existing data to this
+architecture and identifies decisions still requiring independent review. It does not
+change these requirements or claim a new schema/UUID conversion has been implemented.
+HA-002-ARCH-01 has no verified standalone record; no detailed findings are invented.

@@ -125,3 +125,17 @@ Do not merge the integration branch into develop/main or implement further datab
 functionality until independent review of this gap analysis. Preserve original develop
 and both parent histories. The supplied master mapping, supported cities and data ownership decisions require
 independent review before implementation. No new business schema is introduced.
+
+
+## HA-002-A recovery/design update (19 November 2026)
+
+The original 18-item assessment above is the historical 0627839 checkpoint. Subsequent
+Issue #4 work demonstrates protected backup and exact isolated restore of the synthetic
+baseline, including negative fixture/archive checks. See [current implementation report](HA-002-implementation-report.md)
+for the distinct AC01-AC12 matrix and [backup runbook](../database/backup-and-recovery.md).
+Master AC17 moves from no restore evidence to **partial**: local synthetic restore is
+proven, but broader backup identity/encryption/retention policy remains incomplete.
+Master AC18 now has backup/migration policy and implementation-report paths; other
+missing ERD/dictionary/security/ADR documentation and independent acceptance remain.
+No UUID/schema/catalog/role/pagination gaps have been silently closed. HA-002-ARCH-01
+is unavailable as a standalone reference, confirmed by owner; master requirements stay authoritative.

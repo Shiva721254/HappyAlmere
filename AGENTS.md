@@ -36,3 +36,8 @@
 - Commit and push approved changes to the appropriate authorized development/remediation branch; verify the remote SHA. This standing workflow authorizes synchronization of approved task changes, not unapproved features, unrelated changes or history rewriting.
 - ChatGPT independently reviews implementation through GitHub. The project owner retains final approval authority. CI success and agent-authored reports are not substitutes for either review or owner approval.
 - Do not merge into main or deploy to production without explicit approval. Preserve main, develop and other histories; never bypass required branch protection. Existing task-specific stop/review gates remain in force.
+
+## Current HA-002-A assignment
+- Issue #4 and the owner's clarification authorize inventory, protected backup, isolated restore/integrity and non-destructive migration design on feature/ha-002-a. Reconcile against repository architecture; HA-002-ARCH-01 has no verified standalone reference and must not be invented.
+- Record the recovery gate before any primary-key, ownership or existing-structure changes. Escalate ambiguous migration mappings in Issue #4 for independent review. All twelve acceptance criteria remain active; baseline restore is not forward-migration completion.
+- Report progress, actual test results, commits and criterion-level evidence directly in Issue #4. Preserve main/develop/source data and all prior approval/deployment restrictions.

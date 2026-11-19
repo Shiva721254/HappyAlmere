@@ -2,16 +2,47 @@
 
 Updated: 19 November 2026 (Europe/Amsterdam).
 Repository: private [Shiva721254/HappyAlmere](https://github.com/Shiva721254/HappyAlmere).
-Working/review branch: **integration/ha-001-v02**.
+Working branch: **feature/ha-002-a**, from integration baseline 62b1defdca00989bf363a39057f5558aae8ee3e3.
+Active assignment: [Issue #4](https://github.com/Shiva721254/HappyAlmere/issues/4).
 Review: [draft PR #3](https://github.com/Shiva721254/HappyAlmere/pull/3), unmerged.
+
+## Latest task - HA-002-A recovery/design
+
+The owner authorized baseline inventory, backup, isolated restore/integrity and
+non-destructive design. Those phases now have implementation evidence. The source
+schema/data/roles and original migrations are unchanged. Three fresh isolated restores
+reconciled 1 city, 5 categories, 6 discovery entries and applied history. The final
+runner rejects altered synthetic fixtures and a truncated archive before intact restore.
+All owned test containers are stopped; archives/credentials stay protected and ignored.
+
+Fresh restored-baseline verification: Debug/Release zero warnings/errors; 68 tests,
+42 responsive cases, 190 security and five rate assertions pass. NuGet/npm scans clean
+within scope. CI adds the same isolated recovery gate; new outcomes must be read at
+their exact commit in Issue #4/PR checks, not inferred from older baseline runs.
+
+[Implementation report and AC01-AC12 matrix](docs/reports/HA-002-implementation-report.md),
+[backup runbook](docs/database/backup-and-recovery.md),
+[migration design/policy](docs/database/migration-policy.md),
+[sanitized evidence](docs/reports/evidence/HA-002-A/).
+
+HA-002-A remains active and incomplete. No UUID conversion, ownership migration or
+pagination was implemented. Independent review must resolve legacy UUID mapping,
+discovery placement, non-authoritative district/domain/address backfills, role design
+and pagination contract before forward implementation. HA-002-ARCH-01 is unavailable
+as a standalone record, confirmed by the owner; repository architecture is authoritative.
+The detailed report lists changed files, tests, evidence and outstanding criteria.
+
+The earlier integration/closure snapshot below remains historical context. This task's
+implementation commit is identified by Git history and the issue completion/progress
+comment after push; no self-approval, issue closure, main merge or deployment.
 
 ## Shared record and authority
 
 GitHub is the shared source of truth for Codex, ChatGPT and the project owner.
 Update this file and existing progress records after every development task, recording
 actual evidence and approved synchronization. ChatGPT independently reviews through
-GitHub; the owner retains final approval. No new HA-002 features, main merge or
-production deployment is authorized by this handover. See [engineering instructions](AGENTS.md).
+GitHub; the owner retains final approval. Only the current explicitly assigned HA-002-A recovery/design scope is authorized;
+no unreviewed new catalog feature, main merge or production deployment is authorized by this handover. See [engineering instructions](AGENTS.md).
 
 ## Implementation and acceptance snapshot
 

@@ -26,6 +26,8 @@ jobs:
       - name: Foundation and actual PostgreSQL tests
         shell: pwsh
         run: ./scripts/Test-Local.ps1
+      - name: Isolated synthetic backup and restore gate
+        run: python3 scripts/verify-database-recovery.py
       - run: dotnet list HappyAlmere.slnx package --vulnerable --include-transitive
       - run: npm ci --ignore-scripts
       - run: npm audit --audit-level=high
@@ -55,6 +57,7 @@ jobs:
           name: integration-verification
           retention-days: 7
           path: |
+            artifacts/ha002a/*/evidence.json
             artifacts/responsive-results.json
             artifacts/*-*.png
             artifacts/r02/browser/*-results.json

@@ -1,0 +1,295 @@
+{
+  "scope": "Fresh existing regression suite against the isolated restored baseline, no new forward migration.",
+  "counters": {
+    "total": "68",
+    "executed": "68",
+    "passed": "68",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "tests": [
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Http_redirects_to_https",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Database_connections_require_verified_tls(mode: \"Prefer\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.City_scope_must_be_explicit_and_valid(city: \"Almere\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Real_postgres_search_matches_literal_filter_contract(category: null, query: \"_\", count: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Real_postgres_search_matches_literal_filter_contract(category: null, query: \" FAMILIE \", count: 1)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?category=winkelen\", expected: \"Ontdek je buurt\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Real_postgres_search_matches_literal_filter_contract(category: null, query: \"' OR 1=1 --\", count: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Security_headers_cover_errors_and_static_files(path: \"/not-found\", status: NotFound)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Database_connections_require_verified_tls(mode: \"VerifyCA\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: null, query: \"does-not-exist\", count: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Oversized_input_is_rejected(name: \"q\", length: 101)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Database_enforces_content_constraints(scenario: \"title\", sqlState: \"23514\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Database_connections_require_verified_tls(mode: \"Require\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?category=diensten\", expected: \"Huis en tuin\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?category=activiteiten\", expected: \"Een wandeling aan het water\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Database_incompatible_text_is_rejected_at_http_boundary(path: \"/?q=hello%00world\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Mvc_uses_postgres_and_cannot_be_switched_to_another_city_by_query_string",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Database_enforces_content_constraints(scenario: \"duplicate\", sqlState: \"23505\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Real_postgres_search_matches_literal_filter_contract(category: null, query: \"does-not-exist\", count: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Real_postgres_search_matches_literal_filter_contract(category: \"diensten\", query: \"familie\", count: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Security_headers_cover_errors_and_static_files(path: \"/test/throw\", status: InternalServerError)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?q=familie\", expected: \"Een familiedag plannen\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Search_limits_are_enforced_at_application_boundary",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Real_postgres_search_matches_literal_filter_contract(category: null, query: null, count: 6)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Unsafe_action_requires_antiforgery_token",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: \"diensten\", query: \"familie\", count: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Database_connections_require_verified_tls(mode: \"Disable\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: null, query: \"   \", count: 6)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Real_postgres_search_matches_literal_filter_contract(category: null, query: \"%\", count: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Cancellation_reaches_the_repository",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Real_postgres_search_matches_literal_filter_contract(category: \"activiteiten\", query: null, count: 2)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Untrusted_host_is_rejected",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Unencrypted_tcp_is_rejected_by_postgres",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Database_enforces_content_constraints(scenario: \"slug\", sqlState: \"23514\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Database_enforces_content_constraints(scenario: \"city\", sqlState: \"23503\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Database_enforces_content_constraints(scenario: \"category\", sqlState: \"23503\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Database_incompatible_text_is_rejected_at_http_boundary(path: \"/?category=%00\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?category=eten\", expected: \"Lokaal lunchen\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Cancellation_is_propagated",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Cities_and_drafts_are_isolated_and_queries_are_bounded",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/\", expected: \"Haal meer uit\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Database_enforces_content_constraints(scenario: \"length\", sqlState: \"22001\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.City_scope_must_be_explicit_and_valid(city: \"\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: null, query: \" FAMILIE \", count: 1)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Untrusted_certificate_is_rejected_by_real_connection",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Hsts_is_emitted_for_non_loopback_https_host",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: \"unknown\", query: null, count: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Search_budget_returns_429_without_blocking_privacy",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: null, query: null, count: 6)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Oversized_input_is_rejected(name: \"category\", length: 31)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Rate_limit_isolates_peers_and_ignores_spoofed_forwarding_headers",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Real_postgres_search_matches_literal_filter_contract(category: null, query: \"idee\u00ebn\", count: 1)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?category=besparen\", expected: \"Winkelaanbiedingen\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.City_scope_must_be_explicit_and_valid(city: \"../almere\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: \" ETEN \", query: \"lunch\", count: 1)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Migrations_are_current_and_repeatable",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Security_headers_cover_errors_and_static_files(path: \"/css/site.css\", status: OK)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Database_incompatible_text_is_rejected_at_http_boundary(path: \"/?q=%00\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/Home/Business\", expected: \"Voor ondernemers\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Search_encodes_untrusted_text_and_retains_category",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Database_outage_returns_generic_error_without_demo_fallback",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Valid_csrf_token_succeeds_but_tampered_token_fails",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Runtime_connection_uses_tls_and_cannot_write_or_create_tables",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/?q=does-not-exist\", expected: \"Geen resultaten\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.DiscoveryTests.Search_has_predictable_filtering(category: \"activiteiten\", query: null, count: 2)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Real_postgres_search_matches_literal_filter_contract(category: \" ETEN \", query: \"lunch\", count: 1)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.PostgresTests.Real_postgres_search_matches_literal_filter_contract(category: null, query: \"\\\\\", count: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "HappyCity.FoundationTests.WebTests.Pages_and_search_render(path: \"/Home/Privacy\", expected: \"Privacy\")",
+      "outcome": "Passed"
+    }
+  ]
+}

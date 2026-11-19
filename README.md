@@ -1,4 +1,4 @@
-# HappyAlmere - preserved PostgreSQL integration candidate
+# HappyAlmere - HA-002-A recovery and migration-design candidate
 
 This branch reconciles existing develop c2964ee with approved V0.1 main 0e7739d.
 It is a review candidate, not accepted HA-002 implementation. Only synthetic local use.
@@ -62,3 +62,13 @@ Database review specifications (consolidated from the owner-supplied requirement
 
 These specifications describe the intended architecture, not completed implementation
 or HA-002 approval. Independent review of draft PR #3 precedes new feature work.
+
+
+## HA-002-A recovery/design progress
+
+[Issue #4](https://github.com/Shiva721254/HappyAlmere/issues/4) is active. The owner-authorized
+inventory/backup/isolated restore/design phase has evidence in the
+[implementation report](docs/reports/HA-002-implementation-report.md). Reuse the
+[backup runbook](docs/database/backup-and-recovery.md) and review the
+[non-destructive migration proposal](docs/database/migration-policy.md). No forward
+migration or full HA-002 acceptance is claimed; preserve original source/volumes.

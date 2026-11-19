@@ -2,6 +2,13 @@
 
 Only observed Git history and actual local changes are recorded. Dates use Europe/Amsterdam.
 
+## HA-002-A recovery/design - 2026-11-19
+
+- Add protected synthetic-only PostgreSQL inventory/backup/isolated restore with exact reconciliation and negative input/archive checks; preserve the source and existing migrations.
+- Verify 68 existing tests and HTTPS/browser regressions against the restored database; add the same recovery gate to CI.
+- Document non-destructive migration mapping for independent review; forward migration, UUID conversion, role changes and pagination remain pending.
+- Record owner-confirmed unavailability of standalone HA-002-ARCH-01; use repository specifications without inventing findings.
+
 ## Shared handoff policy - 2026-11-19
 
 - Record GitHub as the shared source of truth, independent ChatGPT review and final owner approval.

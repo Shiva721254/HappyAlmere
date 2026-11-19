@@ -221,3 +221,13 @@ bindings were verified. The NUL-input compatibility regression is resolved by bo
 validation (HTTP 400), without relaxing TLS or other controls. Draft PR #3 and the
 HA-002 gap analysis await independent review. This does not resolve deferred catalog,
 secrets lifecycle, backup/restore or production-access requirements.
+
+
+## HA-002-A recovery/design evidence
+
+Local synthetic backup/restore is now demonstrated; [the implementation report](../reports/HA-002-implementation-report.md)
+records scope, hashes, exact reconciliation, tests and open issue criteria. Archives and
+generated credentials are protected/ignored, never uploaded. Host disk encryption,
+production backup protection and separated backup/migration/owner roles are not claimed.
+SEC-F05/ARCH-F01/PERF-F01 remain open for their residual requirements. A successful
+baseline restore does not demonstrate UUID migration or recovery after its failure.
