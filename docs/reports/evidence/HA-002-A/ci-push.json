@@ -1,0 +1,203 @@
+{
+  "conclusion": "success",
+  "headSha": "c238b3618c732f288726950e5a59a504975dce1e",
+  "jobs": [
+    {
+      "completedAt": "2026-11-19T15:44:02Z",
+      "conclusion": "success",
+      "databaseId": 135677620870,
+      "name": "verify",
+      "startedAt": "2026-11-19T15:41:02Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-11-19T15:41:05Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-11-19T15:41:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:41:07Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "number": 2,
+          "startedAt": "2026-11-19T15:41:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:41:08Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1",
+          "number": 3,
+          "startedAt": "2026-11-19T15:41:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:41:14Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "number": 4,
+          "startedAt": "2026-11-19T15:41:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:41:25Z",
+          "conclusion": "success",
+          "name": "Run dotnet restore HappyAlmere.slnx",
+          "number": 5,
+          "startedAt": "2026-11-19T15:41:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:41:39Z",
+          "conclusion": "success",
+          "name": "Run dotnet build HappyAlmere.slnx -c Debug --no-restore",
+          "number": 6,
+          "startedAt": "2026-11-19T15:41:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:41:46Z",
+          "conclusion": "success",
+          "name": "Run dotnet build HappyAlmere.slnx -c Release --no-restore",
+          "number": 7,
+          "startedAt": "2026-11-19T15:41:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:42:23Z",
+          "conclusion": "success",
+          "name": "Initialize isolated TLS PostgreSQL",
+          "number": 8,
+          "startedAt": "2026-11-19T15:41:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:42:32Z",
+          "conclusion": "success",
+          "name": "Foundation and actual PostgreSQL tests",
+          "number": 9,
+          "startedAt": "2026-11-19T15:42:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:42:43Z",
+          "conclusion": "success",
+          "name": "Isolated synthetic backup and restore gate",
+          "number": 10,
+          "startedAt": "2026-11-19T15:42:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:42:48Z",
+          "conclusion": "success",
+          "name": "Run dotnet list HappyAlmere.slnx package --vulnerable --include-transitive",
+          "number": 11,
+          "startedAt": "2026-11-19T15:42:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:42:49Z",
+          "conclusion": "success",
+          "name": "Run npm ci --ignore-scripts",
+          "number": 12,
+          "startedAt": "2026-11-19T15:42:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:42:50Z",
+          "conclusion": "success",
+          "name": "Run npm audit --audit-level=high",
+          "number": 13,
+          "startedAt": "2026-11-19T15:42:49Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:42:54Z",
+          "conclusion": "success",
+          "name": "Run python3 scripts/verify-source.py",
+          "number": 14,
+          "startedAt": "2026-11-19T15:42:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:43:19Z",
+          "conclusion": "success",
+          "name": "Run npm run browser:install -- --with-deps",
+          "number": 15,
+          "startedAt": "2026-11-19T15:42:54Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:43:24Z",
+          "conclusion": "success",
+          "name": "Trust only the ephemeral local HTTPS certificate",
+          "number": 16,
+          "startedAt": "2026-11-19T15:43:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:43:52Z",
+          "conclusion": "success",
+          "name": "Trusted HTTPS PostgreSQL browser, responsive, security and network tests",
+          "number": 17,
+          "startedAt": "2026-11-19T15:43:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:43:54Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+          "number": 18,
+          "startedAt": "2026-11-19T15:43:52Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:43:58Z",
+          "conclusion": "success",
+          "name": "Stop CI database without deleting volumes",
+          "number": 19,
+          "startedAt": "2026-11-19T15:43:54Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:43:58Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "number": 36,
+          "startedAt": "2026-11-19T15:43:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:43:58Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1",
+          "number": 37,
+          "startedAt": "2026-11-19T15:43:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:43:59Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "number": 38,
+          "startedAt": "2026-11-19T15:43:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-19T15:43:59Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 39,
+          "startedAt": "2026-11-19T15:43:59Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Shiva721254/HappyAlmere/actions/runs/44557553382/job/135677620870"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/Shiva721254/HappyAlmere/actions/runs/44557553382"
+}

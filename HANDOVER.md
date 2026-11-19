@@ -17,8 +17,14 @@ All owned test containers are stopped; archives/credentials stay protected and i
 
 Fresh restored-baseline verification: Debug/Release zero warnings/errors; 68 tests,
 42 responsive cases, 190 security and five rate assertions pass. NuGet/npm scans clean
-within scope. CI adds the same isolated recovery gate; new outcomes must be read at
-their exact commit in Issue #4/PR checks, not inferred from older baseline runs.
+within scope. Verified implementation commit: **c238b3618c732f288726950e5a59a504975dce1e**.
+Both [push CI](https://github.com/Shiva721254/HappyAlmere/actions/runs/44557553382) and
+[PR CI](https://github.com/Shiva721254/HappyAlmere/actions/runs/44557570176) passed,
+including the new isolated recovery gate. Initial e652622 runs failed on a missing
+local develop ref; the correction fetches history and records origin/develop without
+weakening checks. [Draft PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6) targets
+the preserved integration branch. Subsequent documentation-head checks are identified
+in Issue #4/PR #6, never inferred from older runs.
 
 [Implementation report and AC01-AC12 matrix](docs/reports/HA-002-implementation-report.md),
 [backup runbook](docs/database/backup-and-recovery.md),
