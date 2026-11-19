@@ -14,3 +14,8 @@ in Issue #4/PR #6 after synchronization. Original gate JSON retains its actual b
 
 No archives, credentials, raw inventory or private keys are included. Independent
 acceptance remains pending; CI success does not grant merge/deployment permission.
+
+Remote source checkpoint 4f8a756c1dbf506b77528428a907054cd61a95f0 passed push run
+44567576217 and PR run 44567590442. ci-results.json records exact workflow/job/step
+outcomes; ci-forward-recovery.json, ci-performance.json and ci-browser-summary.json
+retain sanitized downloaded PR artifacts/summary. Independent acceptance is pending.

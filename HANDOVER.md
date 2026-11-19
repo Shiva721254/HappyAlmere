@@ -23,6 +23,12 @@ creates independent instances/volumes on a task-private network, and retains art
 No identity/business features. Remaining gates: final remote CI, independent architectural
 acceptance, owner decision. Final commit hashes/CI results are linked in Issue #4/PR #6.
 
+Implementation checkpoint: **4f8a756c1dbf506b77528428a907054cd61a95f0**.
+Push CI 44567576217 and PR CI 44567590442 succeeded (87 tests plus full isolated
+migration/recovery/browser suites); exact links and artifacts are in the latest
+implementation report. Independent acceptance remains pending. This handoff update
+is documentation/evidence only; final containing SHA is recorded in Issue #4/PR #6.
+
 Earlier recovery/design records below are historical and remain preserved.
 
 ## Latest task - HA-002-A recovery/design

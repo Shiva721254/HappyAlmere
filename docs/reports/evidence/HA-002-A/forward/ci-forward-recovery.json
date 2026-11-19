@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "e23eaf44884277ee993a963016eb181980f4d9c9",
+  "startedUtc": "2026-11-19T16:35:44.465578+00:00",
+  "sourceGate": "artifacts/ha002a/20261119163533-6f3840/evidence.json",
+  "checks": {
+    "enrichedBackupRestore": "PASS",
+    "afterBackfillRollback": "PASS",
+    "postFailureFreshRestore": "PASS",
+    "completeRowsAssociationsPublication": "PASS",
+    "allUuidMappingsAndBoundaryIds": "PASS",
+    "secondRunNoOp": "PASS",
+    "cleanCreation": "PASS",
+    "tlsRoleReadsAndEscalationNegatives": "PASS",
+    "restrictedLogicalBackup": "PASS",
+    "dedicatedRestoreIdentityAndRevocation": "PASS",
+    "migratedArchiveAllTablesConstraintsIndexes": "PASS",
+    "nonLoginObjectOwnership": "PASS"
+  },
+  "enrichedCounts": {
+    "Categories": 5,
+    "Cities": 1,
+    "DiscoveryEntries": 8,
+    "__EFMigrationsHistory": 1
+  },
+  "enrichedSha256": "f6bafc9a7d437eead18c3b86549abaa0a82eb53b7d55368295e1be315f28f863",
+  "recoverySeconds": 6.182,
+  "rowDigests": {
+    "Cities": "da2eb7e6813b67d233a4e745a2a3d6a5c8f44709c8268d6e3578eee7743dbad6",
+    "Categories": "91e8603da6334368edd904c23cba93d8b1bd556ad17970356a1939c3b1b58e31",
+    "DiscoveryEntries": "61004d54e9d80c626feb03e113da850df8969243cf1df83366272760ca111f07"
+  },
+  "migrationHistory": [
+    {
+      "MigrationId": "20261119000108_InitialDiscovery",
+      "ProductVersion": "10.0.14"
+    },
+    {
+      "MigrationId": "20261119161305_CatalogForward",
+      "ProductVersion": "10.0.14"
+    }
+  ],
+  "targetContainers": [
+    "1b92b384cd8f0e22f609a5851fda6ef9eae41275861581bb2697f53beac94eae",
+    "e98d6e689db3d34e87cdd97dc432eec70464993595fdeb41383173d911e7db8a",
+    "d0dcb0671d99033008009968ec12ea5bb228ceaab848f04579eb2acc074be4c7",
+    "0e5a1d4c1deb6cba2157ef2deec3ef5f92238053aa7b3c278af8048da60d1d99",
+    "3fe1e4d69f523be12583157124259e34d827e7358358a2742dcf9db24e595385"
+  ],
+  "regressionContainer": "0e5a1d4c1deb6cba2157ef2deec3ef5f92238053aa7b3c278af8048da60d1d99",
+  "completedUtc": "2026-11-19T16:36:30.118944+00:00",
+  "status": "PASS"
+}

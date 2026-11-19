@@ -1,0 +1,14 @@
+{
+  "responsive-results.json": {
+    "result": "PASS",
+    "caseCount": 0
+  },
+  "functional-results.json": {
+    "passed": 190,
+    "failed": 0
+  },
+  "rate-results.json": {
+    "passed": 5,
+    "failed": 0
+  }
+}
