@@ -4,7 +4,26 @@ Updated: 19 November 2026 (Europe/Amsterdam).
 Repository: private [Shiva721254/HappyAlmere](https://github.com/Shiva721254/HappyAlmere).
 Working branch: **feature/ha-002-a**, from integration baseline 62b1defdca00989bf363a39057f5558aae8ee3e3.
 Active assignment: [Issue #4](https://github.com/Shiva721254/HappyAlmere/issues/4).
-Review: [draft PR #3](https://github.com/Shiva721254/HappyAlmere/pull/3), unmerged.
+Review: [draft PR #6](https://github.com/Shiva721254/HappyAlmere/pull/6), unmerged; prior integration PR #3 remains separate.
+
+## Latest phase - authorized HA-002-A forward migration
+
+Owner-approved D01-D10 / safeguards: Issue #4 comment 7014717337. Primary branch
+feature/ha-002-a, baseline 3287994; draft PR #6. Six-table catalog/UUID migration,
+keyset pagination, isolated rollback/recovery and separated roles are implemented
+as a review candidate. No merge/deployment or final acceptance. See latest section
+of docs/reports/HA-002-implementation-report.md and its forward evidence directory.
+Original source/volumes, initial migration and main/develop remain preserved.
+Governance PR #9 is separate; keep its indexes/evidence during any later approved integration.
+
+Run against the explicitly selected artifacts/forward/<run>/rehearsal.env; never the
+preserved original .env database. Initialize-LocalDatabase.ps1 creates only the original
+InitialDiscovery baseline. Forward runner requires a successful exact recovery gate,
+creates independent instances/volumes on a task-private network, and retains artifacts.
+No identity/business features. Remaining gates: final remote CI, independent architectural
+acceptance, owner decision. Final commit hashes/CI results are linked in Issue #4/PR #6.
+
+Earlier recovery/design records below are historical and remain preserved.
 
 ## Latest task - HA-002-A recovery/design
 

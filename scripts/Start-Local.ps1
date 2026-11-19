@@ -1,6 +1,7 @@
+param([Parameter(Mandatory=$true)][string]$EnvironmentFile)
 $ErrorActionPreference = 'Stop'
 Set-Location (Join-Path $PSScriptRoot '..')
-. "$PSScriptRoot/Load-LocalEnvironment.ps1"
+. "$PSScriptRoot/Load-LocalEnvironment.ps1" -EnvironmentFile $EnvironmentFile
 # The website inherits only the read-only connection, never migration credentials.
 Remove-Item Env:HAPPYCITY_MIGRATION_CONNECTION -ErrorAction SilentlyContinue
 Remove-Item Env:POSTGRES_PASSWORD -ErrorAction SilentlyContinue

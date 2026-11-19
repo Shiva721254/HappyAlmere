@@ -41,3 +41,9 @@
 - Issue #4 and the owner's clarification authorize inventory, protected backup, isolated restore/integrity and non-destructive migration design on feature/ha-002-a. Reconcile against repository architecture; HA-002-ARCH-01 has no verified standalone reference and must not be invented.
 - Record the recovery gate before any primary-key, ownership or existing-structure changes. Escalate ambiguous migration mappings in Issue #4 for independent review. All twelve acceptance criteria remain active; baseline restore is not forward-migration completion.
 - Report progress, actual test results, commits and criterion-level evidence directly in Issue #4. Preserve main/develop/source data and all prior approval/deployment restrictions.
+
+
+## Approved HA-002-A forward phase
+- Owner-approved HA-DB-D01 through D10 and eight safeguards are recorded in Issue #4 comment 7014717337. Forward implementation and isolated synthetic rehearsals are authorized on feature/ha-002-a; this supersedes the prior design-only stop for that task.
+- Preserve original database/volumes, initial migration/history and main/develop. New schema changes execute only on verified fresh clones, with exact enriched backup/restore gate, failure rollback and independent recovery.
+- Keep governance PR #9 isolated; do not overwrite or merge it. No HA-003/HA-004, identity/business features, live domains, real data, merge or deployment. Final independent acceptance remains pending.

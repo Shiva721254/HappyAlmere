@@ -190,3 +190,89 @@ handoff commit follows this verified implementation checkpoint and is identified
 Git history and the final Issue #4 comment. Draft PR #6 remains unmerged for independent
 review. AC04 design decisions and forward criteria AC05/AC07/AC08/AC10/AC11 remain
 open as detailed above; do not close the issue or claim HA-002 acceptance.
+
+
+## Owner-authorized forward phase - 19 November 2026 (latest)
+
+This section supersedes earlier design-only/implementation-pending status, preserving
+its historical evidence. Authority: [HA-DB-D01..D10 and eight safeguards](https://github.com/Shiva721254/HappyAlmere/issues/4#issuecomment-7014717337).
+Starting checkpoint 3287994afb0bb3fe7e69f60a6bda689f77c40323; branch feature/ha-002-a,
+draft PR #6. Governance PR #9 is not merged or overwritten. Independent final
+acceptance is still pending; no main/develop modification or deployment.
+
+Implemented six-table catalog plus preserved discovery extension using explicit
+transactional expand/backfill/validate/cutover SQL. Original migration files/history
+are unchanged. UUIDv8 boundary mapping and full original rows/publication/FKs are
+reconciled. New UUIDs use v4. Empty unverified geography/domains remain empty; no live
+resolver, Identity or business implementation. Category defaults, Dutch name retention,
+city defaults, timestamp provenance and versioned keyset contract were recorded before
+schema execution in migration-policy.md. Existing discovery UI remains Dutch.
+
+### Executed verification and evidence
+
+- Fresh source gate reproduced 1 city, 5 categories, 6 entries and original history,
+  with source unchanged. Enriched isolated baseline adds two unpublished boundary
+  records (IDs 0 and int.MaxValue), restores exactly before any schema modification.
+- Forward runner: exact UUIDs, all original content/relationships/publication, clean
+  creation, no-op repeat, controlled post-backfill failure/transactional rollback,
+  independent fresh failure recovery and restricted post-migration backup/restore
+  (all seven tables, constraints, indexes). Twelve explicit runner checks pass.
+- Actual owner/migrator/runtime/backup/restore boundaries and TLS connections tested;
+  runtime/backup writes, DDL and role escalation rejected. Restore login/membership
+  revoked after use. Original legacy bootstrap administrator is not runtime.
+- Debug/Release builds: zero warnings/errors. 87 .NET tests passed, zero failed/skipped
+  in the latest expanded run before final synchronization; original 68 retained.
+  Tests cover model drift, physical metadata, pagination, inactive city, constraints,
+  same-city FK, hierarchy cycles/write serialization, security/TLS and existing MVC.
+- 10,000-row synthetic workload: 30 warmed sequential page samples, p95 below the
+  predeclared 250ms bound; exact timings and plans in performance.json. Stable traversal
+  returned all 10,000 titles exactly once. Not a production concurrency/load claim.
+- Browser: 42 responsive cases over seven widths; 190 functional/security and five
+  rate assertions passed. HTTPS certificate validation retained; actual sockets loopback
+  only, non-loopback probes rejected. Prior and new results remain separately scoped.
+- NuGet direct/transitive and npm scans reported no known vulnerabilities. Scoped
+  tracked-history/current-source credential scan found zero matches; no exhaustive
+  secret absence or production-readiness guarantee.
+- One final-rehearsal attempt failed before clean-target creation because Docker's
+  default address pools were exhausted. Earlier successful evidence was not relabeled.
+  Stopped earlier task containers, retained volumes; forward instances now share a
+  verified task-owned private network while keeping distinct volumes/credentials.
+  Subsequent complete rehearsal passed. A sandboxed NuGet restore/scan failed; the
+  network-authorized restore and scan succeeded. No security controls were weakened.
+
+Sanitized [forward evidence](evidence/HA-002-A/forward/) excludes archives, credentials,
+raw inventories and private keys. Final commit/remote CI links are recorded at handoff;
+local working-tree runs are not falsely attributed to the unchanged baseline commit.
+
+### Issue #4 acceptance matrix - implementing-agent evidence, not final approval
+
+| ID | Forward-phase evidence | Remaining limitation/gate |
+|---|---|---|
+| AC01 | Existing stack/history retained; baseline inventory and mapping | Independent acceptance pending |
+| AC02 | Protected baseline/enriched/restricted logical backups; checksums and prerequisites | Local protected storage, no production encryption claim |
+| AC03 | Exact enriched fresh restore before migration | Demonstrated on synthetic isolated instances |
+| AC04 | Approved D01-D10 mapping and explicit defaults; six catalog tables plus discovery | No unapproved geography/domain activation |
+| AC05 | Entity-tagged UUIDv8; unique legacy IDs; boundary IDs/FK/full-row reconciliation | Import namespace is single-source; new records v4 |
+| AC06 | Complete original content, associations and publication preserved | Synthetic dataset scope |
+| AC07 | Clean creation, upgrade, no-op repeat, immutable initial history, EF/physical metadata tests | Down refuses destructive downgrade |
+| AC08 | Non-login owner and separated migration/runtime/backup/restore/admin; actual permission negatives | Controlled migration/restore intentionally assume owner within isolated DB |
+| AC09 | External protected credentials, VerifyFull TLS, negative TLS tests, scoped scans | Production rotation/encryption/retention not asserted |
+| AC10 | Existing regression suite plus deterministic bounded keyset, 10k traversal and timing/plan | No concurrent production-load capacity claim |
+| AC11 | Post-backfill injected failure rolls back; independent fresh restore reconciles | Local logical recovery, not PITR/production SLA |
+| AC12 | Evidence/documents/CI workflow prepared; review requested at synchronization | Remote CI and independent acceptance/owner disposition remain gates |
+
+### Changed-file scope and reproducible commands
+
+Domain catalog entities/UUID helper; Application page/cursor contracts; Infrastructure
+EF model, appended CatalogForward SQL/designer/snapshot, repository and compatible
+fixture source; MVC continuation link; relational/regression tests. Verification scripts,
+separate forward compose, baseline-pinned initialization, explicit environment selection,
+CI and existing documentation are updated. No new package or framework dependency.
+The exact file list is the PR diff from 3287994.
+
+Commands: dotnet restore HappyAlmere.slnx; dotnet build HappyAlmere.slnx -c Debug/Release;
+python scripts/verify-database-recovery.py; python scripts/verify-forward-migration.py
+--gate <printed gate>; scripts/Test-Local.ps1 -EnvironmentFile <printed environment>;
+npm ci --ignore-scripts; npm run test:browser with that environment; dotnet package list
+--project HappyAlmere.slnx --vulnerable --include-transitive --format json; npm audit
+--audit-level=high; python scripts/verify-source.py; git diff --check.

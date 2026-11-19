@@ -56,11 +56,11 @@ public sealed class PostgresTests
     {
         await using var database = Database(true);
         await using var transaction = await database.Database.BeginTransactionAsync();
-        var utrecht = new City { Slug = "utrecht", Name = "Synthetic Utrecht" };
+        var utrecht = new City { Slug = "utrecht", Name = "Synthetic Utrecht", CountryCode = "NL", DefaultLanguage = "nl", TimeZone = "Europe/Amsterdam", IsActive = true };
         database.Cities.Add(utrecht);
         await database.SaveChangesAsync();
         database.DiscoveryEntries.Add(Entry(utrecht.Id, "wandeling", "Utrecht only"));
-        var draft = Entry(1, "draft", "Unpublished");
+        var draft = Entry(LegacyIdentifier.Map(1, 1), "draft", "Unpublished");
         draft.IsPublished = false;
         database.DiscoveryEntries.Add(draft);
         await database.SaveChangesAsync();
@@ -72,7 +72,7 @@ public sealed class PostgresTests
         Assert.Empty(await repository.FindAsync(new DiscoveryFilter("unknown-city", null, null)));
 
         for (var i = 0; i < 105; i++)
-            database.DiscoveryEntries.Add(Entry(1, "bounded-" + i, "Bounded " + i));
+            database.DiscoveryEntries.Add(Entry(LegacyIdentifier.Map(1, 1), "bounded-" + i, "Bounded " + i));
         await database.SaveChangesAsync();
         Assert.Equal(DiscoveryFilter.MaximumResults,
             (await repository.FindAsync(new DiscoveryFilter("almere", null, null))).Count);
@@ -90,12 +90,12 @@ public sealed class PostgresTests
     {
         await using var database = Database(true);
         await using var transaction = await database.Database.BeginTransactionAsync();
-        var entry = Entry(1, "constraint-test", "Synthetic test");
+        var entry = Entry(LegacyIdentifier.Map(1, 1), "constraint-test", "Synthetic test");
         switch (scenario)
         {
             case "duplicate": entry.Slug = "wandeling"; break;
-            case "city": entry.CityId = int.MaxValue; break;
-            case "category": entry.CategoryId = int.MaxValue; break;
+            case "city": entry.CityId = Guid.NewGuid(); break;
+            case "category": entry.CategoryId = Guid.NewGuid(); break;
             case "title": entry.Title = " "; break;
             case "slug": entry.Slug = "Invalid Slug"; break;
             case "length": entry.Title = new string('x', 201); break;
@@ -112,7 +112,7 @@ public sealed class PostgresTests
         await connection.OpenAsync();
         await using var ssl = new NpgsqlCommand("SELECT ssl FROM pg_stat_ssl WHERE pid = pg_backend_pid()", connection);
         Assert.Equal(true, await ssl.ExecuteScalarAsync());
-        foreach (var sql in new[] { "DELETE FROM \"DiscoveryEntries\" WHERE false", "CREATE TABLE forbidden_probe (id integer)" })
+        foreach (var sql in new[] { "DELETE FROM discovery.discovery_entries WHERE false", "CREATE TABLE forbidden_probe (id integer)" })
         {
             await using var command = new NpgsqlCommand(sql, connection);
             var exception = await Assert.ThrowsAsync<PostgresException>(() => command.ExecuteNonQueryAsync());
@@ -144,7 +144,9 @@ public sealed class PostgresTests
         {
             var settings = new NpgsqlConnectionStringBuilder(Connection())
             {
-                RootCertificate = path, Pooling = false, Timeout = 3
+                RootCertificate = path,
+                Pooling = false,
+                Timeout = 3
             };
             await using var connection = new NpgsqlConnection(settings.ConnectionString);
             await Assert.ThrowsAsync<NpgsqlException>(() => connection.OpenAsync());
@@ -166,7 +168,8 @@ public sealed class PostgresTests
         });
         using var client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
-            BaseAddress = new Uri("https://localhost"), AllowAutoRedirect = false
+            BaseAddress = new Uri("https://localhost"),
+            AllowAutoRedirect = false
         });
         using var response = await client.GetAsync("/?q=familie&city=utrecht&citySlug=utrecht");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -176,10 +179,16 @@ public sealed class PostgresTests
         Assert.Contains("script-src 'none'", response.Headers.GetValues("Content-Security-Policy").Single());
     }
 
-    private static DiscoveryEntry Entry(int cityId, string slug, string title) => new()
+    private static DiscoveryEntry Entry(Guid cityId, string slug, string title) => new()
     {
-        CityId = cityId, CategoryId = 1, Slug = slug, Title = title,
-        Description = "Synthetic test only", District = "Test district", Icon = "*", IsPublished = true
+        CityId = cityId,
+        CategoryId = LegacyIdentifier.Map(2, 1),
+        Slug = slug,
+        Title = title,
+        Description = "Synthetic test only",
+        District = "Test district",
+        Icon = "*",
+        IsPublished = true
     };
 
     [Fact]
@@ -207,7 +216,8 @@ public sealed class PostgresTests
         });
         using var client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
-            BaseAddress = new Uri("https://localhost"), AllowAutoRedirect = false
+            BaseAddress = new Uri("https://localhost"),
+            AllowAutoRedirect = false
         });
         using var response = await client.GetAsync("/");
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);

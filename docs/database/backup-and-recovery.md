@@ -1,4 +1,4 @@
-﻿# PostgreSQL backup and recovery - HA-002-A
+# PostgreSQL backup and recovery - HA-002-A
 
 Authority: [Issue #4](https://github.com/Shiva721254/HappyAlmere/issues/4) and the
 owner's clarified sequence: inventory, backup, isolated restore, migration design.
@@ -117,3 +117,37 @@ not yet demonstrated.** Its transaction and recovery design is in
 Measured rehearsal durations and actual counts are in the
 [implementation report](../reports/HA-002-implementation-report.md) and linked JSON.
 They describe a tiny local synthetic dataset, not a production RTO/RPO or downtime SLA.
+
+
+## Authorized forward rehearsal (supersedes earlier pending-migration limitation)
+
+Owner disposition: Issue #4 comment 7014717337. Preserve the original source; use
+only local synthetic isolated instances. Build Release, then run:
+
+```powershell
+python scripts/verify-database-recovery.py
+# Substitute the exact evidence path printed by the successful gate:
+python scripts/verify-forward-migration.py --gate artifacts/ha002a/<run>/evidence.json
+# Substitute the exact protected environment path printed by the forward runner:
+./scripts/Test-Local.ps1 -EnvironmentFile artifacts/forward/<run>/rehearsal.env
+. ./scripts/Load-LocalEnvironment.ps1 -EnvironmentFile artifacts/forward/<run>/rehearsal.env
+npm run test:browser
+```
+
+The runner verifies immutable original migration files and archive checksum, clones
+into new volumes, adds only synthetic unpublished ID=0/int.MaxValue fixtures, takes
+and restores that exact enriched backup before migration. It injects a session-local
+failure after UUID backfill/before commit, compares the complete old inventory/history,
+then independently restores another new instance. Successful upgrade is reconciled
+against all original content, IDs, associations and publication flags. Clean creation,
+second no-op, restricted roles/TLS, restricted backup and dedicated restore are tested.
+
+Only evidence.json is publishable after review. Archives, credentials and raw inventory
+remain private. Stop exact targetContainers from that run's evidence after confirming
+Docker compose project labels start ha002f-; do not delete volumes. The runner stops
+its instances on failure, retaining artifacts. A successful run leaves isolated
+instances for tests. No recovery command targets the original source for mutation.
+
+CatalogForward.Down deliberately refuses a destructive downgrade. Recovery is a fresh
+instance restored from protected backup, not dropping tables or rewriting history.
+Inspect all generated SQL before use outside this fixed reviewed local rehearsal.

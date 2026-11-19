@@ -2,6 +2,14 @@
 
 Only observed Git history and actual local changes are recorded. Dates use Europe/Amsterdam.
 
+## HA-002-A forward migration - 2026-11-19
+
+- Implement owner-approved six-table catalog and preserved discovery UUID migration without rewriting initial history or modifying the original source database.
+- Add bounded filter-bound keyset pagination and explicit catalog/inactive-city constraints; preserve Dutch discovery content and publication behavior.
+- Rehearse failure rollback, fresh recovery, restricted backup/restore and separated database roles; add relational/performance evidence and CI coverage.
+- Pin original initialization to its baseline; require explicit isolated environment for new application tests. Retain volumes and isolate governance PR #9.
+- Independent acceptance remains pending; no identity/business implementation, merge or deployment.
+
 ## HA-002-A recovery/design - 2026-11-19
 
 - Add protected synthetic-only PostgreSQL inventory/backup/isolated restore with exact reconciliation and negative input/archive checks; preserve the source and existing migrations.

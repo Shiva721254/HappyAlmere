@@ -117,3 +117,36 @@ Identity, RLS, cloud storage or extra database products speculatively.
 
 Until disposition, AC04 is partial and forward-migration acceptance remains open.
 Successful baseline recovery is not self-approval of this design or full HA-002-A.
+
+
+## Owner-approved forward implementation contract - 19 November 2026
+
+Authority: Issue #4 comment 7014717337 approves HA-DB-D01 through D10 and eight
+safeguards; this supersedes the earlier pending-disposition status, not acceptance.
+Baseline: 3287994afb0bb3fe7e69f60a6bda689f77c40323. Governance PR #9 remains separate.
+
+Existing synthetic categories use category_type `discovery` (technical content purpose,
+not a new taxonomy), display_order equal to original integer ID, is_active=true.
+Copy Name verbatim to Dutch (`nl`) translation and retain legacy Name for fallback;
+no additional language or hierarchy is inferred. Existing Almere alone receives NL,
+nl, Europe/Amsterdam. Unknown cities require explicit valid settings. Timestamps
+record migration execution provenance, not original content creation time.
+
+Pagination contract v1: ascending (legacy-null rank, legacy_id, UUID). Legacy rows
+rank 0 and retain integer order; future UUID-only rows rank 1 and use PostgreSQL UUID
+ordering. UUID is a unique tie-breaker. Page size is 1..100. Cursor is bounded,
+versioned, and bound to normalized city/category/query and page size; malformed or
+mismatched cursors fail before I/O. Cursor is navigation, not authorization or a
+snapshot: concurrent inserts before its position require restarting enumeration.
+City-active and publication restrictions apply to every page. No offset pagination.
+
+Before execution, performance budget: an isolated 10,000-row synthetic discovery
+workload, warmed 30 sequential first/continuation-page samples, p95 <=250ms locally,
+result limit <=100 and no duplicate/omitted rows in stable-dataset traversal.
+Record plans and actual timing/environment; this is not a production capacity SLA.
+
+Original migration files/history remain immutable; forward expand/backfill/validate/
+cutover occurs only after exact enriched-fixture backup/restore verification. New
+UUIDs use random v4 (disjoint from reserved imported v8). Structured domains,
+districts, locations and coordinates remain empty unless explicitly synthetic test
+fixtures within rolled-back tests. No Identity/business schemas or live resolver.

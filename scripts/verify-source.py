@@ -4,7 +4,7 @@ root = pathlib.Path.cwd()
 def git(*args):
     return subprocess.check_output(['git', '-C', str(root), *args], text=True, encoding='utf-8')
 files = git('ls-files', '--cached', '--others', '--exclude-standard').splitlines()
-text_extensions = {'.cs', '.csproj', '.cshtml', '.json', '.props', '.slnx', '.md', '.yml', '.css', '.cjs', '.py', '.log', '.txt', '.ps1'}
+text_extensions = {'.cs', '.csproj', '.cshtml', '.json', '.props', '.slnx', '.md', '.yml', '.css', '.cjs', '.py', '.log', '.txt', '.ps1', '.sql'}
 def is_text(filename):
     return pathlib.Path(filename).suffix in text_extensions or pathlib.Path(filename).name in {'.gitignore', '.gitattributes', '.editorconfig', '.node-version'}
 graph = {}

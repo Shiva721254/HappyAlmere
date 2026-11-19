@@ -2,9 +2,10 @@ namespace HappyCity.Domain;
 
 public sealed class DiscoveryEntry
 {
-    public int Id { get; set; }
-    public int CityId { get; set; }
-    public int CategoryId { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public int? LegacyId { get; set; }
+    public Guid CityId { get; set; }
+    public Guid CategoryId { get; set; }
     public required string Slug { get; set; }
     public required string Title { get; set; }
     public required string Description { get; set; }

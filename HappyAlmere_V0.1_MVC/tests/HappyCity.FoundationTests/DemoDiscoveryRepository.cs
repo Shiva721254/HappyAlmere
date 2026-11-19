@@ -29,4 +29,9 @@ public sealed class DemoDiscoveryRepository : IDiscoveryRepository
         // In-memory work completes synchronously; a future EF repository will await database I/O.
         return Task.FromResult(results);
     }
+    public async Task<DiscoveryPage> FindPageAsync(DiscoveryFilter filter, int size, string? cursor, CancellationToken cancellationToken = default)
+    {
+        DiscoveryCursor.Parse(cursor, filter, size);
+        return new DiscoveryPage((await FindAsync(filter, cancellationToken)).Take(size).ToArray(), null);
+    }
 }

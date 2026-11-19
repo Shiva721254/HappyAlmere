@@ -104,7 +104,7 @@ def inventory(container):
 
 
 def verify_synthetic(snapshot):
-    source = (ROOT/'HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/SyntheticDiscoverySeed.cs').read_text(encoding='utf-8-sig')
+    source = run('git', 'show', '3287994afb0bb3fe7e69f60a6bda689f77c40323:HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/SyntheticDiscoverySeed.cs')
     entries = re.findall(r'Entry\((\d+), (\d+), "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"\)', source)
     expected = [{'Id': int(i), 'CityId': 1, 'CategoryId': int(c), 'Slug': s, 'Title': t,
                  'Description': d, 'District': district, 'Icon': icon, 'IsPublished': True}

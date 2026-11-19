@@ -1,0 +1,707 @@
+{
+  "task": "HA-002-A backup/restore gate",
+  "startedUtc": "2026-11-19T16:10:50.797908+00:00",
+  "implementationBaseline": "3287994afb0bb3fe7e69f60a6bda689f77c40323",
+  "developBaseline": "c2964eeff4232dd1f925c63af06f8c97c751b161",
+  "project": "ha002a-20261119161050-4b5de6",
+  "backupProtection": "NTFS ACL: current user and SYSTEM only; inheritance removed",
+  "sourceImage": "postgres:18-bookworm@sha256:1757c628698dd1ca67ff7a5fc386bfd91040afc62a45484c346c788b0cbe5402",
+  "limitations": [
+    "Only exact known synthetic fixtures accepted.",
+    "Local ACL-protected storage; encryption-at-rest status of host disk not asserted.",
+    "Single logical database restore, not point-in-time or production recovery.",
+    "Current baseline administrative role design is inventoried, not hardened by this gate."
+  ],
+  "negativeFixtureChecks": [
+    "DiscoveryEntries.Title",
+    "DiscoveryEntries.IsPublished",
+    "Cities.Name",
+    "Categories.Name"
+  ],
+  "postgresVersion": "18.7 (Debian 18.7-1.pgdg12+2)",
+  "dumpVersion": "pg_dump (PostgreSQL) 18.7 (Debian 18.7-1.pgdg12+2)",
+  "baseline": {
+    "schemas": [
+      {
+        "nspname": "public",
+        "owner": "pg_database_owner"
+      }
+    ],
+    "tablePrivileges": [
+      {
+        "table_name": "Categories",
+        "grantee": "happy_app",
+        "privilege_type": "SELECT",
+        "is_grantable": "NO"
+      },
+      {
+        "table_name": "Categories",
+        "grantee": "happy_migrator",
+        "privilege_type": "DELETE",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Categories",
+        "grantee": "happy_migrator",
+        "privilege_type": "INSERT",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Categories",
+        "grantee": "happy_migrator",
+        "privilege_type": "REFERENCES",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Categories",
+        "grantee": "happy_migrator",
+        "privilege_type": "SELECT",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Categories",
+        "grantee": "happy_migrator",
+        "privilege_type": "TRIGGER",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Categories",
+        "grantee": "happy_migrator",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Categories",
+        "grantee": "happy_migrator",
+        "privilege_type": "UPDATE",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Cities",
+        "grantee": "happy_app",
+        "privilege_type": "SELECT",
+        "is_grantable": "NO"
+      },
+      {
+        "table_name": "Cities",
+        "grantee": "happy_migrator",
+        "privilege_type": "DELETE",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Cities",
+        "grantee": "happy_migrator",
+        "privilege_type": "INSERT",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Cities",
+        "grantee": "happy_migrator",
+        "privilege_type": "REFERENCES",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Cities",
+        "grantee": "happy_migrator",
+        "privilege_type": "SELECT",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Cities",
+        "grantee": "happy_migrator",
+        "privilege_type": "TRIGGER",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Cities",
+        "grantee": "happy_migrator",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "Cities",
+        "grantee": "happy_migrator",
+        "privilege_type": "UPDATE",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "grantee": "happy_app",
+        "privilege_type": "SELECT",
+        "is_grantable": "NO"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "grantee": "happy_migrator",
+        "privilege_type": "DELETE",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "grantee": "happy_migrator",
+        "privilege_type": "INSERT",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "grantee": "happy_migrator",
+        "privilege_type": "REFERENCES",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "grantee": "happy_migrator",
+        "privilege_type": "SELECT",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "grantee": "happy_migrator",
+        "privilege_type": "TRIGGER",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "grantee": "happy_migrator",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "grantee": "happy_migrator",
+        "privilege_type": "UPDATE",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "grantee": "happy_app",
+        "privilege_type": "SELECT",
+        "is_grantable": "NO"
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "grantee": "happy_migrator",
+        "privilege_type": "DELETE",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "grantee": "happy_migrator",
+        "privilege_type": "INSERT",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "grantee": "happy_migrator",
+        "privilege_type": "REFERENCES",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "grantee": "happy_migrator",
+        "privilege_type": "SELECT",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "grantee": "happy_migrator",
+        "privilege_type": "TRIGGER",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "grantee": "happy_migrator",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": "YES"
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "grantee": "happy_migrator",
+        "privilege_type": "UPDATE",
+        "is_grantable": "YES"
+      }
+    ],
+    "columns": [
+      {
+        "table_name": "Categories",
+        "column_name": "Id",
+        "ordinal_position": 1,
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": null
+      },
+      {
+        "table_name": "Categories",
+        "column_name": "Slug",
+        "ordinal_position": 2,
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": 30
+      },
+      {
+        "table_name": "Categories",
+        "column_name": "Name",
+        "ordinal_position": 3,
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": 100
+      },
+      {
+        "table_name": "Cities",
+        "column_name": "Id",
+        "ordinal_position": 1,
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": null
+      },
+      {
+        "table_name": "Cities",
+        "column_name": "Slug",
+        "ordinal_position": 2,
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": 80
+      },
+      {
+        "table_name": "Cities",
+        "column_name": "Name",
+        "ordinal_position": 3,
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": 100
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "column_name": "Id",
+        "ordinal_position": 1,
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": null
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "column_name": "CityId",
+        "ordinal_position": 2,
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": null
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "column_name": "CategoryId",
+        "ordinal_position": 3,
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": null
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "column_name": "Slug",
+        "ordinal_position": 4,
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": 120
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "column_name": "Title",
+        "ordinal_position": 5,
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": 200
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "column_name": "Description",
+        "ordinal_position": 6,
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": 2000
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "column_name": "District",
+        "ordinal_position": 7,
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": 100
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "column_name": "Icon",
+        "ordinal_position": 8,
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": 16
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "column_name": "IsPublished",
+        "ordinal_position": 9,
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": null
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "column_name": "MigrationId",
+        "ordinal_position": 1,
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": 150
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "column_name": "ProductVersion",
+        "ordinal_position": 2,
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null,
+        "character_maximum_length": 32
+      }
+    ],
+    "constraints": [
+      {
+        "table_name": "Categories",
+        "name": "CK_Categories_Slug",
+        "type": "c",
+        "definition": "CHECK (((\"Slug\")::text ~ '^[a-z0-9]+(-[a-z0-9]+)*$'::text))"
+      },
+      {
+        "table_name": "Categories",
+        "name": "Categories_Id_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"Id\""
+      },
+      {
+        "table_name": "Categories",
+        "name": "Categories_Name_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"Name\""
+      },
+      {
+        "table_name": "Categories",
+        "name": "Categories_Slug_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"Slug\""
+      },
+      {
+        "table_name": "Categories",
+        "name": "PK_Categories",
+        "type": "p",
+        "definition": "PRIMARY KEY (\"Id\")"
+      },
+      {
+        "table_name": "Cities",
+        "name": "CK_Cities_Slug",
+        "type": "c",
+        "definition": "CHECK (((\"Slug\")::text ~ '^[a-z0-9]+(-[a-z0-9]+)*$'::text))"
+      },
+      {
+        "table_name": "Cities",
+        "name": "Cities_Id_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"Id\""
+      },
+      {
+        "table_name": "Cities",
+        "name": "Cities_Name_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"Name\""
+      },
+      {
+        "table_name": "Cities",
+        "name": "Cities_Slug_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"Slug\""
+      },
+      {
+        "table_name": "Cities",
+        "name": "PK_Cities",
+        "type": "p",
+        "definition": "PRIMARY KEY (\"Id\")"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "CK_DiscoveryEntries_Slug",
+        "type": "c",
+        "definition": "CHECK (((\"Slug\")::text ~ '^[a-z0-9]+(-[a-z0-9]+)*$'::text))"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "CK_DiscoveryEntries_Title",
+        "type": "c",
+        "definition": "CHECK ((length(btrim((\"Title\")::text)) > 0))"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "DiscoveryEntries_CategoryId_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"CategoryId\""
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "DiscoveryEntries_CityId_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"CityId\""
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "DiscoveryEntries_Description_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"Description\""
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "DiscoveryEntries_District_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"District\""
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "DiscoveryEntries_Icon_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"Icon\""
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "DiscoveryEntries_Id_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"Id\""
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "DiscoveryEntries_IsPublished_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"IsPublished\""
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "DiscoveryEntries_Slug_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"Slug\""
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "DiscoveryEntries_Title_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"Title\""
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "FK_DiscoveryEntries_Categories_CategoryId",
+        "type": "f",
+        "definition": "FOREIGN KEY (\"CategoryId\") REFERENCES \"Categories\"(\"Id\") ON DELETE RESTRICT"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "FK_DiscoveryEntries_Cities_CityId",
+        "type": "f",
+        "definition": "FOREIGN KEY (\"CityId\") REFERENCES \"Cities\"(\"Id\") ON DELETE RESTRICT"
+      },
+      {
+        "table_name": "DiscoveryEntries",
+        "name": "PK_DiscoveryEntries",
+        "type": "p",
+        "definition": "PRIMARY KEY (\"Id\")"
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "name": "PK___EFMigrationsHistory",
+        "type": "p",
+        "definition": "PRIMARY KEY (\"MigrationId\")"
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "name": "__EFMigrationsHistory_MigrationId_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"MigrationId\""
+      },
+      {
+        "table_name": "__EFMigrationsHistory",
+        "name": "__EFMigrationsHistory_ProductVersion_not_null",
+        "type": "n",
+        "definition": "NOT NULL \"ProductVersion\""
+      }
+    ],
+    "indexes": [
+      {
+        "tablename": "Categories",
+        "indexname": "IX_Categories_Slug",
+        "indexdef": "CREATE UNIQUE INDEX \"IX_Categories_Slug\" ON public.\"Categories\" USING btree (\"Slug\")"
+      },
+      {
+        "tablename": "Categories",
+        "indexname": "PK_Categories",
+        "indexdef": "CREATE UNIQUE INDEX \"PK_Categories\" ON public.\"Categories\" USING btree (\"Id\")"
+      },
+      {
+        "tablename": "Cities",
+        "indexname": "IX_Cities_Slug",
+        "indexdef": "CREATE UNIQUE INDEX \"IX_Cities_Slug\" ON public.\"Cities\" USING btree (\"Slug\")"
+      },
+      {
+        "tablename": "Cities",
+        "indexname": "PK_Cities",
+        "indexdef": "CREATE UNIQUE INDEX \"PK_Cities\" ON public.\"Cities\" USING btree (\"Id\")"
+      },
+      {
+        "tablename": "DiscoveryEntries",
+        "indexname": "IX_DiscoveryEntries_CategoryId",
+        "indexdef": "CREATE INDEX \"IX_DiscoveryEntries_CategoryId\" ON public.\"DiscoveryEntries\" USING btree (\"CategoryId\")"
+      },
+      {
+        "tablename": "DiscoveryEntries",
+        "indexname": "IX_DiscoveryEntries_CityId_IsPublished_CategoryId_Id",
+        "indexdef": "CREATE INDEX \"IX_DiscoveryEntries_CityId_IsPublished_CategoryId_Id\" ON public.\"DiscoveryEntries\" USING btree (\"CityId\", \"IsPublished\", \"CategoryId\", \"Id\")"
+      },
+      {
+        "tablename": "DiscoveryEntries",
+        "indexname": "IX_DiscoveryEntries_CityId_Slug",
+        "indexdef": "CREATE UNIQUE INDEX \"IX_DiscoveryEntries_CityId_Slug\" ON public.\"DiscoveryEntries\" USING btree (\"CityId\", \"Slug\")"
+      },
+      {
+        "tablename": "DiscoveryEntries",
+        "indexname": "PK_DiscoveryEntries",
+        "indexdef": "CREATE UNIQUE INDEX \"PK_DiscoveryEntries\" ON public.\"DiscoveryEntries\" USING btree (\"Id\")"
+      },
+      {
+        "tablename": "__EFMigrationsHistory",
+        "indexname": "PK___EFMigrationsHistory",
+        "indexdef": "CREATE UNIQUE INDEX \"PK___EFMigrationsHistory\" ON public.\"__EFMigrationsHistory\" USING btree (\"MigrationId\")"
+      }
+    ],
+    "sequences": [
+      {
+        "sequencename": "Categories_Id_seq",
+        "start_value": 1000,
+        "min_value": 1,
+        "max_value": 2147483647,
+        "increment_by": 1,
+        "cycle": false,
+        "last_value": null
+      },
+      {
+        "sequencename": "Cities_Id_seq",
+        "start_value": 1000,
+        "min_value": 1,
+        "max_value": 2147483647,
+        "increment_by": 1,
+        "cycle": false,
+        "last_value": 1004
+      },
+      {
+        "sequencename": "DiscoveryEntries_Id_seq",
+        "start_value": 1000,
+        "min_value": 1,
+        "max_value": 2147483647,
+        "increment_by": 1,
+        "cycle": false,
+        "last_value": 1559
+      }
+    ],
+    "roles": [
+      {
+        "rolname": "happy_app",
+        "rolsuper": false,
+        "rolcreatedb": false,
+        "rolcreaterole": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "happy_migrator",
+        "rolsuper": true,
+        "rolcreatedb": true,
+        "rolcreaterole": true,
+        "rolcanlogin": true,
+        "rolreplication": true,
+        "rolbypassrls": true
+      }
+    ],
+    "invariants": {
+      "entries": 6,
+      "published": 6,
+      "unpublished": 0,
+      "orphanCities": 0,
+      "orphanCategories": 0,
+      "duplicateCitySlugs": 0,
+      "familySearch": 1,
+      "activities": 2
+    }
+  },
+  "tableCounts": {
+    "Categories": 5,
+    "Cities": 1,
+    "DiscoveryEntries": 6,
+    "__EFMigrationsHistory": 1
+  },
+  "tableDigests": {
+    "Categories": "91e8603da6334368edd904c23cba93d8b1bd556ad17970356a1939c3b1b58e31",
+    "Cities": "da2eb7e6813b67d233a4e745a2a3d6a5c8f44709c8268d6e3578eee7743dbad6",
+    "DiscoveryEntries": "81cd3943afec0a445356fb5fc9d9958f0d83c0c1573cd257bb946bccac6baa26",
+    "__EFMigrationsHistory": "9a6e01b0b5821a6ddf863e2fd9179280cdd2e7847b3c6dd3faabc41e774b92d6"
+  },
+  "migrationHistory": [
+    {
+      "MigrationId": "20261119000108_InitialDiscovery",
+      "ProductVersion": "10.0.14"
+    }
+  ],
+  "backupSeconds": 0.366,
+  "backupSha256": "38f07c2effc6e1355f66ff1f508310a6628e2889819f3310ef25d382b6948194",
+  "backupBytes": 11931,
+  "globalsSha256": "da2acc50b417b28c87cee4bf0ef7c93a4c6074737cf77e42495a664e1a71987e",
+  "failedRestoreThenRecovery": "Truncated archive rejected; target remained empty; valid archive then restored.",
+  "restoreSeconds": 0.144,
+  "targetContainer": "ha002a-20261119161050-4b5de6-postgres-1",
+  "targetBindings": {
+    "5432/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "55434"
+      }
+    ]
+  },
+  "isolatedVolumes": [
+    "ha002a-20261119161050-4b5de6_recovery-data",
+    "ha002a-20261119161050-4b5de6_recovery-tls"
+  ],
+  "checks": {
+    "exactSyntheticBaseline": "PASS",
+    "backupChecksum": "PASS",
+    "freshEmptyTarget": "PASS",
+    "independentVolumes": "PASS",
+    "allRowContent": "PASS",
+    "counts": "PASS",
+    "constraints": "PASS",
+    "indexes": "PASS",
+    "sequences": "PASS",
+    "migrationHistory": "PASS",
+    "roleAttributes": "PASS",
+    "publicationState": "PASS",
+    "foreignKeys": "PASS",
+    "representativeQueries": "PASS",
+    "sourceUnchanged": "PASS"
+  },
+  "gate": "PASS: clean isolated backup/restore verified before schema modification",
+  "completedUtc": "2026-11-19T16:11:03.524441+00:00",
+  "targetLeftRunning": true
+}

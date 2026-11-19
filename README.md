@@ -1,8 +1,8 @@
-# HappyAlmere - HA-002-A recovery and migration-design candidate
+# HappyAlmere - HA-002-A forward migration review candidate
 
 This branch reconciles existing develop c2964ee with approved V0.1 main 0e7739d.
 It is a review candidate, not accepted HA-002 implementation. Only synthetic local use.
-The existing database schema/migration and both histories are preserved.
+The original database and migration history are preserved; the authorized forward catalog migration is rehearsed only on isolated synthetic clones.
 
 ## Shared implementation record
 
@@ -18,17 +18,20 @@ On a fresh isolated synthetic development checkout:
 
 ```powershell
 dotnet restore HappyAlmere.slnx
-./scripts/Initialize-LocalDatabase.ps1
+./scripts/Initialize-LocalDatabase.ps1 # InitialDiscovery baseline only
 dotnet build HappyAlmere.slnx -c Debug --no-restore
 dotnet build HappyAlmere.slnx -c Release --no-restore
-./scripts/Test-Local.ps1
+python scripts/verify-database-recovery.py
+python scripts/verify-forward-migration.py --gate artifacts/ha002a/<run>/evidence.json
+./scripts/Test-Local.ps1 -EnvironmentFile artifacts/forward/<run>/rehearsal.env
 npm ci --ignore-scripts
 npm run browser:install
-. ./scripts/Load-LocalEnvironment.ps1
+. ./scripts/Load-LocalEnvironment.ps1 -EnvironmentFile artifacts/forward/<run>/rehearsal.env
 npm run test:browser
-./scripts/Start-Local.ps1
+./scripts/Start-Local.ps1 -EnvironmentFile artifacts/forward/<run>/rehearsal.env
 ```
 
+Replace <run> with the exact paths printed by each successful runner.
 Do not initialize a second checkout against existing volumes with unrelated credentials.
 Reuse the existing protected environment configuration for the preserved synthetic
 instance. Never print credentials or remove volumes; tests roll back their fixtures.
@@ -72,3 +75,14 @@ inventory/backup/isolated restore/design phase has evidence in the
 [backup runbook](docs/database/backup-and-recovery.md) and review the
 [non-destructive migration proposal](docs/database/migration-policy.md). No forward
 migration or full HA-002 acceptance is claimed; preserve original source/volumes.
+
+
+## HA-002-A forward review candidate
+
+Owner disposition D01-D10 is recorded in Issue #4. See the latest
+[implementation report](docs/reports/HA-002-implementation-report.md),
+[ERD](docs/database/entity-relationship-diagram.md), [dictionary](docs/database/data-dictionary.md),
+[security](docs/database/database-security.md) and [recovery runbook](docs/database/backup-and-recovery.md).
+Use `scripts/Start-Local.ps1 -EnvironmentFile artifacts/forward/<run>/rehearsal.env`
+only after a successful isolated forward run; do not point the new application at the
+preserved old schema. No main merge, production deployment or final acceptance.

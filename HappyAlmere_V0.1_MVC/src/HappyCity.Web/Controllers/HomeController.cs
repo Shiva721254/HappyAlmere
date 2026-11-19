@@ -8,15 +8,19 @@ namespace HappyCity.Web.Controllers;
 public sealed class HomeController(IDiscoveryService discovery) : Controller
 {
     [HttpGet, EnableRateLimiting("search")]
-    public async Task<IActionResult> Index(string? category, string? q, CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(string? category, string? q, CancellationToken cancellationToken, string? cursor = null)
     {
         DiscoveryFilter filter;
         // This deployment serves Almere. Request parameters cannot override the city.
         try { filter = new DiscoveryFilter("almere", category, q); }
         catch (ArgumentException) { return BadRequest(); }
 
-        var items = await discovery.FindAsync(filter, cancellationToken);
-        return View(new DiscoveryViewModel(items, filter.Query, filter.Category));
+        try
+        {
+            var page = await discovery.FindPageAsync(filter, DiscoveryFilter.MaximumResults, cursor, cancellationToken);
+            return View(new DiscoveryViewModel(page.Items, filter.Query, filter.Category, page.NextCursor));
+        }
+        catch (ArgumentException) { return BadRequest(); }
     }
 
     [HttpGet]

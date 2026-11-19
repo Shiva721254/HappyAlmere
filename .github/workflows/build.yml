@@ -24,11 +24,21 @@ jobs:
       - name: Initialize isolated TLS PostgreSQL
         shell: pwsh
         run: ./scripts/Initialize-LocalDatabase.ps1
-      - name: Foundation and actual PostgreSQL tests
-        shell: pwsh
-        run: ./scripts/Test-Local.ps1
       - name: Isolated synthetic backup and restore gate
         run: python3 scripts/verify-database-recovery.py
+      - name: Forward migration, rollback, recovery and privilege verification
+        shell: pwsh
+        run: |
+          $gate = Get-ChildItem artifacts/ha002a/*/evidence.json | Sort-Object FullName | Select-Object -Last 1
+          python3 scripts/verify-forward-migration.py --gate $gate.FullName
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $forward = Get-ChildItem artifacts/forward/*/rehearsal.env | Sort-Object FullName | Select-Object -Last 1
+          "HAPPYCITY_FORWARD_ENV_FILE=$($forward.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+      - name: Foundation and migrated PostgreSQL tests
+        shell: pwsh
+        run: |
+          $env:HAPPYCITY_EVIDENCE_DIRECTORY = Join-Path (Get-Location) 'artifacts/forward-tests'
+          ./scripts/Test-Local.ps1 -EnvironmentFile $env:HAPPYCITY_FORWARD_ENV_FILE
       - run: dotnet list HappyAlmere.slnx package --vulnerable --include-transitive
       - run: npm ci --ignore-scripts
       - run: npm audit --audit-level=high
@@ -49,7 +59,7 @@ jobs:
       - name: Trusted HTTPS PostgreSQL browser, responsive, security and network tests
         shell: pwsh
         run: |
-          . ./scripts/Load-LocalEnvironment.ps1
+          . ./scripts/Load-LocalEnvironment.ps1 -EnvironmentFile $env:HAPPYCITY_FORWARD_ENV_FILE
           npm run test:browser
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
@@ -58,6 +68,8 @@ jobs:
           name: integration-verification
           retention-days: 7
           path: |
+            artifacts/forward/*/evidence.json
+            artifacts/forward-tests/performance.json
             artifacts/ha002a/*/evidence.json
             artifacts/responsive-results.json
             artifacts/*-*.png
@@ -65,4 +77,13 @@ jobs:
             artifacts/r02/browser/*-network.json
       - name: Stop CI database without deleting volumes
         if: always()
-        run: docker compose stop postgres
+        shell: pwsh
+        run: |
+          docker compose stop postgres
+          foreach ($file in Get-ChildItem artifacts/forward/*/evidence.json -ErrorAction SilentlyContinue) {
+            $evidence = Get-Content $file.FullName -Raw | ConvertFrom-Json
+            foreach ($container in $evidence.targetContainers) {
+              $info = docker inspect $container | ConvertFrom-Json
+              if ($info.Config.Labels.'com.docker.compose.project' -like 'ha002f-*') { docker stop $container }
+            }
+          }

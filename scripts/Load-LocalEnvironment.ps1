@@ -1,6 +1,6 @@
+param([string]$EnvironmentFile = (Join-Path $PSScriptRoot "../.env"))
 # Dot-source from repository scripts. Never print connection strings.
-$environmentFile = Join-Path $PSScriptRoot '../.env'
-if (!(Test-Path $environmentFile)) { throw 'Run scripts/Initialize-LocalDatabase.ps1 first.' }
+if (!(Test-Path $environmentFile)) { throw 'Provide a verified isolated rehearsal environment file.' }
 foreach ($line in [IO.File]::ReadAllLines($environmentFile)) {
     if ([string]::IsNullOrWhiteSpace($line) -or $line.StartsWith('#')) { continue }
     $parts = $line.Split('=', 2)

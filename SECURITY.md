@@ -21,3 +21,8 @@ R02 records actual loopback bindings and local non-loopback connection rejection
 AllowedHosts and noindex are not network access controls. See the permanent
 [risk register](docs/security/security-risk-register.md) for all independent findings,
 future milestones and pending acceptance decisions.
+
+
+HA-002-A forward rehearsal uses separate non-login ownership and restricted runtime,
+migration, backup and temporary restore identities; see docs/database/database-security.md.
+Original source remains unchanged. No production readiness or authorization is implied.

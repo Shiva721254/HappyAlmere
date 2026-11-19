@@ -231,3 +231,19 @@ generated credentials are protected/ignored, never uploaded. Host disk encryptio
 production backup protection and separated backup/migration/owner roles are not claimed.
 SEC-F05/ARCH-F01/PERF-F01 remain open for their residual requirements. A successful
 baseline restore does not demonstrate UUID migration or recovery after its failure.
+
+
+## HA-002-A forward implementation evidence update
+
+Owner authorization: Issue #4 comment 7014717337; acceptance still pending.
+SEC-F05: local role separation, protected ephemeral credentials, verified TLS and
+restricted backup/restore now have execution evidence; rotation procedure documented.
+Production secret lifecycle, host/backup encryption and retention remain unverified.
+PERF-F01: 10,000 synthetic rows, bounded keyset traversal, plans and local timing are
+now measured; no production capacity conclusion. PERF-F02 remains open.
+ARCH-F01: shared catalog/city relationships now implemented/tested in isolation;
+no live domain resolver or private cross-city authorization is claimed. GOV-F01:
+histories remain preserved, governance PR #9 and primary PR #6 remain unmerged.
+No future Identity/business/Data Protection requirement is marked implemented.
+Docker address-pool exhaustion occurred during an extra rehearsal; task-private network
+reuse resolves subnet consumption while preserving independent instances/volumes.

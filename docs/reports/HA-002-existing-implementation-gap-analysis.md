@@ -139,3 +139,35 @@ Master AC18 now has backup/migration policy and implementation-report paths; oth
 missing ERD/dictionary/security/ADR documentation and independent acceptance remain.
 No UUID/schema/catalog/role/pagination gaps have been silently closed. HA-002-ARCH-01
 is unavailable as a standalone reference, confirmed by owner; master requirements stay authoritative.
+
+
+## Forward-phase update after owner disposition (19 November 2026)
+
+Earlier baseline findings remain historical. Issue #4 HA-DB-D01..D10 authorized the
+isolated forward phase; the implementation report/evidence now demonstrates the
+following. This is not independent acceptance and does not renumber either matrix.
+
+| Master criterion | Current classification | Evidence / remaining scope |
+|---|---|---|
+| HA-002-AC01 | Implemented | Domain/Application/Infrastructure/Web dependencies preserved; no new packages |
+| HA-002-AC02 | Implemented locally | Pinned Docker, separate persistent volumes, verified TLS and loopback; production environment remains unverified |
+| HA-002-AC03 | Implemented | Six catalog tables and UUIDs, discovery extension, reserved legacy mapping, composite translation key |
+| HA-002-AC04 | Implemented locally | Explicit city fields/validations, Almere defaults, inactive-city filtering; settings for future cities must be supplied |
+| HA-002-AC05 | Partial | Normalized unique hostnames and active-primary invariant; tables empty, no live resolver/canonical redirect authorized |
+| HA-002-AC06 | Implemented | Same-city parent FK, slug uniqueness, self/cycle rejection and hierarchy-write serialization |
+| HA-002-AC07 | Implemented storage | Structured address fields, optional same-city district and paired/ranged coordinates; no real geography imported |
+| HA-002-AC08 | Implemented storage | Shared categories, hierarchy, unique slug, explicit order/type/active defaults; no category-admin UI claimed |
+| HA-002-AC09 | Implemented storage | Dutch names copied exactly, unique language/category FK; legacy name retained; no new multilingual UI claimed |
+| HA-002-AC10 | Partial | Public city filtering and relational same-city constraints tested; private authorization remains future scope |
+| HA-002-AC11 | Implemented within measured scope | Bounded projected async keyset, cancellation, literal input; 10k traversal/timing/plan; no production SLA |
+| HA-002-AC12 | Implemented locally | Non-login owner, restricted migration/runtime/backup, dedicated temporary restore and admin; actual negatives |
+| HA-002-AC13 | Partial | VerifyFull, external protected ephemeral credentials, negative TLS, documented rotation; production lifecycle/encryption unverified |
+| HA-002-AC14 | Implemented locally | Immutable initial history, appended forward migration, clean/upgrade/no-op and injected failure rollback; no startup migration |
+| HA-002-AC15 | Implemented boundary | Synthetic-only guard; no Identity/business/payments/live domains/deployment |
+| HA-002-AC16 | Implemented local evidence | 87 tests and existing browser/security/network suites; exact final CI at issue handoff |
+| HA-002-AC17 | Implemented local evidence | Baseline/enriched/migrated backup and fresh restore with row/constraint/index reconciliation; no production RTO/RPO |
+| HA-002-AC18 | Partial | ERD/dictionary/security/ADR/runbooks and evidence updated; independent architectural acceptance and owner disposition pending |
+
+See [implementation report](HA-002-implementation-report.md) for Issue #4 AC01-AC12,
+which remain a distinct assignment set. Unavailable original HA-002-ARCH-01 is not
+recreated; the explicit owner-approved disposition is the forward-phase authority.
