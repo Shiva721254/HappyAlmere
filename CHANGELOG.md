@@ -2,6 +2,12 @@
 
 Only observed Git history and actual local changes are recorded. Dates use Europe/Amsterdam.
 
+## Shared handoff policy - 2026-11-19
+
+- Record GitHub as the shared source of truth, independent ChatGPT review and final owner approval.
+- Add root HANDOVER.md with implementation commits, existing evidence, unresolved gaps and the review boundary; extend existing instructions and closure progress record.
+- Synchronize only approved scoped changes; preserve requirements/history and prohibit unapproved main merges or production deployments. No runtime changes.
+
 ## HA-001-CLOSE - 2026-11-19
 - Merge verified foundation through protected PR #2 and preserve an approved checkpoint.
 - Reconcile existing PostgreSQL history on integration/ha-001-v02, retaining security/layout/tests; no new database schema or feature.

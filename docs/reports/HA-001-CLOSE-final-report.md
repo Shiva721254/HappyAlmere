@@ -237,3 +237,30 @@ resolve. `git diff --check` passed. Fresh `python scripts/verify-source.py` pass
 with no credential-pattern findings; evidence is specification-static-results.json.
 Application, tests, scripts, infrastructure and workflow diffs against ec5bcfd are
 empty. Prior runtime results are not misrepresented as newly executed local tests.
+
+## Shared GitHub record and handover policy
+
+19 November 2026: owner directs GitHub to be the shared source of truth between Codex,
+ChatGPT and the owner. Existing documentation structure was inspected; this report
+continues as the detailed progress record. Root HANDOVER.md is the requested concise
+entry point, not a replacement for architectural requirements or acceptance evidence.
+AGENTS.md now requires task summaries, scoped modified files, actual tests/evidence,
+decisions/issues, branch/implementation commits, secret review, approved commit/push
+and remote-SHA verification. ChatGPT reviews independently; the owner retains final
+approval. No main merge or production deployment without explicit approval.
+
+Modified files: AGENTS.md, HANDOVER.md, README.md, CHANGELOG.md and this report.
+This policy task changes no application, database, dependency or workflow behavior.
+The last specification checkpoint 0627839 passed both workflows 44547697184 and
+44547713903; those results are recorded evidence, not fresh local policy-task tests.
+Relative links, whitespace and scoped credential-pattern review validate this update;
+new remote outcomes are identified by their actual commit/run in PR #3 and the handoff.
+
+Recovery inspection findings are carried into HANDOVER.md rather than publishing a
+second overlapping report: latest integration clean; original develop history and
+untracked audit assets preserved; no submitted GitHub PR #3 review at inspection;
+PostgreSQL container stopped with volumes retained; remaining HA-002 gaps unchanged.
+Business verification, Azure registration, Artifact Signing and production signing
+certificates are deferred to pre-release. STRATO-first is the owner's stated hosting
+constraint, with no verified provider deployment readiness or new cloud decision.
+No new feature implementation or approval is inferred from the standing handoff policy.

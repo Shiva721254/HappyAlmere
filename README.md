@@ -4,6 +4,12 @@ This branch reconciles existing develop c2964ee with approved V0.1 main 0e7739d.
 It is a review candidate, not accepted HA-002 implementation. Only synthetic local use.
 The existing database schema/migration and both histories are preserved.
 
+## Shared implementation record
+
+Start with [HANDOVER.md](HANDOVER.md) for the current branch, implementation checkpoints,
+verification evidence, outstanding issues and review gate. GitHub is the shared source
+of truth; ChatGPT reviews independently and the project owner retains final approval.
+
 ## Run the existing database-backed application
 
 Prerequisites: .NET SDK from global.json, Docker Linux containers, PowerShell,
