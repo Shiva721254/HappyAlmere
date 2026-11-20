@@ -314,7 +314,8 @@ def mutation_cases():
     add('T18','table-owner','ALTER TABLE identity.users OWNER TO happy_identity_app','ALTER TABLE identity.users OWNER TO happy_identity_owner; SET ROLE happy_identity_owner; GRANT SELECT,INSERT,UPDATE,DELETE ON identity.users TO happy_identity_app','ownership')
     for schema,table,identifier in [('catalog','cities','T19'),('discovery','discovery_entries','T20'),('public','"__EFMigrationsHistory"','T21')]:
         for principal in ['happy_identity_app','happy_identity_backup']:
-            add(identifier,principal+'-latent',f'GRANT SELECT ON {schema}.{table} TO {principal}',f'REVOKE SELECT ON {schema}.{table} FROM {principal}','effective')
+            exposure='-usable-public' if schema=='public' else '-latent'
+            add(identifier,principal+exposure,f'GRANT SELECT ON {schema}.{table} TO {principal}',f'REVOKE SELECT ON {schema}.{table} FROM {principal}','effective')
         if schema!='public':
             add(identifier,'usable-app-access',f'GRANT SELECT ON {schema}.{table} TO happy_identity_app; GRANT USAGE ON SCHEMA {schema} TO happy_identity_app',f'REVOKE SELECT ON {schema}.{table} FROM happy_identity_app; REVOKE USAGE ON SCHEMA {schema} FROM happy_identity_app','effective')
     for schema,table,col in [('identity','"__EFMigrationsHistory"','"MigrationId"'),('catalog','cities','name')]:
@@ -364,8 +365,10 @@ def verify_mutations(container, env, expected, results):
                 schema,table={'T19':('catalog','cities'),'T20':('discovery','discovery_entries'),'T21':('public','"__EFMigrationsHistory"')}[identifier]
                 principal='happy_identity_backup' if variant.startswith('happy_identity_backup') else 'happy_identity_app'
                 statement=f'SELECT count(*) FROM {schema}.{table}'
-                if variant=='usable-app-access' or schema=='public':f.execute(container,statement,principal,env[principal])
-                else:f.execute(container,statement,principal,env[principal],expected_state='42501')
+                if variant=='usable-app-access' or schema=='public':
+                    f.execute(container,statement,principal,env[principal]);record['accessRouteDuringMutation']='usable'
+                else:
+                    f.execute(container,statement,principal,env[principal],expected_state='42501');record['accessRouteDuringMutation']='latent; schema denies with SQLSTATE 42501'
         finally:
             f.execute(container,cleanup)
         verify_authority(container,expected)
@@ -397,6 +400,9 @@ def inspect_archive(archive, evidence_file):
                 if not inspect_json(child):return False
         elif isinstance(value,list):
             return all(inspect_json(child) for child in value)
+        elif isinstance(value,str):
+            # Decode JSON escapes before testing indicators, not only raw bytes.
+            return not any(re.search(pattern,value.encode('utf-8')) for pattern in patterns)
         return True
     patterns=[rb'-----BEGIN [A-Z ]*PRIVATE KEY-----',rb'gh[pousr]_[A-Za-z0-9]{30,}',rb'github_pat_[A-Za-z0-9_]{40,}',
               rb'(?i)(?:password|pwd|clientsecret|access_token)\s*[=:]\s*[^\s;",}]{6,}',

@@ -251,6 +251,20 @@ public sealed class IdentityRuntimeSafetyTests
 [Trait("Category", "Postgres")]
 public sealed class IdentityRuntimePostgresTests
 {
+    private static async Task<string> AuthoritySnapshot(NpgsqlConnection connection)
+    {
+        var root = new DirectoryInfo(AppContext.BaseDirectory);
+        while (root is not null && !File.Exists(Path.Combine(root.FullName, "HappyAlmere.slnx"))) root = root.Parent;
+        Assert.NotNull(root);
+        var source = await File.ReadAllTextAsync(Path.Combine(root.FullName, "scripts", "verify-identity-foundation.py"));
+        // Reuse the exhaustive read-only inventory, not a second reduced policy.
+        var match = System.Text.RegularExpressions.Regex.Match(source,
+            "def authority_inventory\\(container\\):.*?sql=\"\"\"(.*?)\"\"\"", System.Text.RegularExpressions.RegexOptions.Singleline);
+        Assert.True(match.Success, "Independent authority inventory SQL was not found.");
+        await using var command = new NpgsqlCommand(match.Groups[1].Value, connection) { CommandTimeout = 15 };
+        return Assert.IsType<string>(await command.ExecuteScalarAsync());
+    }
+
     public static IEnumerable<object[]> DmlMutations()
     {
         foreach (var table in new[] { "users", "roles", "user_roles", "user_claims", "role_claims", "user_logins", "user_tokens" })
@@ -267,6 +281,12 @@ public sealed class IdentityRuntimePostgresTests
         using var services = IdentityPersistenceTests.Services();
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<HappyCityIdentityDbContext>();
+        var before = await AuthoritySnapshot(owner);
+        var path = Environment.GetEnvironmentVariable("HAPPYCITY_IDENTITY_EVIDENCE");
+        Assert.False(string.IsNullOrWhiteSpace(path));
+        var evidence = JsonNode.Parse(File.ReadAllText(path!))!.AsObject();
+        Assert.True(JsonNode.DeepEquals(JsonNode.Parse(before), evidence["r01AuthorityReference"]),
+            "EF mutation must start from the independently expected authority policy.");
         await db.Database.OpenConnectionAsync();
         await db.Users.CountAsync();
         await db.Database.CloseConnectionAsync();
@@ -274,6 +294,14 @@ public sealed class IdentityRuntimePostgresTests
         {
             await using var revoke = new NpgsqlCommand($"REVOKE {privilege} ON identity.{table} FROM happy_identity_app", owner);
             await revoke.ExecuteNonQueryAsync();
+            // The production callback intentionally sanitizes query errors. Prove
+            // the intended false authority result independently, so a syntax,
+            // authentication or connectivity error cannot satisfy this control.
+            await using (var control = await IdentityPrivilegeTests.Open("ConnectionStrings__HappyCityIdentity"))
+            {
+                await using var predicate = new NpgsqlCommand(IdentityRuntimeSafetyTests.AuthoritySql, control) { CommandTimeout = 5 };
+                Assert.Equal(false, await predicate.ExecuteScalarAsync());
+            }
             var error = asynchronous
                 ? await Assert.ThrowsAsync<InvalidOperationException>(() => db.Users.CountAsync())
                 : Assert.Throws<InvalidOperationException>(() => db.Users.Count());
@@ -287,6 +315,18 @@ public sealed class IdentityRuntimePostgresTests
         }
         await db.Users.CountAsync();
         Assert.Equal(ConnectionState.Closed, db.Database.GetDbConnection().State);
+        var after = await AuthoritySnapshot(owner);
+        Assert.True(before == after, "Complete authority inventory was not restored after the EF mutation.");
+        var mutations = evidence["r01EfDmlMutations"] as JsonArray ?? new JsonArray();
+        if (mutations.Parent is null) evidence["r01EfDmlMutations"] = mutations;
+        mutations.Add(JsonSerializer.SerializeToNode(new
+        {
+            table, privilege, mode = asynchronous ? "async" : "sync", status = "PASS", runtimeScalarDuringMutation = false, rejectedConnectionClosed = true,
+            beforeSnapshotSha256 = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(before))),
+            afterSnapshotSha256 = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(after))),
+            digestFormat = "PostgreSQL JSON text; before/after equality, distinct from the Python canonical cross-instance digest"
+        }));
+        File.WriteAllText(path!, evidence.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) + Environment.NewLine);
     }
 
     [Theory]
