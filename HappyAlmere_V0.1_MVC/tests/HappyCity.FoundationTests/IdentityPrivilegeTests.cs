@@ -313,6 +313,30 @@ public sealed class IdentityRuntimePostgresTests
         Assert.Equal(ConnectionState.Open, connection.State);
     }
 
+    [Fact]
+    public async Task Actual_tls_rejects_an_unrelated_trust_root_after_a_valid_control()
+    {
+        await using var positive = await IdentityPrivilegeTests.Open("ConnectionStrings__HappyCityIdentity");
+        using var key = System.Security.Cryptography.RSA.Create(2048);
+        var request = new System.Security.Cryptography.X509Certificates.CertificateRequest("CN=R01 synthetic unrelated trust root", key,
+            System.Security.Cryptography.HashAlgorithmName.SHA256, System.Security.Cryptography.RSASignaturePadding.Pkcs1);
+        using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-1), DateTimeOffset.UtcNow.AddHours(1));
+        var path = Path.GetTempFileName();
+        try
+        {
+            await File.WriteAllTextAsync(path, certificate.ExportCertificatePem());
+            var settings = new NpgsqlConnectionStringBuilder(IdentityConfiguration.RequireRuntimeConnection(
+                Environment.GetEnvironmentVariable("ConnectionStrings__HappyCityIdentity")))
+            { RootCertificate = path, Pooling = false };
+            Assert.Equal(SslMode.VerifyFull, settings.SslMode);
+            await using var invalid = new NpgsqlConnection(settings.ConnectionString);
+            var error = await Assert.ThrowsAsync<NpgsqlException>(() => invalid.OpenAsync());
+            Assert.IsType<System.Security.Authentication.AuthenticationException>(error.InnerException);
+            Assert.Equal(ConnectionState.Closed, invalid.State);
+        }
+        finally { File.Delete(path); }
+    }
+
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -350,7 +374,7 @@ public sealed class IdentityRuntimePostgresTests
         Assert.False(string.IsNullOrWhiteSpace(path));
         var evidence = JsonNode.Parse(File.ReadAllText(path!))!.AsObject();
         var metrics = evidence["r01RuntimeOverhead"] as JsonObject ?? new JsonObject();
-        evidence["r01RuntimeOverhead"] = metrics;
+        if (metrics.Parent is null) evidence["r01RuntimeOverhead"] = metrics;
         metrics[asynchronous ? "async-pooled" : "sync-pooled"] = JsonSerializer.SerializeToNode(new
         {
             status = p95 <= 25 ? "PASS" : "FAIL", warmedSamples = samples, warmups, authorityCommands = commands,

@@ -196,7 +196,7 @@ def authority_inventory(container):
     ACLs have no implicit grants; effective column access also includes table ACLs.
     Keep names/signatures, not cluster-specific OIDs, for cross-instance equality.
     """
-    return query(container, """
+    sql="""
     WITH ns AS (SELECT * FROM pg_namespace WHERE nspname IN ('identity','catalog','discovery','public')),
     roles AS (SELECT * FROM pg_roles WHERE rolname LIKE 'happy_%' AND rolname NOT IN ('happy_restore','happy_identity_restore')),
     objects AS (
@@ -205,7 +205,7 @@ def authority_inventory(container):
         ARRAY['SELECT','INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER','MAINTAIN'] privileges
         FROM pg_class c JOIN ns n ON n.oid=c.relnamespace WHERE c.relkind IN ('r','p','v','m','f')
       UNION ALL SELECT 'sequence',n.nspname,c.relname,'',c.oid,0,c.relowner,c.relacl,
-        coalesce(c.relacl,acldefault('S',c.relowner)),ARRAY['USAGE','SELECT','UPDATE']
+        coalesce(c.relacl,acldefault('s',c.relowner)),ARRAY['USAGE','SELECT','UPDATE']
         FROM pg_class c JOIN ns n ON n.oid=c.relnamespace WHERE c.relkind='S'
       UNION ALL SELECT 'column',n.nspname,c.relname,a.attname,c.oid,a.attnum,c.relowner,a.attacl,
         coalesce(a.attacl,'{}'::aclitem[]),ARRAY['SELECT','INSERT','UPDATE','REFERENCES']
@@ -236,9 +236,23 @@ def authority_inventory(container):
       'effective',(SELECT json_agg(e ORDER BY kind,schema,name,col,role,privilege,grant_option) FROM effective e),
       'ownership',(SELECT json_agg(t ORDER BY schema,name,kind) FROM (SELECT n.nspname schema,c.relname name,c.relkind kind,pg_get_userbyid(c.relowner) owner FROM pg_class c JOIN ns n ON n.oid=c.relnamespace) t),
       'routines',(SELECT json_agg(t ORDER BY schema,name,args) FROM (SELECT n.nspname schema,p.proname name,pg_get_function_identity_arguments(p.oid) args,p.prokind kind,pg_get_userbyid(p.proowner) owner,p.prosecdef security_definer,p.proconfig config,pg_get_functiondef(p.oid) definition FROM pg_proc p JOIN ns n ON n.oid=p.pronamespace) t),
+      'defaultDefinitions',(SELECT coalesce(json_agg(t ORDER BY owner,schema,kind),'[]') FROM (SELECT pg_get_userbyid(d.defaclrole) owner,coalesce(n.nspname,'*') schema,d.defaclobjtype kind,cardinality(d.defaclacl)=0 empty_acl FROM pg_default_acl d LEFT JOIN pg_namespace n ON n.oid=d.defaclnamespace WHERE d.defaclnamespace=0 OR n.nspname IN ('identity','catalog','discovery','public') OR d.defaclrole IN (SELECT oid FROM roles)) t),
       'defaults',(SELECT coalesce(json_agg(t ORDER BY owner,schema,kind,grantor,grantee,privilege_type),'[]') FROM (SELECT pg_get_userbyid(d.defaclrole) owner,coalesce(n.nspname,'*') schema,d.defaclobjtype kind,pg_get_userbyid(x.grantor) grantor,CASE WHEN x.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(x.grantee) END grantee,x.privilege_type,x.is_grantable FROM pg_default_acl d LEFT JOIN pg_namespace n ON n.oid=d.defaclnamespace CROSS JOIN LATERAL aclexplode(d.defaclacl) x WHERE d.defaclnamespace=0 OR n.nspname IN ('identity','catalog','discovery','public') OR d.defaclrole IN (SELECT oid FROM roles)) t)
     )
-    """)
+    """
+    # Only this read-only metadata query gets structured diagnostics. Never emit
+    # server DETAIL/CONTEXT, SQL text, row values or connection information.
+    result=subprocess.run(['docker','exec','-i',container,'psql','-X','-qAt','-v','ON_ERROR_STOP=1',
+                           '-v','VERBOSITY=verbose','-U','happy_migrator','-d','happyalmere'],
+                          input=sql,text=True,encoding='utf-8',capture_output=True)
+    if result.returncode:
+        code=re.search(r'ERROR:\s+([0-9A-Z]{5}):',result.stderr)
+        location=re.search(r'LOCATION:\s+([A-Za-z0-9_]+),\s+([A-Za-z0-9_.]+):([0-9]+)',result.stderr)
+        line=re.search(r'LINE ([0-9]+):',result.stderr)
+        raise RuntimeError('Authority inventory SQL failed: SQLSTATE '+(code[1] if code else 'unavailable')+
+                           '; statement line '+(line[1] if line else 'unavailable')+
+                           '; server routine '+(location[1] if location else 'unavailable'))
+    return json.loads(result.stdout)
 
 
 def authority_mismatch(actual, expected):
@@ -340,6 +354,8 @@ def verify_mutations(container, env, expected):
             reject=(identifier in runtime_reject and not (identifier=='T22' and variant.startswith('catalog'))) or variant=='usable-app-access'
             runtime=f.execute(container,runtime_sql,'happy_identity_app',env['happy_identity_app'])
             if runtime != ('f' if reject else 't'):raise RuntimeError('Runtime mutation boundary mismatch: '+identifier+'/'+variant)
+            if identifier=='T16':
+                assert f.execute(container,'SET ROLE happy_identity_owner; '+runtime_sql,'happy_identity_app',env['happy_identity_app'])=='f'
             if identifier in ['T19','T20','T21']:
                 schema,table={'T19':('catalog','cities'),'T20':('discovery','discovery_entries'),'T21':('public','"__EFMigrationsHistory"')}[identifier]
                 principal='happy_identity_backup' if variant.startswith('happy_identity_backup') else 'happy_identity_app'
@@ -558,10 +574,14 @@ def main():
         f.execute(restored,'ALTER ROLE happy_identity_restore NOLOGIN; REVOKE happy_identity_owner FROM happy_identity_restore; REVOKE CONNECT ON DATABASE happyalmere FROM happy_identity_restore;')
         assert f.execute(restored,"""SELECT NOT rolcanlogin AND NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls
             AND NOT EXISTS (SELECT 1 FROM pg_auth_members WHERE member=r.oid)
+            AND NOT EXISTS (SELECT 1 FROM pg_roles target WHERE target.oid<>r.oid AND (pg_has_role(r.oid,target.oid,'MEMBER') OR pg_has_role(r.oid,target.oid,'SET')))
             AND NOT has_database_privilege(r.oid,'happyalmere','CONNECT,CREATE,TEMP')
             AND NOT EXISTS (SELECT 1 FROM pg_namespace n WHERE n.nspname IN ('identity','catalog','discovery') AND has_schema_privilege(r.oid,n.oid,'USAGE,CREATE'))
-            AND NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='identity' AND c.relkind='r' AND has_table_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN'))
-            AND NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='identity' AND CASE WHEN c.relkind='S' THEN has_sequence_privilege(r.oid,c.oid,'USAGE,SELECT,UPDATE') ELSE false END)
+            AND NOT has_schema_privilege(r.oid,'public','CREATE,USAGE WITH GRANT OPTION')
+            AND NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('identity','catalog','discovery','public') AND c.relkind IN ('r','p','v','m','f') AND (has_table_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN') OR has_any_column_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,REFERENCES')))
+            AND NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('identity','catalog','discovery','public') AND CASE WHEN c.relkind='S' THEN has_sequence_privilege(r.oid,c.oid,'USAGE,SELECT,UPDATE') ELSE false END)
+            AND NOT EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname IN ('identity','catalog','discovery','public') AND (p.proowner=r.oid OR has_function_privilege(r.oid,p.oid,'EXECUTE')))
+            AND NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('identity','catalog','discovery','public') AND c.relowner=r.oid)
             FROM pg_roles r WHERE rolname='happy_identity_restore'""")=='t'
         assert state(restored)==full;check('coordinatedSharedStateBothHistoriesSequencesAndAclRestore')
         verify_permissions(restored,venv)

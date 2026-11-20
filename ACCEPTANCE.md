@@ -1,5 +1,163 @@
 # Acceptance traceability
 
+## R01 per-item verification ledger
+
+This ledger supersedes historical dispositions above for the R01 candidate. **Pending CI** means implemented or preserved but not yet freshly verified on PostgreSQL. A successful implementation test does not approve G10/G11/G12. The final exact-head handover belongs in Issue #34 and draft PR #32.
+
+### Forty acceptance criteria
+
+| ID | Requirement | Current evidence / disposition |
+|---|---|---|
+| IAM-A-AC01 | exact baseline/authority/scope | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-A-AC02 | EF10.0.14 compatible/audits | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-A-AC03 | UUID model/physical/persistence | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-A-AC04 | infrastructure layering | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-A-AC05 | separate context/history | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-A-AC06 | original preservation/regressions | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-A-AC07 | F01/F02 authority | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-A-AC08 | wider intended denials/mutations | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-A-AC09 | actual PG invariants | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-A-AC10 | recovery authority completeness | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-A-AC11 | fresh CI/artifacts | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-A-AC12 | no public auth; handover | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC01 | INT-G12/baseline | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC02 | seven tables/history | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC03 | actual physical contract | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC04 | concurrent unique email | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC05 | framework hashing/concurrency | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC06 | required/forbidden authority completeness | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC07 | credential isolation exhaustive exclusions | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC08 | original migrations/history | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC09 | recovery complete authority | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC10 | absent auth routes | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC11 | scope supported; independent secret-content assurance incomplete | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-EXEC-AC12 | exact-head handover | Pending CI — preserved original contract and regressions; fresh evidence required. |
+| IAM-R01-AC01 | exact start and accepted base | PASS (implementation/preflight evidence): owner brief, G05 comment and scoped source/docs; independent review reserved. |
+| IAM-R01-AC02 | 13-path R01 and cumulative34 limit | PASS (implementation/preflight evidence): owner brief, G05 comment and scoped source/docs; independent review reserved. |
+| IAM-R01-AC03 | observed defects vs gaps distinguished | PASS (implementation/preflight evidence): owner brief, G05 comment and scoped source/docs; independent review reserved. |
+| IAM-R01-AC04 | explicit approved runtime/independent boundary | PASS (implementation/preflight evidence): owner brief, G05 comment and scoped source/docs; independent review reserved. |
+| IAM-R01-AC05 | actual identity/TLS/attrs | Pending CI — runtime/interceptor, complete independent inventory, mutations/recovery and fresh artifacts as applicable. |
+| IAM-R01-AC06 | required/forbidden runtime checks | Pending CI — runtime/interceptor, complete independent inventory, mutations/recovery and fresh artifacts as applicable. |
+| IAM-R01-AC07 | relevant cross-schema table/column matrix | Pending CI — runtime/interceptor, complete independent inventory, mutations/recovery and fresh artifacts as applicable. |
+| IAM-R01-AC08 | DB/schema/sequence/routine perms | Pending CI — runtime/interceptor, complete independent inventory, mutations/recovery and fresh artifacts as applicable. |
+| IAM-R01-AC09 | raw/effective/ownership/PUBLIC/default/membership/grant options | Pending CI — runtime/interceptor, complete independent inventory, mutations/recovery and fresh artifacts as applicable. |
+| IAM-R01-AC10 | actual positive-negative-positive mutations | Pending CI — runtime/interceptor, complete independent inventory, mutations/recovery and fresh artifacts as applicable. |
+| IAM-R01-AC11 | intended mismatch/denial reason, no false pass | Pending CI — runtime/interceptor, complete independent inventory, mutations/recovery and fresh artifacts as applicable. |
+| IAM-R01-AC12 | cleanup and recovery equality | Pending CI — runtime/interceptor, complete independent inventory, mutations/recovery and fresh artifacts as applicable. |
+| IAM-R01-AC13 | original migration/discovery/authority preserved | Pending CI — runtime/interceptor, complete independent inventory, mutations/recovery and fresh artifacts as applicable. |
+| IAM-R01-AC14 | all original regressions/perf | Pending CI — runtime/interceptor, complete independent inventory, mutations/recovery and fresh artifacts as applicable. |
+| IAM-R01-AC15 | exact fresh CI/actual artifact content/overhead | Pending CI — runtime/interceptor, complete independent inventory, mutations/recovery and fresh artifacts as applicable. |
+| IAM-R01-AC16 | F01–03 individually reviewed | NOT TESTED — F01/F02/F03 require independent architectural closure. |
+
+### Eighty-eight scenarios
+
+| ID | Scenario | Fresh verification route / disposition |
+|---|---|---|
+| IAM-T01 | UserManager resolution | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T02 | RoleManager resolution | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T03 | dedicated context | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T04 | layer dependencies | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T05 | synthetic account | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T06 | UUIDv4 user/role | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T07 | normalized username uniqueness | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T08 | normalized email uniqueness | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T09 | concurrent duplicate email | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T10 | normalized lookup | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T11 | framework hash/no plaintext | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T12 | correct password | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T13 | wrong password | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T14 | account update | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T15 | stale concurrency | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T16 | synthetic role | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T17 | role uniqueness | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T18 | valid user-role | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T19 | duplicate user-role | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T20 | missing FK | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T21 | claims/logins/tokens round trip | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T22 | deletion/cascades | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T23 | required DML | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T24 | discovery credential denial | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T25 | catalog write denial | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T26 | schema DDL denial | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T27 | owner escalation denial | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T28 | history write denial | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T29 | future private object denial | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T30 | clean initialization | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T31 | accepted upgrade | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T32 | no-op | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T33 | controlled fault/recovery | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T34 | isolated restore | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T35 | public regression/no exposure | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-T36 | dependency/source/secret | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T01 | design-time contexts | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T02 | disabled discovery | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T03 | invalid enabled config | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T04 | runtime discovery-owner denial | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T05 | discovery migrator identity-owner denial | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T06 | existing backup credential denial | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T07 | identity backup unrelated access | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T08 | required sequence rights | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T09 | privileged child env exclusion | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T10 | both histories restored | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T11 | retired login denied | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-PRE-T12 | no auth routes/cookies | Pending CI — unchanged original PostgreSQL/framework/browser regression evidence. |
+| IAM-R01-T01 | correct config accepted | IdentityRuntimePostgresTests positive controls; pending CI |
+| IAM-R01-T02 | wrong configured username rejected | IdentityRuntimeSafetyTests.Configuration_drift_is_rejected; locally PASS |
+| IAM-R01-T03 | wrong actual authenticated authority rejected | Actual_wrong_authenticated_role_fails_the_runtime_statement; pending CI |
+| IAM-R01-T04 | unsafe session role/override rejected | Configuration_drift_is_rejected plus independent membership options; local config PASS, PostgreSQL pending CI |
+| IAM-R01-T05 | TLS invalid rejected | Configuration_drift_is_rejected + unchanged actual verified-TLS controls; local config PASS, PostgreSQL pending CI |
+| IAM-R01-T06 | users required DML revoked rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T07 | dependent table DML revoked rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T08 | extra table privileges rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T09 | history SELECT grant rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T10 | history write grant rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T11 | sequence USAGE revoked rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T12 | extra sequence SELECT/UPDATE rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T13 | identity CREATE grant rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T14 | database CREATE/TEMP rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T15 | unauthorized grant option rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T16 | unauthorized membership rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T17 | dangerous role attrs rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T18 | forbidden ownership rejected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T19 | catalog direct grant independent mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T20 | discovery direct grant independent mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T21 | public retained-object grant independent mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T22 | column-only unauthorized grant mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T23 | PUBLIC grant mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T24 | future table default ACL mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T25 | future sequence default ACL mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T26 | routine EXECUTE mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T27 | unexpected security-definer exposure mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T28 | transitive membership mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T29 | unauthorized admin/set/inherit options mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T30 | ownership/delegated grant mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T31 | new private probe denied or grant detected | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T32 | existing discovery/backup identity access mismatch | verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; pending CI |
+| IAM-R01-T33 | validator error/cancellation safe failure | Failure_closes_or_disposes_without_exposing_diagnostics / Already_cancelled_open_closes_without_a_query locally PASS; actual pooled cancellation pending CI |
+| IAM-R01-T34 | sync/async parity | Every_reopen_checks_once_without_caching locally PASS; 56 real sync/async DML variants pending CI |
+| IAM-R01-T35 | pool/reopen no stale successful bypass | Actual_cancelled_callback_closes_pooled_connection_and_next_open_verifies + DML reopen variants; pending CI |
+| IAM-R01-T36 | cleanup exact state restoration | verify_mutations finally cleanup and entire authority digest equality; pending CI |
+| IAM-R01-T37 | disabled discovery unchanged | Unchanged disabled-mode 105 regressions / default-off registration; pending CI |
+| IAM-R01-T38 | clean/upgrade/recovered/restored full authority | R01_independent_authority_matrix_matches_on_all_four_paths / r01AuthorityPaths; pending CI |
+| IAM-R01-T39 | measured overhead within approved budget | Authority_overhead_has_forty_warmed_samples_and_meets_approved_target; pending CI, stop if >25 ms p95 |
+| IAM-R01-T40 | exact-head regression/handover | Exact-head push/PR logs, scope/tree proof and final handover; pending CI and G09 |
+
+### Findings and clarifications
+
+| Item | Current disposition |
+|---|---|
+| F01 | Runtime checks and fail-closed handling expanded; database evidence and independent closure pending |
+| F02 | Full relevant cross-schema raw/effective/reference inventory added; four-path evidence and independent closure pending |
+| F03 | 87 independent mutation variants, 56 EF DML reopen variants and lifecycle/configuration tests added; PostgreSQL evidence and independent closure pending |
+| CL01 | 16 lifecycle/configuration tests passed locally; actual PostgreSQL reopen/cancellation pending |
+| CL02 | Latent grants separately distinguished from usable catalog/discovery/public access; pending CI |
+| CL03 | acldefault expands implicit PUBLIC routine EXECUTE; mutation included, pending CI |
+| CL04 | Same complete policy on clean/upgrade/recovered/restored, pending CI |
+| CL05 | Owner-approved post-download original ZIP inspection, pending fresh archives; no blanket certification |
+| CL06 | Identity and historical migrations/designer/snapshots/SQL and CI untouched in exact 13-path change |
+| CL07 | 40 warmed samples per sync/async workload; pending measurement, mandatory stop if target missed |
+
+
 ## HA-003-A-ARCH-R01 ? current remediation (20 November 2026)
 
 This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01?D08 and bounded G05?G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
