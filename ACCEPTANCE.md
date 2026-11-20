@@ -1,5 +1,231 @@
 # Acceptance traceability
 
+## R01 per-item verification ledger
+
+This ledger supersedes historical dispositions below. PASS means executed implementation evidence at 3714b59d3a9e6af0074072789d57b5ffafb8be1c (push 44715760735 / PR 44715769012), not independent architectural acceptance. Both runs freshly passed; final documentation-containing head still requires the separately published exact-head results. HANDOVER.md records commands, actual counts, archive identities, the earlier performance failure and limitations. Final containing-head CI and submission are published in Issue #34 / draft PR #32. G08 requires independent confirmation; G10/G11/G12 are reserved.
+
+### Forty acceptance criteria
+
+| ID | Requirement | Current evidence / disposition |
+|---|---|---|
+| IAM-A-AC01 | exact baseline/authority/scope | PASS - G05 authority comment 7035023769; exact start/base and thirteen-path proof in HANDOVER. |
+| IAM-A-AC02 | EF10.0.14 compatible/audits | PASS - unchanged project references/packages; Debug/Release zero warnings/errors; transitive NuGet/npm scans no known vulnerabilities. |
+| IAM-A-AC03 | UUID model/physical/persistence | PASS - unchanged IdentityPersistenceTests; independent physical metadata and framework persistence cases in 238 enabled tests. |
+| IAM-A-AC04 | infrastructure layering | PASS - verify-source.py dependency direction; unchanged Domain/Application/Web composition and architecture tests. |
+| IAM-A-AC05 | separate context/history | PASS - IdentityMigrationTests.Separate_identity_history_matches_model_and_has_exactly_seven_functional_tables; both contexts/histories recovery. |
+| IAM-A-AC06 | original preservation/regressions | PASS - 353 protected candidate blobs/modes; original 105 disabled / 157 included enabled cases unchanged and passing. |
+| IAM-A-AC07 | F01/F02 authority | PASS (technical evidence) - RTA-01-16, four-path ACL-01-20 inventory; F01/F02 independent closure reserved. |
+| IAM-A-AC08 | wider intended denials/mutations | PASS - 87 independent mutation variants plus 56 real EF DML variants; intended mismatch/false predicate, exact cleanup. |
+| IAM-A-AC09 | actual PG invariants | PASS - original physical uniqueness/FK/check/nullability/concurrency/hash tests unchanged and executed. |
+| IAM-A-AC10 | recovery authority completeness | PASS - independent expected authority equals clean/upgrade/recovered/restored; thirteen Identity rehearsal checks. |
+| IAM-A-AC11 | fresh CI/artifacts | PASS at named checkpoint - both raw CI logs and original 34-entry downloaded archives inspected; final containing-head results separately required. |
+| IAM-A-AC12 | no public auth; handover | PASS for scoped implementation - unchanged absent-auth-route/cookie tests; HANDOVER and technical contract; no parent milestone acceptance. |
+| IAM-EXEC-AC01 | INT-G12/baseline | PASS - accepted INT-G12 provenance retained; integration ref remains exact 216df25. |
+| IAM-EXEC-AC02 | seven tables/history | PASS - independent SQL physical reference and IdentityMigrationTests; seven functional tables plus dedicated history. |
+| IAM-EXEC-AC03 | actual physical contract | PASS - independentPhysicalContractFourPaths and mismatch controls; protected literal SQL/migration/designer/snapshot. |
+| IAM-EXEC-AC04 | concurrent unique email | PASS - Concurrent_normalized_email_insert_is_rejected_by_database (actual concurrent PostgreSQL). |
+| IAM-EXEC-AC05 | framework hashing/concurrency | PASS - Framework_managers_round_trip_hash_normalize_and_cascade_all_stores and Stale_framework_concurrency_stamp_rejects_update. |
+| IAM-EXEC-AC06 | required/forbidden authority completeness | PASS - required/forbidden effective table/column/sequence/schema/DB/routine and grant-option matrix, RTA and mutations. |
+| IAM-EXEC-AC07 | credential isolation exhaustive exclusions | PASS within process boundary - old/new app, backup, migrator exclusions; latent/usable grants and retired restore checks. Not compromised-process isolation. |
+| IAM-EXEC-AC08 | original migrations/history | PASS - original discovery/Identity migrations, histories, literal SQL and metadata preserved; immutable blobs/modes. |
+| IAM-EXEC-AC09 | recovery complete authority | PASS - coordinated two-history/data/sequence/ACL recovery plus full independently expected authority in all four paths. |
+| IAM-EXEC-AC10 | absent auth routes | PASS - Persistence_does_not_publish_account_endpoints and Enabled_services_resolve_without_sign_in_or_cookie_schemes; browser regressions. |
+| IAM-EXEC-AC11 | scope supported; independent secret-content assurance incomplete | PARTIAL - scope/history/source and decoded JSON/PNG content checks executed; bounded checks and visual review are not exhaustive independent secret certification. |
+| IAM-EXEC-AC12 | exact-head handover | PARTIAL until final containing-head ledger is posted - implementation handover prepared; independent review/owner acceptance remain separate. |
+| IAM-R01-AC01 | exact start and accepted base | PASS - G05 start c5b61a36/base216df25 provenance, exact refs and coordination recorded. |
+| IAM-R01-AC02 | 13-path R01 and cumulative34 limit | PASS - thirteen existing paths, zero new/deleted; cumulative34; 353 candidate/332 base entries identical. |
+| IAM-R01-AC03 | observed defects vs gaps distinguished | PASS - F01-F03 assurance/coverage defects distinguished from confirmed excessive grants/exploit; failed verifier attempts documented. |
+| IAM-R01-AC04 | explicit approved runtime/independent boundary | PASS - D01-D08 approved Alternative B, one bounded runtime query vs exhaustive independent provisioning/recovery matrix. |
+| IAM-R01-AC05 | actual identity/TLS/attrs | PASS - actual TLS positive/unrelated-root negative, actual wrong role, unsafe SET ROLE and dangerous-attribute controls. |
+| IAM-R01-AC06 | required/forbidden runtime checks | PASS - required seven-table DML, history, sequence/schema/DB limits, grant options, ownership and effective-role RTA checks. |
+| IAM-R01-AC07 | relevant cross-schema table/column matrix | PASS - independent reference inventories identity/catalog/discovery/public tables and columns; latent and usable access differentiated. |
+| IAM-R01-AC08 | DB/schema/sequence/routine perms | PASS - database/schema/sequence/routine raw/effective rights and ownership; routine mutation controls. |
+| IAM-R01-AC09 | raw/effective/ownership/PUBLIC/default/membership/grant options | PASS - 9 roles, 864 membership paths, 132 objects, 222 ACL entries, 10296 effective rights, 63 ownership records, 3 routines; preserved default policy. |
+| IAM-R01-AC10 | actual positive-negative-positive mutations | PASS - 87 independently parameterized deviations, 56 EF DML variants; positive/mutation/intended rejection/cleanup/positive. |
+| IAM-R01-AC11 | intended mismatch/denial reason, no false pass | PASS - exact expected mismatch dimension; successful TLS/role controls, raw false predicate before EF rejection, original exact SQLSTATE assertions. |
+| IAM-R01-AC12 | cleanup and recovery equality | PASS - all mutation cleanup hashes and all four authority paths match independent reference; per-EF before/after equality. |
+| IAM-R01-AC13 | original migration/discovery/authority preserved | PASS - immutable source/blob/mode checks and original data/metadata/history/privilege regressions. |
+| IAM-R01-AC14 | all original regressions/perf | PASS at named checkpoint - original105/157 pass; 10k traversal and eleven workloads within unchanged250ms; historical409ms failure retained as risk. |
+| IAM-R01-AC15 | exact fresh CI/actual artifact content/overhead | PASS at named checkpoint within stated scope - both runs, actual original archive content checks, separate40-sample sync/async overhead below25ms; final containing-head checks required. |
+| IAM-R01-AC16 | F01–03 individually reviewed | NOT TESTED - independent Claude disposition of F01/F02/F03 remains G10; Codex cannot close it. |
+
+### Eighty-eight scenarios
+
+| ID | Scenario | Fresh verification route / disposition |
+|---|---|---|
+| IAM-T01 | UserManager resolution | PASS - IdentityArchitectureTests.Enabled_services_resolve_without_sign_in_or_cookie_schemes. |
+| IAM-T02 | RoleManager resolution | PASS - IdentityArchitectureTests.Enabled_services_resolve_without_sign_in_or_cookie_schemes. |
+| IAM-T03 | dedicated context | PASS - IdentityMigrationTests.Separate_identity_history_matches_model_and_has_exactly_seven_functional_tables. |
+| IAM-T04 | layer dependencies | PASS - verify-source.py / IdentityArchitectureTests. |
+| IAM-T05 | synthetic account | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T06 | UUIDv4 user/role | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T07 | normalized username uniqueness | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T08 | normalized email uniqueness | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T09 | concurrent duplicate email | PASS - IdentityPersistenceTests.Concurrent_normalized_email_insert_is_rejected_by_database. |
+| IAM-T10 | normalized lookup | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T11 | framework hash/no plaintext | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T12 | correct password | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T13 | wrong password | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T14 | account update | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T15 | stale concurrency | PASS - IdentityPersistenceTests.Stale_framework_concurrency_stamp_rejects_update. |
+| IAM-T16 | synthetic role | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T17 | role uniqueness | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T18 | valid user-role | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T19 | duplicate user-role | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T20 | missing FK | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T21 | claims/logins/tokens round trip | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T22 | deletion/cascades | PASS - IdentityPersistenceTests.Framework_managers_round_trip_hash_normalize_and_cascade_all_stores / physical invariant tests. |
+| IAM-T23 | required DML | PASS - IdentityPrivilegeTests.Positive_control_precedes_exact_authorization_denial / verify_permissions. |
+| IAM-T24 | discovery credential denial | PASS - IdentityPrivilegeTests.Positive_control_precedes_exact_authorization_denial / verify_permissions. |
+| IAM-T25 | catalog write denial | PASS - IdentityPrivilegeTests.Positive_control_precedes_exact_authorization_denial / verify_permissions. |
+| IAM-T26 | schema DDL denial | PASS - IdentityPrivilegeTests.Positive_control_precedes_exact_authorization_denial / verify_permissions. |
+| IAM-T27 | owner escalation denial | PASS - IdentityPrivilegeTests.Positive_control_precedes_exact_authorization_denial / verify_permissions. |
+| IAM-T28 | history write denial | PASS - IdentityPrivilegeTests.Positive_control_precedes_exact_authorization_denial / verify_permissions. |
+| IAM-T29 | future private object denial | PASS - IdentityPrivilegeTests.Positive_control_precedes_exact_authorization_denial / verify_permissions. |
+| IAM-T30 | clean initialization | PASS - verify-identity-foundation.py clean initialization / r01AuthorityPaths.clean. |
+| IAM-T31 | accepted upgrade | PASS - accepted-baseline upgrade / r01AuthorityPaths.upgrade. |
+| IAM-T32 | no-op | PASS - completeIdentityNoOp. |
+| IAM-T33 | controlled fault/recovery | PASS - exactP0001FullIdentityRollback / independentFreshRecoveryAndReapplication. |
+| IAM-T34 | isolated restore | PASS - coordinatedSharedStateBothHistoriesSequencesAndAclRestore / r01AuthorityPaths.restored. |
+| IAM-T35 | public regression/no exposure | PASS - IdentityArchitectureTests.Persistence_does_not_publish_account_endpoints / 190 browser assertions. |
+| IAM-T36 | dependency/source/secret | PARTIAL - verify-source.py and transitive audits; bounded post-download inspection, no exhaustive certification. |
+| IAM-PRE-T01 | design-time contexts | PASS - independent context migration SQL and physical metadata checks. |
+| IAM-PRE-T02 | disabled discovery | PASS - Default_off_registers_no_identity_services / original105 disabled cases. |
+| IAM-PRE-T03 | invalid enabled config | PASS - Enabled_invalid_configuration_fails_closed / 18 lifecycle cases / actual PG mutations. |
+| IAM-PRE-T04 | runtime discovery-owner denial | PASS - runtime/discovery owner denial positive controls. |
+| IAM-PRE-T05 | discovery migrator identity-owner denial | PASS - discovery migrator Identity-owner denial / full authority matrix. |
+| IAM-PRE-T06 | existing backup credential denial | PASS - existing backup credential exclusion / T32 mutations. |
+| IAM-PRE-T07 | identity backup unrelated access | PASS - Identity backup catalog/discovery/public latent and usable access variants T19-T21. |
+| IAM-PRE-T08 | required sequence rights | PASS - both claim sequences USAGE positives and T11/T12 negatives. |
+| IAM-PRE-T09 | privileged child env exclusion | PASS - Actual_child_processes_exclude_privileged_environment (PowerShell/Python). |
+| IAM-PRE-T10 | both histories restored | PASS - coordinatedSharedStateBothHistoriesSequencesAndAclRestore. |
+| IAM-PRE-T11 | retired login denied | PASS - retiredRestoreAuthenticationAndAuthorizationDenied / exact28000 after live control. |
+| IAM-PRE-T12 | no auth routes/cookies | PASS - Persistence_does_not_publish_account_endpoints / no SignInManager or cookie schemes. |
+| IAM-R01-T01 | correct config accepted | PASS - IdentityRuntimePostgresTests positive controls; executed in both named runs |
+| IAM-R01-T02 | wrong configured username rejected | PASS - IdentityRuntimeSafetyTests.Configuration_drift_is_rejected; locally PASS |
+| IAM-R01-T03 | wrong actual authenticated authority rejected | PASS - Actual_wrong_authenticated_role_fails_the_runtime_statement; executed in both named runs |
+| IAM-R01-T04 | unsafe session role/override rejected | PASS - Configuration_drift_is_rejected plus independent membership options; configuration and actual unsafe SET ROLE / membership checks PASS |
+| IAM-R01-T05 | TLS invalid rejected | PASS - Configuration_drift_is_rejected + Actual_tls_rejects_an_unrelated_trust_root_after_a_valid_control; VerifyFull never disabled |
+| IAM-R01-T06 | users required DML revoked rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T07 | dependent table DML revoked rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T08 | extra table privileges rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T09 | history SELECT grant rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T10 | history write grant rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T11 | sequence USAGE revoked rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T12 | extra sequence SELECT/UPDATE rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T13 | identity CREATE grant rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T14 | database CREATE/TEMP rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T15 | unauthorized grant option rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T16 | unauthorized membership rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T17 | dangerous role attrs rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T18 | forbidden ownership rejected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T19 | catalog direct grant independent mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T20 | discovery direct grant independent mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T21 | public retained-object grant independent mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T22 | column-only unauthorized grant mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T23 | PUBLIC grant mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T24 | future table default ACL mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T25 | future sequence default ACL mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T26 | routine EXECUTE mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T27 | unexpected security-definer exposure mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T28 | transitive membership mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T29 | unauthorized admin/set/inherit options mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T30 | ownership/delegated grant mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T31 | new private probe denied or grant detected | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T32 | existing discovery/backup identity access mismatch | PASS - verify_mutations independently parameterized deviation + runtime boundary + exact cleanup; executed in both named runs |
+| IAM-R01-T33 | validator error/cancellation safe failure | PASS - Failure_closes_or_disposes_without_exposing_diagnostics / Already_cancelled_open_closes_without_a_query PASS; actual pooled cancellation PASS |
+| IAM-R01-T34 | sync/async parity | PASS - Every_reopen_checks_once_without_caching PASS; 56 real sync/async DML variants PASS |
+| IAM-R01-T35 | pool/reopen no stale successful bypass | PASS - Actual_cancelled_callback_closes_pooled_connection_and_next_open_verifies + DML reopen variants; executed in both named runs |
+| IAM-R01-T36 | cleanup exact state restoration | PASS - verify_mutations finally cleanup and entire authority digest equality; executed in both named runs |
+| IAM-R01-T37 | disabled discovery unchanged | PASS - Unchanged disabled-mode 105 regressions / default-off registration; executed in both named runs |
+| IAM-R01-T38 | clean/upgrade/recovered/restored full authority | PASS - R01_independent_authority_matrix_matches_on_all_four_paths / r01AuthorityPaths; executed in both named runs |
+| IAM-R01-T39 | measured overhead within approved budget | PASS - Authority_overhead_has_forty_warmed_samples_and_meets_approved_target; actual p95 below25ms, 40 samples/workload |
+| IAM-R01-T40 | exact-head regression/handover | PARTIAL - Exact-head push/PR logs, scope/tree proof and final handover; final containing-head submission pending |
+
+### Findings and clarifications
+
+| Item | Current disposition |
+|---|---|
+| F01 | Implemented and verified: expanded RTA checks, 18 lifecycle/configuration + actual PG controls; independent high-finding closure reserved. |
+| F02 | Implemented and verified: exhaustive independent expected cross-schema policy, four-path equality and latent/routine/default/membership controls; independent closure reserved. |
+| F03 | Implemented and verified: 87 independent variants, 56 EF DML variants, complete cleanup, wrong-role/TLS/cancellation/reopen cases; independent closure reserved. |
+| CL01 | PASS - 18 lifecycle/configuration cases and real pooled PostgreSQL cancellation/reopen; rejected EF connections closed. |
+| CL02 | PASS - latent catalog/discovery grants still deny actual access42501; usable schema/public variants recorded separately. |
+| CL03 | PASS - implicit PUBLIC EXECUTE expansion and actual synthetic routine mutation; raw-null distinction retained. |
+| CL04 | PASS - same independently expected full policy on clean/upgrade/recovered/restored; digest58ae3663 (full in evidence). |
+| CL05 | PASS within bounded inspection scope - original ZIP bytes/hash/CRC, decoded JSON scans and PNG structural checks, all 21 rendered reference screenshots visually reviewed; separate post-download record, not exhaustive certification. |
+| CL06 | PASS - protected migration/designer/snapshot/literal SQL and historical source identical blob/mode. |
+| CL07 | PASS at named checkpoint - five warmups/40 samples per mode, p50/p95/p99/max/error/timeout/command evidence; largest authority p95 7.1313ms <25ms. |
+
+
+## HA-003-A-ARCH-R01 - current remediation (20 November 2026)
+
+This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01-D08 and bounded G05-G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
+
+Branch `feature/ha-003-a`, draft PR #32; exact start `c5b61a362fd35522718401e558961e12d1b24bab`, accepted base `216df25c5656a979fcf67dfe3a16d07d7d66f154`. Exactly thirteen existing paths are authorized; no new tracked files, migrations, dependencies or workflow edits. No merge, public authentication, production data or next milestone. Claude independently reviews G10; G11 owner acceptance and G12 merge authority remain separate.
+
+Implementation3714b59 completed fresh PostgreSQL and both push/PR CI runs; final documentation-head results belong to the submission ledger. The prior review found F01 runtime assurance gaps, F02 independent inventory gaps and F03 mutation-test gaps; no correctly provisioned excessive grant, exploit or breach was established. The implementation addresses these findings but does not self-close architectural review. The detailed per-item dispositions below are historical until explicitly refreshed with R01 evidence. New sixteen criteria and forty scenarios are tracked by the implementation brief; scenario counts are not xUnit counts.
+
+
+## HA-003-A current candidate acceptance (not independent acceptance)
+
+Sources: [#26 original criteria](https://github.com/Shiva721254/HappyAlmere/issues/26), [#28 approved compatibility additions](https://github.com/Shiva721254/HappyAlmere/issues/28), [IAM-G04](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023159754). Exact baseline `216df25c5656a979fcf67dfe3a16d07d7d66f154`; branch `feature/ha-003-a`. [Technical contract/runbook](docs/database/identity-foundation.md). Criteria retain separate identities and no automatic acceptance from authorization.
+
+| ID | Requirement | Actual evidence route | Current disposition |
+|---|---|---|---|
+| IAM-A-AC01 | Baseline/authority | IAM-G04 + IAM-G05 comments; git ancestry/path audit | Preflight verified |
+| IAM-A-AC02 | Compatible reviewed dependencies | Identity EF 10.0.14; EF/Npgsql graph; Debug/Release + NuGet audit | Verified locally and in both implementation CI runs |
+| IAM-A-AC03 | UUID accounts/roles and mappings | IdentityPersistenceTests; independent SQL contract | Verified locally and in both implementation CI runs |
+| IAM-A-AC04 | Infrastructure/layer boundaries | Preserved source verifier; unchanged project references | Local verified |
+| IAM-A-AC05 | Dedicated history/physical schema | IdentityMigrationTests; runner independent contract | Verified locally and in both implementation CI runs |
+| IAM-A-AC06 | Existing foundation preservation | Original 105 tests; protected blobs; runner original-state snapshots | Verified locally and in both implementation CI runs |
+| IAM-A-AC07 | Least privilege | IdentityPrivilegeTests; runner full ACL/role/sequence matrix | Verified locally and in both implementation CI runs |
+| IAM-A-AC08 | Exact denials and controls | 42501/28000 checks with live TLS positive controls; contract mismatch controls | Verified locally and in both implementation CI runs |
+| IAM-A-AC09 | Actual relational invariants | IdentityPersistenceTests on actual PostgreSQL | Verified locally and in both implementation CI runs |
+| IAM-A-AC10 | Clean/upgrade/no-op/recovery | verify-identity-foundation.py full state comparison | Verified locally and in both implementation CI runs |
+| IAM-A-AC11 | Fresh original/new regressions and CI | Original suite default-off; full suite enabled; browser; push and PR CI | Verified at d4ec551; final documentation-head evidence in GitHub ledger |
+| IAM-A-AC12 | Scope/docs/review submission | No auth surface; 34-path maximum; draft PR/handover | Draft PR #32 submitted; independent acceptance reserved |
+| IAM-EXEC-AC01 | INT-G12/exact baseline | Issue #27 comment7022990043, exact216df25 | Verified |
+| IAM-EXEC-AC02 | Seven functional + history | Independent SQL + actual metadata, IdentityMigrationTests | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC03 | Complete physical contract | Column/PK/FK/index/ownership/sequence snapshots and mismatch controls | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC04 | Concurrent email uniqueness | Concurrent_normalized_email_insert_is_rejected_by_database | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC05 | Framework hashing/concurrency | Framework_managers_round_trip_hash_normalize_and_cascade_all_stores; Stale_framework_concurrency_stamp_rejects_update | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC06 | Explicit DML/sequence rights | Full table/column/sequence effective privileges and actual framework operations | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC07 | Discovery/backup exclusion | Positive_control_precedes_exact_authorization_denial and runner | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC08 | Applied migration preservation | Protected blobs; original-state/history snapshots and original no-op tests | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC09 | Identity-inclusive restoration | Coordinated shared-state restore and retired login tests | Verified locally and in both implementation CI runs |
+| IAM-EXEC-AC10 | No public auth routes | IdentityArchitectureTests endpoint cases; no sign-in/cookie service | Local verified (account-route/DI tests) |
+| IAM-EXEC-AC11 | Allowlist/no secrets/production | Scope diff; source/history scan; task-owned isolated resources | 34/34 approved paths; local and both CI scans passed |
+| IAM-EXEC-AC12 | Exact-head handoff/review | New draft PR + actual push/PR logs/artifacts + review request | Handover supplied; final SHA/checks and review request in GitHub submission ledger; independent acceptance reserved |
+
+### Scenario-to-test traceability
+
+| Scenarios | Concrete verification |
+|---|---|
+| IAM-T01–03 | IdentityArchitectureTests.Enabled_services_resolve_without_sign_in_or_cookie_schemes |
+| IAM-T04 | Unchanged verify-source.py dependency direction |
+| IAM-T05–08,10–14,16–19,21–23 | IdentityPersistenceTests framework managers/physical role invariants |
+| IAM-T09 | Concurrent_normalized_email_insert_is_rejected_by_database (one save, one23505) |
+| IAM-T15 | Stale_framework_concurrency_stamp_rejects_update |
+| IAM-T20 | Physical_constraints_reject_exact_invalid_operation (23503) |
+| IAM-T24–28 | IdentityPrivilegeTests exact42501 with positive TLS controls |
+| IAM-T29 | Runner private_probe actual denied access, finally removed |
+| IAM-T30–34 | Runner clean/upgrade/full no-op/controlledP0001/fresh recovery/coordinated restore |
+| IAM-T35 | Original105 tests disabled/enabled, browser harness, account endpoint404 tests |
+| IAM-T36 | NuGet/npm audits, preserved source/history verifier, final scoped review |
+| IAM-PRE-T01 | Both explicit factories used by runner and original tooling |
+| IAM-PRE-T02 | Original105 tests with flagfalse, default-off service test |
+| IAM-PRE-T03 | Enabled_invalid_configuration_fails_closed |
+| IAM-PRE-T04–07 | IdentityPrivilegeTests and runner role/backup denial matrix |
+| IAM-PRE-T08 | Framework claims create; exact sequence ACLs, setval/backup nextval42501 |
+| IAM-PRE-T09 | Actual_child_processes_exclude_privileged_environment, both Node and PowerShell |
+| IAM-PRE-T10 | Runner both-history/full-state restoration |
+| IAM-PRE-T11 | Retired_identity_restore_login_denied_after_live_tls_control (Npgsql28000) |
+| IAM-PRE-T12 | Persistence_does_not_publish_account_endpoints; no SignInManager/scheme |
+
+All 36 original +12 compatibility scenarios are retained; grouped rows identify shared tests, not reduced criteria. Original parent IAM-AC01–12 (#7) remain distinct: A contributes persistence/layer/security/threat-test foundations only. Lifecycle/recovery endpoints, scoped roles/resource authorization, web/native sessions, MFA, business ownership, production secrets/audit/privacy and complete independent identity acceptance remain later gates. IAM-G01–05 prerequisites verified; G06–09 candidate verification/submission pending; G10–12 independent review, owner candidate acceptance and separately authorized integration remain pending. No parent HA-003 completion is claimed.
+
+
 Canonical cross-milestone index. Definitions remain in original sources; no renumbering or replacement. Documentation date 19 November 2026. [Status](PROJECT_STATUS.md) summarizes milestones; [risk register](docs/security/security-risk-register.md) owns outstanding obligations.
 
 ## Evidence and authority
@@ -157,3 +383,5 @@ Source [#23](https://github.com/Shiva721254/HappyAlmere/issues/23); all initiall
 | GOV-G10 | Post-integration integrity/applicable fresh CI | Independent reviewer |
 
 G01–G06 are execution/submission gates, evidenced in docs/README and the final GitHub ledger. G07–G10 remain pending independent review, owner acceptance, separate merge authorization and post-integration checks. INT-G12 cannot close at draft submission or candidate acceptance alone. No issue/PR closure or merge from this task.
+
+Implementation CI provenance and actual numeric results: [HANDOVER](HANDOVER.md#verified-implementation-ci-and-review-handoff). Both d4ec551 push and synthetic-merge PR runs passed; final containing documentation-head results are the Issue #26 / PR #32 submission ledger. Green checks do not grant IAM-G10?12 or parent identity acceptance.

@@ -9,7 +9,21 @@ const output = path.resolve('artifacts/r02/browser');
 const project = 'HappyAlmere_V0.1_MVC/src/HappyCity.Web';
 fs.mkdirSync(output, { recursive: true });
 
-function run(command, args, env = process.env) {
+function runtimeEnvironment(source) {
+    const keys = new Set([
+        'PATH', 'HOME', 'USERPROFILE', 'APPDATA', 'LOCALAPPDATA', 'TEMP', 'TMP', 'TMPDIR',
+        'SYSTEMROOT', 'WINDIR', 'COMSPEC', 'PATHEXT', 'PROGRAMFILES', 'PROGRAMFILES(X86)',
+        'PROGRAMDATA', 'SYSTEMDRIVE', 'USER', 'USERNAME', 'USERDOMAIN', 'LANG', 'LC_ALL',
+        'TERM', 'OS', 'NUMBER_OF_PROCESSORS', 'PROCESSOR_ARCHITECTURE', 'PSMODULEPATH',
+        'DOTNET_ROOT', 'DOTNET_ROOT_X64', 'DOTNET_CLI_HOME', 'DOTNET_CLI_TELEMETRY_OPTOUT',
+        'NUGET_PACKAGES', 'SSL_CERT_FILE', 'SSL_CERT_DIR', 'PLAYWRIGHT_BROWSERS_PATH',
+        'CONNECTIONSTRINGS__HAPPYCITY', 'CONNECTIONSTRINGS__HAPPYCITYIDENTITY',
+        'IDENTITYFOUNDATION__ENABLED'
+    ]);
+    return Object.fromEntries(Object.entries(source).filter(([key]) => keys.has(key.toUpperCase())));
+}
+
+function run(command, args, env = runtimeEnvironment(process.env)) {
     const result = spawnSync(command, args, { stdio: 'inherit', env, windowsHide: true });
     if (result.error) throw result.error;
     if (result.status !== 0) throw new Error(`${command} exited ${result.status}`);
@@ -43,13 +57,11 @@ async function suite(name, development, script, args = []) {
             throw new Error(`Port ${port} already has a listener; stop it before running tests.`);
     }
     const env = {
-        ...process.env,
+        ...runtimeEnvironment(process.env),
         ASPNETCORE_ENVIRONMENT: development ? 'Development' : 'Production',
         HA_BASE_URL: `https://localhost:${ports[0]}`,
         NODE_EXTRA_CA_CERTS: path.join(output, 'localhost-public.crt')
     };
-    for (const secret of ['HAPPYCITY_MIGRATION_CONNECTION', 'POSTGRES_PASSWORD', 'HAPPY_APP_PASSWORD'])
-        delete env[secret]; // Web/browser processes need only the read-only runtime connection.
     const serverArgs = ['run', '--project', project, '-c', 'Release', '--no-build'];
     if (development) serverArgs.push('--launch-profile', 'https');
     else serverArgs.push('--no-launch-profile', '--', '--urls',
@@ -83,7 +95,8 @@ async function suite(name, development, script, args = []) {
     }
 }
 
-(async () => {
+module.exports = { runtimeEnvironment };
+if (require.main === module) (async () => {
     if (!['win32', 'linux'].includes(process.platform)) throw new Error('Supported hosts: Windows and Linux.');
     run('dotnet', ['dev-certs', 'https', '--check', ...(process.platform === 'win32' ? ['--trust'] : [])]);
     // Linux CI provisions OS/NSS trust; both Node HTTPS and Chromium still validate TLS.

@@ -1,5 +1,19 @@
 # Current risk and known-issues disposition — HA-GOV-R01
 
+## HA-003-A-ARCH-R01 - current remediation (20 November 2026)
+
+**Latest verified implementation: 3714b59d3a9e6af0074072789d57b5ffafb8be1c.** Fresh push44715760735 and PR44715769012 both passed105 disabled /238 enabled tests, recovery, browser/security and dependency checks. Authority-query p95 max7.1313ms <25ms; discovery budgets unchanged and met. Both34-entry original archives were downloaded/content-inspected; all21 PNGs match the visually reviewed reference. HANDOVER.md contains exact metrics, commands, hashes, expiry and retained failed attempts. Subsequent documentation-head CI/submission is identified in Issue#34/PR#32; independent G08/G10 confirmation, G11 owner acceptance and G12 merge are not self-approved. This supersedes progress snapshots below.
+
+
+This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01-D08 and bounded G05-G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
+
+Branch `feature/ha-003-a`, draft PR #32; exact start `c5b61a362fd35522718401e558961e12d1b24bab`, accepted base `216df25c5656a979fcf67dfe3a16d07d7d66f154`. Exactly thirteen existing paths are authorized; no new tracked files, migrations, dependencies or workflow edits. No merge, public authentication, production data or next milestone. Claude independently reviews G10; G11 owner acceptance and G12 merge authority remain separate.
+
+F01 (high runtime assurance gap), F02 (high independent cross-schema inventory gap) and F03 (high mutation-coverage gap) have implementation and test evidence ready for independent review; no confirmed exploit or breach is claimed. New bounded runtime, exhaustive independent reference, mutation cleanup and overhead checks passed both fresh runs; independent review remains outstanding. Highest prospective risks are retained authority after a mutation, altered accepted grants/migrations, and an invalid positive result; exact cleanup, protected blobs, positive controls and explicit mismatches address them. Artifact inspection is a bounded content check, not blanket certification. Synthetic local results do not close DEF-01-08, production key management, private authorization, recovery or capacity requirements.
+
+R01 verification risk update: the a6df1ae PR run 44712698136 failed an unchanged discovery workload at p95 409.0267 ms against 250 ms; its push passed. Subsequent c41e82a push/PR both passed unchanged thresholds. Root cause remains unproven and the earlier failure is not erased; synthetic runner variability cannot be promoted into production capacity assurance. Test-evidence serialization is reduced in 3714b59 without reducing checks or samples; fresh verification passed in both3714b59 runs. Treat unexplained performance variability as medium priority for independent disposition; a repeated failure requiring discovery/runner changes needs a bounded scope amendment. Existing upload-artifact runtime/deprecation warnings are low-priority protected-workflow follow-up, not suppressed compiler failures. No new confirmed critical vulnerability has been established; F01-F03 retain high review priority until independently dispositioned.
+
+
 Documentation date 19 November 2026. This is the canonical KNOWN_ISSUES register. [ARCH-04](https://github.com/Shiva721254/HappyAlmere/issues/21) resolved ten original and five residual technical findings within the accepted development scope; [owner decision](https://github.com/Shiva721254/HappyAlmere/issues/21#issuecomment-7021312167) accepted exact 6da4b25e7a291e08b8fb0feab1b75ff22e55d0e0 and eight future deferrals. Historical pending wording below is preserved, superseded only by these attributed scoped dispositions. No universal security certification or production readiness.
 
 ## Approved future obligations
@@ -302,3 +316,27 @@ histories remain preserved, governance PR #9 and primary PR #6 remain unmerged.
 No future Identity/business/Data Protection requirement is marked implemented.
 Docker address-pool exhaustion occurred during an extra rehearsal; task-private network
 reuse resolves subnet consumption while preserving independent instances/volumes.
+## HA-003-A candidate risk tracking
+
+[Issue #26](https://github.com/Shiva721254/HappyAlmere/issues/26) supplies the following prospective risks; [#28](https://github.com/Shiva721254/HappyAlmere/issues/28) approves bounded controls, not production acceptance. All fifteen remain tracked through implementation verification and independent HA-003-A-ARCH-01. Owner is accountable; Codex implements/tests; ChatGPT reviews. Evidence: [Identity foundation](../database/identity-foundation.md), [acceptance](../../ACCEPTANCE.md). No risk is closed by source presence alone.
+
+| ID | Risk | Severity | Control |
+|---|---|---|---|
+| IAM-R01 | Existing migration history overwritten | Critical | separate coordinated history |
+| IAM-R02 | Credential data exposed to discovery | Critical | explicit grants/negative tests |
+| IAM-R03 | Runtime migration authority | Critical | separate migration credentials |
+| IAM-R04 | Duplicate accounts | High | physical uniqueness/concurrency |
+| IAM-R05 | UUID namespace conflict | High | explicit UUIDv4 |
+| IAM-R06 | Incompatible dependencies | High | exact version review/builds |
+| IAM-R07 | Premature auth exposure | High | endpoint inventory/HTTP regression |
+| IAM-R08 | Uncontrolled admin account | Critical | no privileged bootstrap A |
+| IAM-R09 | Credential logs/artifacts | Critical | redacted synthetic evidence |
+| IAM-R10 | Account concurrency errors | High | framework concurrency tests |
+| IAM-R11 | Backup excludes identity | Critical | approved scope/actual restore |
+| IAM-R12 | Global roles confused with scoped authority | High | explicit resource boundaries |
+| IAM-R13 | Cross-context consistency failure | High | no speculative dependencies |
+| IAM-R14 | Discovery regression | High | preserve accepted tests |
+| IAM-R15 | Foundation mistaken for full authentication | High | explicit scope/release gates |
+Proposed risks, not findings of existing vulnerabilities.
+
+PRE-F01–08 compatibility controls: explicit context commands; scoped coordinated backups; runtime child environment allowlist; exact two Identity sequences; separate context/factory/history/snapshot; separate protected runtime config preserving debugger contract; explicit physical mapping; unchanged original recovery gate. Remaining package/CI/time-budget/startup/fixture-isolation risks require fresh execution. IAM-G05 package checks passed; production Data Protection, sessions, sensitive token protection, real accounts and all DEF-01–08 obligations remain deferred. Administrative visibility limitations and prior risk acceptance scopes below remain unchanged.

@@ -1,5 +1,25 @@
 # HappyAlmere project status
 
+## HA-003-A-ARCH-R01 - current remediation (20 November 2026)
+
+**Latest verified implementation: 3714b59d3a9e6af0074072789d57b5ffafb8be1c.** Fresh push44715760735 and PR44715769012 both passed105 disabled /238 enabled tests, recovery, browser/security and dependency checks. Authority-query p95 max7.1313ms <25ms; discovery budgets unchanged and met. Both34-entry original archives were downloaded/content-inspected; all21 PNGs match the visually reviewed reference. HANDOVER.md contains exact metrics, commands, hashes, expiry and retained failed attempts. Subsequent documentation-head CI/submission is identified in Issue#34/PR#32; independent G08/G10 confirmation, G11 owner acceptance and G12 merge are not self-approved. This supersedes progress snapshots below.
+
+
+This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01-D08 and bounded G05-G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
+
+Branch `feature/ha-003-a`, draft PR #32; exact start `c5b61a362fd35522718401e558961e12d1b24bab`, accepted base `216df25c5656a979fcf67dfe3a16d07d7d66f154`. Exactly thirteen existing paths are authorized; no new tracked files, migrations, dependencies or workflow edits. No merge, public authentication, production data or next milestone. Claude independently reviews G10; G11 owner acceptance and G12 merge authority remain separate.
+
+G05 passed before source changes. G06 implementation is complete; checkpoint3714b59 passed both push/PR PostgreSQL, recovery, 105 disabled / 238 enabled tests, browser/security and overhead checks. Test-evidence follow-up3714b59 passed its own fresh isolated CI. Local Release has zero warnings/errors and non-PostgreSQL tests pass76/76. G08 independent confirmation and G09 final submission remain pending; G10-G12 are not approved. Earlier discovery p95 failure is retained in HANDOVER/risk register, not erased by subsequent success. DEF-01-08 remain unchanged.
+
+
+## HA-003-A current execution update
+
+Current branch `feature/ha-003-a`, exact accepted baseline `216df25c5656a979fcf67dfe3a16d07d7d66f154`. [IAM-G04 authorization](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023159754) and [approved #28 contract](https://github.com/Shiva721254/HappyAlmere/issues/28) supersede historical execution snapshots below only within the bounded persistence scope. [INT-G12 passed](https://github.com/Shiva721254/HappyAlmere/issues/27#issuecomment-7022990043); [IAM-G05 passed before implementation](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023218886).
+
+IAM-A01–02 preflight complete; A03–07 entities/context/migration/roles/minimal DI implemented locally; A08–09 verification in progress; A10 draft PR/handover pending. Identity defaults off, with seven functional tables and separate context/history. Existing catalog/discovery source, migrations, original tests and performance thresholds are preserved. Exact authorized changes remain within the 34-path maximum. [Technical dictionary/runbook](docs/database/identity-foundation.md), [acceptance](ACCEPTANCE.md) and [handover](HANDOVER.md) own detailed evidence. Debug/Release builds pass with zero warnings/errors; 157 enabled .NET tests and all 105 original tests with Identity disabled pass (zero failures/skips). Eleven isolated database rehearsal checks, 42 responsive cases, 190 functional/security assertions and five rate assertions pass. NuGet/npm audits report no known vulnerabilities. Implementation head d4ec551 passed both push and PR CI; actual links/artifacts are in HANDOVER.md. Final documentation-head CI is reported in the GitHub submission ledger. Independent review remains outstanding.
+
+Owner remains migration coordinator and final approval authority; ChatGPT performs independent HA-003-A-ARCH-01 review. No merge, deployment, public auth endpoints, real accounts, business features or later Identity phases. IAM-OPEN-01–10 and IAM-PRE-D01/D02 are approved as recorded in #28; future cryptographic/session/resource policies remain deferred. Final commit, draft PR and push/PR CI are recorded in the GitHub submission ledger after actual synchronization; no self-referential commit hash is fabricated. Historical content below remains intact.
+
 Snapshot documented 19 November 2026. Canonical milestone/branch state; [acceptance](ACCEPTANCE.md) owns criterion dispositions and [HANDOVER](HANDOVER.md) owns execution synchronization. Do not infer approval from issue closure or green CI.
 
 ## State vocabulary
