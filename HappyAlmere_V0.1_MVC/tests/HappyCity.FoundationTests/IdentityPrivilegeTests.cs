@@ -249,19 +249,11 @@ public sealed class IdentityRuntimeSafetyTests
 }
 
 [Trait("Category", "Postgres")]
-public sealed class IdentityRuntimePostgresTests
+public sealed class IdentityRuntimePostgresTests(IdentityRuntimeEvidence collector) : IClassFixture<IdentityRuntimeEvidence>
 {
-    private static async Task<string> AuthoritySnapshot(NpgsqlConnection connection)
+    private async Task<string> AuthoritySnapshot(NpgsqlConnection connection)
     {
-        var root = new DirectoryInfo(AppContext.BaseDirectory);
-        while (root is not null && !File.Exists(Path.Combine(root.FullName, "HappyAlmere.slnx"))) root = root.Parent;
-        Assert.NotNull(root);
-        var source = await File.ReadAllTextAsync(Path.Combine(root.FullName, "scripts", "verify-identity-foundation.py"));
-        // Reuse the exhaustive read-only inventory, not a second reduced policy.
-        var match = System.Text.RegularExpressions.Regex.Match(source,
-            "def authority_inventory\\(container\\):.*?sql=\"\"\"(.*?)\"\"\"", System.Text.RegularExpressions.RegexOptions.Singleline);
-        Assert.True(match.Success, "Independent authority inventory SQL was not found.");
-        await using var command = new NpgsqlCommand(match.Groups[1].Value, connection) { CommandTimeout = 15 };
+        await using var command = new NpgsqlCommand(collector.InventorySql, connection) { CommandTimeout = 15 };
         return Assert.IsType<string>(await command.ExecuteScalarAsync());
     }
 
@@ -282,11 +274,9 @@ public sealed class IdentityRuntimePostgresTests
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<HappyCityIdentityDbContext>();
         var before = await AuthoritySnapshot(owner);
-        var path = Environment.GetEnvironmentVariable("HAPPYCITY_IDENTITY_EVIDENCE");
-        Assert.False(string.IsNullOrWhiteSpace(path));
-        var evidence = JsonNode.Parse(File.ReadAllText(path!))!.AsObject();
-        Assert.True(JsonNode.DeepEquals(JsonNode.Parse(before), evidence["r01AuthorityReference"]),
-            "EF mutation must start from the independently expected authority policy.");
+        using (var actual = JsonDocument.Parse(before))
+            Assert.True(JsonElement.DeepEquals(actual.RootElement, collector.Expected),
+                "EF mutation must start from the independently expected authority policy.");
         await db.Database.OpenConnectionAsync();
         await db.Users.CountAsync();
         await db.Database.CloseConnectionAsync();
@@ -317,16 +307,13 @@ public sealed class IdentityRuntimePostgresTests
         Assert.Equal(ConnectionState.Closed, db.Database.GetDbConnection().State);
         var after = await AuthoritySnapshot(owner);
         Assert.True(before == after, "Complete authority inventory was not restored after the EF mutation.");
-        var mutations = evidence["r01EfDmlMutations"] as JsonArray ?? new JsonArray();
-        if (mutations.Parent is null) evidence["r01EfDmlMutations"] = mutations;
-        mutations.Add(JsonSerializer.SerializeToNode(new
+        collector.Mutations.Add(new
         {
             table, privilege, mode = asynchronous ? "async" : "sync", status = "PASS", runtimeScalarDuringMutation = false, rejectedConnectionClosed = true,
             beforeSnapshotSha256 = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(before))),
             afterSnapshotSha256 = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(after))),
             digestFormat = "PostgreSQL JSON text; before/after equality, distinct from the Python canonical cross-instance digest"
-        }));
-        File.WriteAllText(path!, evidence.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) + Environment.NewLine);
+        });
     }
 
     [Theory]
@@ -413,19 +400,54 @@ public sealed class IdentityRuntimePostgresTests
             return new { samples = values, p50 = Percentile(.50), p95 = Percentile(.95), p99 = Percentile(.99), max = ordered[^1] };
         }
         var p95 = authority.Order().ElementAt((int)Math.Ceiling(samples * .95) - 1);
-        var path = Environment.GetEnvironmentVariable("HAPPYCITY_IDENTITY_EVIDENCE");
-        Assert.False(string.IsNullOrWhiteSpace(path));
-        var evidence = JsonNode.Parse(File.ReadAllText(path!))!.AsObject();
-        var metrics = evidence["r01RuntimeOverhead"] as JsonObject ?? new JsonObject();
-        if (metrics.Parent is null) evidence["r01RuntimeOverhead"] = metrics;
-        metrics[asynchronous ? "async-pooled" : "sync-pooled"] = JsonSerializer.SerializeToNode(new
+        collector.Overhead[asynchronous ? "async-pooled" : "sync-pooled"] = new
         {
             status = p95 <= 25 ? "PASS" : "FAIL", warmedSamples = samples, warmups, authorityCommands = commands,
             commandsPerOpen = 1, errors = 0, timeouts = 0, targetP95Milliseconds = 25,
             authorityQuery = Statistics(authority), connectionOpen = Statistics(open), openAuthorityAndRead = Statistics(total),
             scope = "Synthetic localhost, pooled sequential opens; open includes pool checkout (TLS handshake only on a physical miss); not capacity evidence."
-        });
-        File.WriteAllText(path!, evidence.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) + Environment.NewLine);
+        };
         Assert.True(p95 <= 25, $"R01-CL07 target not met: {p95:F4} ms; stop and request amendment, do not relax 25 ms.");
+    }
+}
+
+// Only immutable expected policy and small result records are retained here.
+// Actual database authority is queried afresh before/after every case. Write the
+// large evidence document once per class to avoid repeated allocation and I/O
+// interfering with the unchanged same-process performance regression tests.
+public sealed class IdentityRuntimeEvidence : IDisposable
+{
+    private readonly string path;
+    private readonly JsonDocument reference;
+    public string InventorySql { get; }
+    public JsonElement Expected => reference.RootElement.GetProperty("r01AuthorityReference");
+    public List<object> Mutations { get; } = [];
+    public Dictionary<string, object> Overhead { get; } = [];
+
+    public IdentityRuntimeEvidence()
+    {
+        path = Environment.GetEnvironmentVariable("HAPPYCITY_IDENTITY_EVIDENCE")!;
+        Assert.False(string.IsNullOrWhiteSpace(path));
+        reference = JsonDocument.Parse(File.ReadAllText(path));
+        var root = new DirectoryInfo(AppContext.BaseDirectory);
+        while (root is not null && !File.Exists(Path.Combine(root.FullName, "HappyAlmere.slnx"))) root = root.Parent;
+        Assert.NotNull(root);
+        var source = File.ReadAllText(Path.Combine(root.FullName, "scripts", "verify-identity-foundation.py"));
+        var match = System.Text.RegularExpressions.Regex.Match(source,
+            "def authority_inventory\\(container\\):.*?sql=\"\"\"(.*?)\"\"\"", System.Text.RegularExpressions.RegexOptions.Singleline);
+        Assert.True(match.Success, "Independent authority inventory SQL was not found.");
+        InventorySql = match.Groups[1].Value;
+    }
+
+    public void Dispose()
+    {
+        try
+        {
+            var evidence = JsonNode.Parse(File.ReadAllText(path))!.AsObject();
+            evidence["r01EfDmlMutations"] = JsonSerializer.SerializeToNode(Mutations);
+            evidence["r01RuntimeOverhead"] = JsonSerializer.SerializeToNode(Overhead);
+            File.WriteAllText(path, evidence.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) + Environment.NewLine);
+        }
+        finally { reference.Dispose(); }
     }
 }
