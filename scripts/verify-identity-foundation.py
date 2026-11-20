@@ -14,6 +14,7 @@ from pathlib import Path
 import re
 import secrets
 import subprocess
+import zipfile
 
 spec = importlib.util.spec_from_file_location('forward', Path(__file__).with_name('verify-forward-migration.py'))
 f = importlib.util.module_from_spec(spec)
@@ -188,14 +189,249 @@ def restore_catalog(container, env, archive):
     f.grants(container)
 
 
+def authority_inventory(container):
+    """ACL-01..20. No data rows, credentials or cluster-internal object inventory.
+
+    acldefault is essential: a NULL routine ACL includes PUBLIC EXECUTE. Column
+    ACLs have no implicit grants; effective column access also includes table ACLs.
+    Keep names/signatures, not cluster-specific OIDs, for cross-instance equality.
+    """
+    return query(container, """
+    WITH ns AS (SELECT * FROM pg_namespace WHERE nspname IN ('identity','catalog','discovery','public')),
+    roles AS (SELECT * FROM pg_roles WHERE rolname LIKE 'happy_%' AND rolname NOT IN ('happy_restore','happy_identity_restore')),
+    objects AS (
+      SELECT 'table' kind,n.nspname schema,c.relname name,'' col,c.oid,0 subid,c.relowner owner,c.relacl raw,
+        coalesce(c.relacl,acldefault('r',c.relowner)) acl,
+        ARRAY['SELECT','INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER','MAINTAIN'] privileges
+        FROM pg_class c JOIN ns n ON n.oid=c.relnamespace WHERE c.relkind IN ('r','p','v','m','f')
+      UNION ALL SELECT 'sequence',n.nspname,c.relname,'',c.oid,0,c.relowner,c.relacl,
+        coalesce(c.relacl,acldefault('S',c.relowner)),ARRAY['USAGE','SELECT','UPDATE']
+        FROM pg_class c JOIN ns n ON n.oid=c.relnamespace WHERE c.relkind='S'
+      UNION ALL SELECT 'column',n.nspname,c.relname,a.attname,c.oid,a.attnum,c.relowner,a.attacl,
+        coalesce(a.attacl,'{}'::aclitem[]),ARRAY['SELECT','INSERT','UPDATE','REFERENCES']
+        FROM pg_class c JOIN ns n ON n.oid=c.relnamespace JOIN pg_attribute a ON a.attrelid=c.oid
+        WHERE c.relkind IN ('r','p','v','m','f') AND a.attnum>0 AND NOT a.attisdropped
+      UNION ALL SELECT 'routine',n.nspname,p.proname||'('||pg_get_function_identity_arguments(p.oid)||')','',p.oid,0,p.proowner,p.proacl,
+        coalesce(p.proacl,acldefault('f',p.proowner)),ARRAY['EXECUTE'] FROM pg_proc p JOIN ns n ON n.oid=p.pronamespace
+      UNION ALL SELECT 'schema',nspname,nspname,'',oid,0,nspowner,nspacl,coalesce(nspacl,acldefault('n',nspowner)),ARRAY['USAGE','CREATE'] FROM ns
+      UNION ALL SELECT 'database','','happyalmere','',oid,0,datdba,datacl,coalesce(datacl,acldefault('d',datdba)),ARRAY['CONNECT','CREATE','TEMP']
+        FROM pg_database WHERE datname='happyalmere'
+    ), effective AS (
+      SELECT o.kind,o.schema,o.name,o.col,r.rolname role,p privilege,g grant_option,
+      CASE o.kind
+        WHEN 'table' THEN has_table_privilege(r.oid,o.oid,p||g)
+        WHEN 'column' THEN has_column_privilege(r.oid,o.oid,o.subid::smallint,p||g)
+        WHEN 'sequence' THEN has_sequence_privilege(r.oid,o.oid,p||g)
+        WHEN 'routine' THEN has_function_privilege(r.oid,o.oid,p||g)
+        WHEN 'schema' THEN has_schema_privilege(r.oid,o.oid,p||g)
+        WHEN 'database' THEN has_database_privilege(r.oid,o.oid,p||g)
+      END allowed FROM objects o CROSS JOIN roles r CROSS JOIN LATERAL unnest(o.privileges) p
+        CROSS JOIN unnest(ARRAY['',' WITH GRANT OPTION']) g
+    ) SELECT json_build_object(
+      'roles',(SELECT json_agg(t ORDER BY rolname) FROM (SELECT rolname,rolsuper,rolinherit,rolcreaterole,rolcreatedb,rolcanlogin,rolreplication,rolbypassrls,rolconnlimit,rolvaliduntil FROM roles) t),
+      'memberships',(SELECT coalesce(json_agg(t ORDER BY member,role,grantor),'[]') FROM (SELECT a.rolname member,b.rolname role,pg_get_userbyid(m.grantor) grantor,m.admin_option,m.inherit_option,m.set_option FROM pg_auth_members m JOIN pg_roles a ON a.oid=m.member JOIN pg_roles b ON b.oid=m.roleid WHERE a.rolname IN (SELECT rolname FROM roles) OR b.rolname IN (SELECT rolname FROM roles)) t),
+      'paths',(SELECT json_agg(t ORDER BY member,role,privilege) FROM (SELECT a.rolname member,b.rolname role,p privilege,pg_has_role(a.oid,b.oid,p) allowed FROM roles a CROSS JOIN pg_roles b CROSS JOIN unnest(ARRAY['MEMBER','USAGE','SET','MEMBER WITH ADMIN OPTION']) p WHERE a.oid<>b.oid AND b.rolname NOT IN ('happy_restore','happy_identity_restore')) t),
+      'objects',(SELECT json_agg(t ORDER BY kind,schema,name,col) FROM (SELECT kind,schema,name,col,pg_get_userbyid(owner) owner,raw IS NULL implicit_acl FROM objects) t),
+      'acl',(SELECT coalesce(json_agg(t ORDER BY kind,schema,name,col,grantor,grantee,privilege_type),'[]') FROM (SELECT o.kind,o.schema,o.name,o.col,pg_get_userbyid(x.grantor) grantor,CASE WHEN x.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(x.grantee) END grantee,x.privilege_type,x.is_grantable FROM objects o CROSS JOIN LATERAL aclexplode(o.acl) x) t),
+      'effective',(SELECT json_agg(e ORDER BY kind,schema,name,col,role,privilege,grant_option) FROM effective e),
+      'ownership',(SELECT json_agg(t ORDER BY schema,name,kind) FROM (SELECT n.nspname schema,c.relname name,c.relkind kind,pg_get_userbyid(c.relowner) owner FROM pg_class c JOIN ns n ON n.oid=c.relnamespace) t),
+      'routines',(SELECT json_agg(t ORDER BY schema,name,args) FROM (SELECT n.nspname schema,p.proname name,pg_get_function_identity_arguments(p.oid) args,p.prokind kind,pg_get_userbyid(p.proowner) owner,p.prosecdef security_definer,p.proconfig config,pg_get_functiondef(p.oid) definition FROM pg_proc p JOIN ns n ON n.oid=p.pronamespace) t),
+      'defaults',(SELECT coalesce(json_agg(t ORDER BY owner,schema,kind,grantor,grantee,privilege_type),'[]') FROM (SELECT pg_get_userbyid(d.defaclrole) owner,coalesce(n.nspname,'*') schema,d.defaclobjtype kind,pg_get_userbyid(x.grantor) grantor,CASE WHEN x.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(x.grantee) END grantee,x.privilege_type,x.is_grantable FROM pg_default_acl d LEFT JOIN pg_namespace n ON n.oid=d.defaclnamespace CROSS JOIN LATERAL aclexplode(d.defaclacl) x WHERE d.defaclnamespace=0 OR n.nspname IN ('identity','catalog','discovery','public') OR d.defaclrole IN (SELECT oid FROM roles)) t)
+    )
+    """)
+
+
+def authority_mismatch(actual, expected):
+    # Expected comes only from the independently provisioned reference: accepted
+    # immutable historical migration + literal Identity SQL + explicit policy.
+    # Never learn an expected permission from an upgraded/recovered target.
+    return [key for key in expected if actual[key] != expected[key]]
+
+
+def authority_digest(value):
+    return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+
+
+def verify_authority(container, expected):
+    actual=authority_inventory(container)
+    mismatch=authority_mismatch(actual,expected)
+    if mismatch: raise RuntimeError('Independent authority mismatch: '+','.join(mismatch))
+    return {'status':'PASS','sha256':authority_digest(actual),
+            'dimensions':{key:len(value or []) for key,value in actual.items()}}
+
+
+def mutation_cases():
+    """Each case changes one independent policy dimension; never repairs a target.
+
+    Mutations are applied only to the isolated synthetic upgrade instance by its
+    provisioning actor. Explicit cleanup restores grant provenance as well as rights.
+    """
+    cases=[]
+    def add(identifier, variant, change, cleanup, dimension):
+        cases.append((identifier,variant,change,cleanup,dimension))
+    for table in TABLES:
+        for privilege in ['SELECT','INSERT','UPDATE','DELETE']:
+            add('T06' if table=='users' else 'T07',table+'-'+privilege,
+                f'REVOKE {privilege} ON identity.{table} FROM happy_identity_app',
+                f'SET ROLE happy_identity_owner; GRANT {privilege} ON identity.{table} TO happy_identity_app','effective')
+    for privilege in ['TRUNCATE','REFERENCES','TRIGGER','MAINTAIN']:
+        add('T08',privilege,f'GRANT {privilege} ON identity.users TO happy_identity_app',
+            f'REVOKE {privilege} ON identity.users FROM happy_identity_app','effective')
+    for privilege in ['SELECT','INSERT','UPDATE','DELETE']:
+        add('T09' if privilege=='SELECT' else 'T10',privilege,
+            f'GRANT {privilege} ON identity."__EFMigrationsHistory" TO happy_identity_app',
+            f'REVOKE {privilege} ON identity."__EFMigrationsHistory" FROM happy_identity_app','effective')
+    for sequence in ['user_claims_id_seq','role_claims_id_seq']:
+        add('T11',sequence,f'REVOKE USAGE ON SEQUENCE identity.{sequence} FROM happy_identity_app',
+            f'SET ROLE happy_identity_owner; GRANT USAGE ON SEQUENCE identity.{sequence} TO happy_identity_app','effective')
+        for privilege in ['SELECT','UPDATE']:
+            add('T12',sequence+'-'+privilege,f'GRANT {privilege} ON SEQUENCE identity.{sequence} TO happy_identity_app',
+                f'REVOKE {privilege} ON SEQUENCE identity.{sequence} FROM happy_identity_app','effective')
+    add('T13','schema-create','GRANT CREATE ON SCHEMA identity TO happy_identity_app','REVOKE CREATE ON SCHEMA identity FROM happy_identity_app','effective')
+    for privilege in ['CREATE','TEMP']:
+        add('T14',privilege,f'GRANT {privilege} ON DATABASE happyalmere TO happy_identity_app',f'REVOKE {privilege} ON DATABASE happyalmere FROM happy_identity_app','effective')
+    add('T15','table-grant-option','GRANT SELECT ON identity.users TO happy_identity_app WITH GRANT OPTION','REVOKE GRANT OPTION FOR SELECT ON identity.users FROM happy_identity_app','effective')
+    for variant,target,privilege in [('column','identity.users','SELECT(id)'),('sequence','SEQUENCE identity.user_claims_id_seq','USAGE'),('schema','SCHEMA identity','USAGE'),('database','DATABASE happyalmere','CONNECT')]:
+        revoke='' if variant=='column' else 'GRANT OPTION FOR '
+        add('T15',variant+'-grant-option',f'GRANT {privilege} ON {target} TO happy_identity_app WITH GRANT OPTION',f'REVOKE {revoke}{privilege} ON {target} FROM happy_identity_app','effective')
+    add('T16','direct-owner','GRANT happy_identity_owner TO happy_identity_app','REVOKE happy_identity_owner FROM happy_identity_app','memberships')
+    for attribute in ['SUPERUSER','CREATEDB','CREATEROLE','REPLICATION','BYPASSRLS']:
+        add('T17',attribute,f'ALTER ROLE happy_identity_app {attribute}',f'ALTER ROLE happy_identity_app NO{attribute}','roles')
+    add('T18','table-owner','ALTER TABLE identity.users OWNER TO happy_identity_app','ALTER TABLE identity.users OWNER TO happy_identity_owner; SET ROLE happy_identity_owner; GRANT SELECT,INSERT,UPDATE,DELETE ON identity.users TO happy_identity_app','ownership')
+    for schema,table,identifier in [('catalog','cities','T19'),('discovery','discovery_entries','T20'),('public','"__EFMigrationsHistory"','T21')]:
+        for principal in ['happy_identity_app','happy_identity_backup']:
+            add(identifier,principal+'-latent',f'GRANT SELECT ON {schema}.{table} TO {principal}',f'REVOKE SELECT ON {schema}.{table} FROM {principal}','effective')
+        if schema!='public':
+            add(identifier,'usable-app-access',f'GRANT SELECT ON {schema}.{table} TO happy_identity_app; GRANT USAGE ON SCHEMA {schema} TO happy_identity_app',f'REVOKE SELECT ON {schema}.{table} FROM happy_identity_app; REVOKE USAGE ON SCHEMA {schema} FROM happy_identity_app','effective')
+    for schema,table,col in [('identity','"__EFMigrationsHistory"','"MigrationId"'),('catalog','cities','name')]:
+        add('T22',schema+'-column-only',f'GRANT SELECT({col}) ON {schema}.{table} TO happy_identity_app',f'REVOKE SELECT({col}) ON {schema}.{table} FROM happy_identity_app','effective')
+    add('T23','PUBLIC','GRANT SELECT ON identity.users TO PUBLIC','REVOKE SELECT ON identity.users FROM PUBLIC','effective')
+    for owner in ['happy_identity_owner','happy_owner','happy_migrator']:
+        for kind,privilege,identifier in [('TABLES','SELECT','T24'),('SEQUENCES','USAGE','T25')]:
+            add(identifier,owner+'-'+kind,f'ALTER DEFAULT PRIVILEGES FOR ROLE {owner} IN SCHEMA identity GRANT {privilege} ON {kind} TO happy_identity_app',f'ALTER DEFAULT PRIVILEGES FOR ROLE {owner} IN SCHEMA identity REVOKE {privilege} ON {kind} FROM happy_identity_app','defaults')
+    add('T26','latent-routine','GRANT EXECUTE ON FUNCTION catalog.check_hierarchy() TO happy_identity_app','REVOKE EXECUTE ON FUNCTION catalog.check_hierarchy() FROM happy_identity_app','effective')
+    add('T26','implicit-PUBLIC-routine','SET ROLE happy_identity_owner; CREATE FUNCTION identity.r01_probe() RETURNS integer LANGUAGE sql AS $$ SELECT 1 $$','DROP FUNCTION identity.r01_probe()','acl')
+    add('T27','security-definer','ALTER FUNCTION catalog.check_hierarchy() SECURITY DEFINER','ALTER FUNCTION catalog.check_hierarchy() SECURITY INVOKER','routines')
+    add('T27','search-path','ALTER FUNCTION catalog.check_hierarchy() SET search_path=public','ALTER FUNCTION catalog.check_hierarchy() RESET search_path','routines')
+    add('T28','transitive','GRANT happy_schema_migrator TO happy_identity_migrator','REVOKE happy_schema_migrator FROM happy_identity_migrator','paths')
+    for option,alter,restore in [('ADMIN','TRUE','FALSE'),('INHERIT','FALSE','TRUE'),('SET','FALSE','TRUE')]:
+        add('T29',option,f'GRANT happy_identity_owner TO happy_identity_migrator WITH {option} {alter}',f'GRANT happy_identity_owner TO happy_identity_migrator WITH {option} {restore}','memberships')
+    add('T30','delegated-owner','GRANT happy_identity_owner TO happy_backup WITH ADMIN TRUE','REVOKE happy_identity_owner FROM happy_backup','memberships')
+    add('T31','future-private','SET ROLE happy_identity_owner; CREATE TABLE identity.r01_probe(id integer)','DROP TABLE identity.r01_probe','objects')
+    for principal in ['happy_app','happy_backup','happy_schema_migrator']:
+        add('T32',principal,f'GRANT SELECT ON identity.users TO {principal}',f'REVOKE SELECT ON identity.users FROM {principal}','effective')
+    return cases
+
+
+def verify_mutations(container, env, expected):
+    results=[]
+    runtime_source=(ROOT/'HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Identity/IdentityConfiguration.cs').read_text(encoding='utf-8-sig')
+    runtime_sql=re.search(r'private const string Sql = """(.*?)""";',runtime_source,re.S).group(1)
+    runtime_reject={'T06','T07','T08','T09','T10','T11','T12','T13','T14','T15','T16','T17','T18','T22'}
+    for identifier,variant,change,cleanup,dimension in mutation_cases():
+        verify_authority(container,expected)
+        assert f.execute(container,'SELECT current_user = \'happy_identity_app\' AND (SELECT ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid())','happy_identity_app',env['happy_identity_app'])=='t'
+        # Positive authenticated operation precedes each deviation.
+        f.execute(container,'SELECT count(*) FROM identity.users','happy_identity_app',env['happy_identity_app'])
+        try:
+            f.execute(container,change)
+            mismatch=authority_mismatch(authority_inventory(container),expected)
+            if dimension not in mismatch: raise RuntimeError('Mutation not detected: '+identifier+'/'+variant)
+            reject=(identifier in runtime_reject and not (identifier=='T22' and variant.startswith('catalog'))) or variant=='usable-app-access'
+            runtime=f.execute(container,runtime_sql,'happy_identity_app',env['happy_identity_app'])
+            if runtime != ('f' if reject else 't'):raise RuntimeError('Runtime mutation boundary mismatch: '+identifier+'/'+variant)
+            if identifier in ['T19','T20','T21']:
+                schema,table={'T19':('catalog','cities'),'T20':('discovery','discovery_entries'),'T21':('public','"__EFMigrationsHistory"')}[identifier]
+                principal='happy_identity_backup' if variant.startswith('happy_identity_backup') else 'happy_identity_app'
+                statement=f'SELECT count(*) FROM {schema}.{table}'
+                if variant=='usable-app-access' or schema=='public':f.execute(container,statement,principal,env[principal])
+                else:f.execute(container,statement,principal,env[principal],expected_state='42501')
+        finally:
+            f.execute(container,cleanup)
+        verify_authority(container,expected)
+        f.execute(container,'SELECT count(*) FROM identity.users','happy_identity_app',env['happy_identity_app'])
+        assert f.execute(container,runtime_sql,'happy_identity_app',env['happy_identity_app'])=='t'
+        results.append({'scenario':identifier,'variant':variant,'status':'PASS','expectedMismatch':dimension,'runtimeAcceptedDuringMutation':not reject,
+                        'actualMismatch':mismatch,'cleanupAuthoritySha256':authority_digest(expected)})
+    return results
+
+
+def inspect_archive(archive, evidence_file):
+    """Post-download CL05; original ZIP stays immutable, evidence is a working copy.
+
+    Reject unknown formats/paths and inspect every JSON byte recursively. PNGs are
+    decoded/visually reviewed by the browser reviewer separately; text chunks are
+    rejected here. This is a bounded exclusion check, not universal secret proof.
+    """
+    import struct
+    import zlib
+    if Path(archive).resolve()==Path(evidence_file).resolve() or Path(evidence_file).name!='evidence.json':
+        raise RuntimeError('Use a separate existing evidence.json working copy')
+    findings=[];entries=[]
+    sensitive_keys={'password','pwd','passwordhash','securitystamp','concurrencystamp','accesstoken','refreshtoken',
+                    'clientsecret','privatekey','connectionstring','pgpassword'}
+    def inspect_json(value):
+        if isinstance(value,dict):
+            for key,child in value.items():
+                if re.sub(r'[^a-z]','',key.lower()) in sensitive_keys:return False
+                if not inspect_json(child):return False
+        elif isinstance(value,list):
+            return all(inspect_json(child) for child in value)
+        return True
+    patterns=[rb'-----BEGIN [A-Z ]*PRIVATE KEY-----',rb'gh[pousr]_[A-Za-z0-9]{30,}',rb'github_pat_[A-Za-z0-9_]{40,}',
+              rb'(?i)(?:password|pwd|clientsecret|access_token)\s*[=:]\s*[^\s;",}]{6,}',
+              rb'(?i)host=[^;\s]+;.*(?:username|user id)=',rb'AQAAAAI[A-Za-z0-9+/=]{50,}']
+    with zipfile.ZipFile(archive) as zipped:
+        if zipped.testzip() is not None: raise RuntimeError('Artifact CRC failure')
+        for member in zipped.infolist():
+            name=member.filename
+            if member.is_dir():continue
+            if '..' in Path(name).parts or name.startswith(('/','\\')) or member.file_size>25_000_000:
+                raise RuntimeError('Unsafe artifact member')
+            data=zipped.read(member)
+            if name.endswith('.json'):
+                if not inspect_json(json.loads(data)):findings.append(name)
+                if any(re.search(pattern,data) for pattern in patterns):findings.append(name)
+                if re.search(rb'"(?:password_hash|passwordHash|security_stamp|concurrency_stamp|connectionString|PGPASSWORD)"\s*:',data):findings.append(name)
+            elif name.endswith('.png'):
+                if not data.startswith(b'\x89PNG\r\n\x1a\n'):raise RuntimeError('Invalid PNG artifact')
+                offset=8;image_data=b'';ended=False
+                while offset<len(data):
+                    length=struct.unpack('>I',data[offset:offset+4])[0];kind=data[offset+4:offset+8]
+                    payload=data[offset+8:offset+8+length];crc=data[offset+8+length:offset+12+length]
+                    if len(crc)!=4 or zlib.crc32(kind+payload)!=struct.unpack('>I',crc)[0]:raise RuntimeError('PNG CRC failure')
+                    if kind in [b'tEXt',b'zTXt',b'iTXt']:raise RuntimeError('Unapproved PNG text payload')
+                    if kind==b'IDAT':image_data+=payload
+                    offset+=length+12
+                    if kind==b'IEND':ended=True;break
+                if not ended or offset!=len(data) or not zlib.decompress(image_data):raise RuntimeError('Incomplete PNG artifact')
+            else:raise RuntimeError('Unapproved artifact type: '+Path(name).suffix)
+            entries.append({'path':name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+    if findings:raise RuntimeError('Sensitive-content indicators detected; do not publish this archive')
+    evidence=json.loads(Path(evidence_file).read_text(encoding='utf-8-sig'))
+    record={'status':'PASS','phase':'post-download; not part of original CI archive','archiveSha256':hashlib.sha256(Path(archive).read_bytes()).hexdigest(),
+            'entries':entries,'limitations':['Pattern/structure checks are not exhaustive secret certification. PNG rendered content requires separate visual review.']}
+    evidence['postDownloadInspection']=record
+    r.private_write(Path(evidence_file),json.dumps(evidence,indent=2)+'\n')
+    print(json.dumps({'status':'PASS','archiveSha256':record['archiveSha256'],'entries':len(entries)}))
+
+
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=55510);args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=55510)
+    parser.add_argument('--inspect-archive');parser.add_argument('--inspection-evidence');args=parser.parse_args()
+    if args.inspect_archive:
+        if not args.inspection_evidence:parser.error('--inspection-evidence requires a separate working copy of evidence.json')
+        inspect_archive(args.inspect_archive,args.inspection_evidence);return
     os.chdir(ROOT)
     if not json.loads(r.docker('context','inspect'))[0]['Endpoints']['docker']['Host'].startswith(('npipe://','unix://')):
         raise RuntimeError('Local Docker required')
     r.run('git','merge-base','--is-ancestor',BASELINE,'HEAD')
     protected=['HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/','HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/HappyCityDbContext.cs','scripts/verify-database-recovery.py','scripts/verify-source.py']
     if r.run('git','diff',BASELINE,'--',*protected).strip():raise RuntimeError('Protected accepted assets changed')
+    immutable=['HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/IdentityMigrations/',
+               'scripts/verify-identity-contract.sql','.github/workflows/build.yml']
+    if r.run('git','diff','c5b61a362fd35522718401e558961e12d1b24bab','--',*immutable).strip():
+        raise RuntimeError('R01 immutable migration/contract/workflow changed')
     networks=json.loads('['+','.join(r.docker('network','ls','--format','json').splitlines())+']')
     network=None
     for item in networks:
@@ -263,8 +499,21 @@ def main():
         assert f.canonical(clean)==f.canonical(upgraded)
         assert {k:v for k,v in clean_after.items() if k!='original'}=={k:v for k,v in upgrade_after.items() if k!='original'}
         check('cleanAndUpgradeBothContextsEqual')
-        reference,xenv=target('contract',4);provision(reference,xenv)
+        reference,xenv=target('contract',4)
+        # Historical definitions are protected against the accepted baseline;
+        # Identity is constructed from the independently written literal contract.
+        f.execute(reference,catalog_sql,'happy_schema_migrator',xenv['MIGRATION_PASSWORD'],'-c role=happy_owner');f.grants(reference)
+        provision(reference,xenv)
         identity_sql(reference,xenv,HISTORY+(ROOT/'scripts/verify-identity-contract.sql').read_text())
+        grant_identity(reference)
+        verify_permissions(reference,xenv)
+        expected_authority=authority_inventory(reference)
+        evidence['r01AuthorityPolicySource']='Accepted immutable historical migration/grants + independent literal Identity contract + explicit approved Identity matrix; never target-derived.'
+        evidence['r01AuthorityReference']=expected_authority
+        evidence['r01AuthorityPaths']={name:verify_authority(instance,expected_authority)
+            for name,instance in [('clean',clean),('upgrade',upgraded),('recovered',recovered)]}
+        evidence['r01Mutations']=verify_mutations(upgraded,uenv,expected_authority)
+        check('r01IndependentAuthorityMutationCleanup')
         expected=identity_metadata(reference)
         for instance in [upgraded,clean,recovered]:assert_contract(identity_metadata(instance),expected)
         assert len(expected['sequences'])==2 and len([x for x in expected['constraints'] if x['type']=='p'])==8 and len([x for x in expected['constraints'] if x['type']=='f'])==6
@@ -316,6 +565,8 @@ def main():
             FROM pg_roles r WHERE rolname='happy_identity_restore'""")=='t'
         assert state(restored)==full;check('coordinatedSharedStateBothHistoriesSequencesAndAclRestore')
         verify_permissions(restored,venv)
+        evidence['r01AuthorityPaths']['restored']=verify_authority(restored,expected_authority)
+        check('r01ComprehensiveAuthorityFourPaths')
         # libpq omits SQLSTATE for connection establishment failures. Match the
         # exact server reason here; IdentityPrivilegeTests verifies 28000 via Npgsql.
         denied=subprocess.run(['docker','exec','-e','PGPASSWORD',restored,'psql','-X',

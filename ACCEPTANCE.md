@@ -1,5 +1,14 @@
 # Acceptance traceability
 
+## HA-003-A-ARCH-R01 ? current remediation (20 November 2026)
+
+This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01?D08 and bounded G05?G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
+
+Branch `feature/ha-003-a`, draft PR #32; exact start `c5b61a362fd35522718401e558961e12d1b24bab`, accepted base `216df25c5656a979fcf67dfe3a16d07d7d66f154`. Exactly thirteen existing paths are authorized; no new tracked files, migrations, dependencies or workflow edits. No merge, public authentication, production data or next milestone. Claude independently reviews G10; G11 owner acceptance and G12 merge authority remain separate.
+
+The current R01 candidate has not completed fresh PostgreSQL or CI verification. The prior review found F01 runtime assurance gaps, F02 independent inventory gaps and F03 mutation-test gaps; no correctly provisioned excessive grant, exploit or breach was established. The implementation addresses these findings but does not self-close architectural review. The detailed per-item dispositions below are historical until explicitly refreshed with R01 evidence. New sixteen criteria and forty scenarios are tracked by the implementation brief; scenario counts are not xUnit counts.
+
+
 ## HA-003-A current candidate acceptance (not independent acceptance)
 
 Sources: [#26 original criteria](https://github.com/Shiva721254/HappyAlmere/issues/26), [#28 approved compatibility additions](https://github.com/Shiva721254/HappyAlmere/issues/28), [IAM-G04](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023159754). Exact baseline `216df25c5656a979fcf67dfe3a16d07d7d66f154`; branch `feature/ha-003-a`. [Technical contract/runbook](docs/database/identity-foundation.md). Criteria retain separate identities and no automatic acceptance from authorization.

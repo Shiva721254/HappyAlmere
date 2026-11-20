@@ -1,5 +1,14 @@
 # Current risk and known-issues disposition — HA-GOV-R01
 
+## HA-003-A-ARCH-R01 ? current remediation (20 November 2026)
+
+This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01?D08 and bounded G05?G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
+
+Branch `feature/ha-003-a`, draft PR #32; exact start `c5b61a362fd35522718401e558961e12d1b24bab`, accepted base `216df25c5656a979fcf67dfe3a16d07d7d66f154`. Exactly thirteen existing paths are authorized; no new tracked files, migrations, dependencies or workflow edits. No merge, public authentication, production data or next milestone. Claude independently reviews G10; G11 owner acceptance and G12 merge authority remain separate.
+
+F01 (high runtime assurance gap), F02 (high independent cross-schema inventory gap) and F03 (high mutation-coverage gap) are under remediation; no confirmed exploit or breach is claimed. New bounded runtime, exhaustive independent reference, mutation cleanup and overhead checks require actual CI results and independent review. Highest prospective risks are retained authority after a mutation, altered accepted grants/migrations, and an invalid positive result; exact cleanup, protected blobs, positive controls and explicit mismatches address them. Artifact inspection is a bounded content check, not blanket certification. Synthetic local results do not close DEF-01?08, production key management, private authorization, recovery or capacity requirements.
+
+
 Documentation date 19 November 2026. This is the canonical KNOWN_ISSUES register. [ARCH-04](https://github.com/Shiva721254/HappyAlmere/issues/21) resolved ten original and five residual technical findings within the accepted development scope; [owner decision](https://github.com/Shiva721254/HappyAlmere/issues/21#issuecomment-7021312167) accepted exact 6da4b25e7a291e08b8fb0feab1b75ff22e55d0e0 and eight future deferrals. Historical pending wording below is preserved, superseded only by these attributed scoped dispositions. No universal security certification or production readiness.
 
 ## Approved future obligations

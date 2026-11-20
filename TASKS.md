@@ -1,5 +1,23 @@
 # Task and authorization register
 
+## HA-003-A-ARCH-R01 ? current remediation (20 November 2026)
+
+This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01?D08 and bounded G05?G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
+
+Branch `feature/ha-003-a`, draft PR #32; exact start `c5b61a362fd35522718401e558961e12d1b24bab`, accepted base `216df25c5656a979fcf67dfe3a16d07d7d66f154`. Exactly thirteen existing paths are authorized; no new tracked files, migrations, dependencies or workflow edits. No merge, public authentication, production data or next milestone. Claude independently reviews G10; G11 owner acceptance and G12 merge authority remain separate.
+
+| Task | Current result |
+|---|---|
+| IAM-R01-A01 | G05 passed, exact start/base and scope recorded |
+| IAM-R01-A02 | Approved runtime/independent boundary documented |
+| IAM-R01-A03 | RTA-01?16 implemented; sixteen lifecycle/config tests passed |
+| IAM-R01-A04 | Full authority inventory and independent reference implemented; actual CI pending |
+| IAM-R01-A05 | Parameterized mutation/cleanup cases implemented; actual CI pending |
+| IAM-R01-A06 | Protected migrations unchanged; four-path matrix pending CI |
+| IAM-R01-A07 | Forty warmed samples per sync/async workload implemented; measurement pending |
+| IAM-R01-A08 | Traceability/handover in progress; stop for independent review after G09 |
+
+
 ## HA-003-A current execution update
 
 Current branch `feature/ha-003-a`, exact accepted baseline `216df25c5656a979fcf67dfe3a16d07d7d66f154`. [IAM-G04 authorization](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023159754) and [approved #28 contract](https://github.com/Shiva721254/HappyAlmere/issues/28) supersede historical execution snapshots below only within the bounded persistence scope. [INT-G12 passed](https://github.com/Shiva721254/HappyAlmere/issues/27#issuecomment-7022990043); [IAM-G05 passed before implementation](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023218886).

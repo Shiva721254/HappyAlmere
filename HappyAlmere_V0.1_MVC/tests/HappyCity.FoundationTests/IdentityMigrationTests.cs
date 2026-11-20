@@ -39,4 +39,35 @@ public sealed class IdentityMigrationTests
             "retiredRestoreAuthenticationAndAuthorizationDenied" })
             Assert.Equal("PASS", checks.GetProperty(name).GetString());
     }
+
+    [Fact]
+    public void R01_independent_authority_matrix_matches_on_all_four_paths()
+    {
+        using var evidence = JsonDocument.Parse(File.ReadAllText(Environment.GetEnvironmentVariable("HAPPYCITY_IDENTITY_EVIDENCE")!));
+        var root = evidence.RootElement;
+        var paths = root.GetProperty("r01AuthorityPaths");
+        Assert.Equal(4, paths.EnumerateObject().Count());
+        var digest = paths.GetProperty("clean").GetProperty("sha256").GetString();
+        foreach (var name in new[] { "clean", "upgrade", "recovered", "restored" })
+        {
+            var path = paths.GetProperty(name);
+            Assert.Equal("PASS", path.GetProperty("status").GetString());
+            Assert.Equal(digest, path.GetProperty("sha256").GetString());
+            Assert.True(path.GetProperty("dimensions").GetProperty("effective").GetInt32() > 1000);
+        }
+        var reference = root.GetProperty("r01AuthorityReference");
+        foreach (var dimension in new[] { "roles", "memberships", "paths", "objects", "acl", "effective", "ownership", "routines", "defaults" })
+            Assert.Equal(JsonValueKind.Array, reference.GetProperty(dimension).ValueKind);
+        var mutations = root.GetProperty("r01Mutations").EnumerateArray().ToArray();
+        Assert.True(mutations.Length >= 70);
+        foreach (var mutation in mutations)
+        {
+            Assert.Equal("PASS", mutation.GetProperty("status").GetString());
+            Assert.Equal(digest, mutation.GetProperty("cleanupAuthoritySha256").GetString());
+            Assert.Contains(mutation.GetProperty("actualMismatch").EnumerateArray(),
+                actual => actual.GetString() == mutation.GetProperty("expectedMismatch").GetString());
+        }
+        foreach (var scenario in Enumerable.Range(6, 27).Select(n => $"T{n:00}"))
+            Assert.Contains(mutations, mutation => mutation.GetProperty("scenario").GetString() == scenario);
+    }
 }

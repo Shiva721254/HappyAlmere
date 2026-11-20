@@ -1,5 +1,14 @@
 # HappyAlmere — accepted development foundation
 
+## HA-003-A-ARCH-R01 ? current remediation (20 November 2026)
+
+This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01?D08 and bounded G05?G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
+
+Branch `feature/ha-003-a`, draft PR #32; exact start `c5b61a362fd35522718401e558961e12d1b24bab`, accepted base `216df25c5656a979fcf67dfe3a16d07d7d66f154`. Exactly thirteen existing paths are authorized; no new tracked files, migrations, dependencies or workflow edits. No merge, public authentication, production data or next milestone. Claude independently reviews G10; G11 owner acceptance and G12 merge authority remain separate.
+
+Runtime authority assurance is being strengthened under the approved Alternative B: one bounded check per EF Identity open plus exhaustive independent provisioning/recovery verification. See [technical contract](docs/database/identity-foundation.md), [acceptance](ACCEPTANCE.md) and [handover](HANDOVER.md). Fresh CI evidence is pending; prior successful CI is not proof of this revision.
+
+
 ## HA-003-A current execution update
 
 Current branch `feature/ha-003-a`, exact accepted baseline `216df25c5656a979fcf67dfe3a16d07d7d66f154`. [IAM-G04 authorization](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023159754) and [approved #28 contract](https://github.com/Shiva721254/HappyAlmere/issues/28) supersede historical execution snapshots below only within the bounded persistence scope. [INT-G12 passed](https://github.com/Shiva721254/HappyAlmere/issues/27#issuecomment-7022990043); [IAM-G05 passed before implementation](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023218886).
