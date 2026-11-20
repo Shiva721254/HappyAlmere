@@ -2,11 +2,14 @@
 
 ## HA-003-A-ARCH-R01 - current remediation (20 November 2026)
 
+**Latest verified implementation: 3714b59d3a9e6af0074072789d57b5ffafb8be1c.** Fresh push44715760735 and PR44715769012 both passed105 disabled /238 enabled tests, recovery, browser/security and dependency checks. Authority-query p95 max7.1313ms <25ms; discovery budgets unchanged and met. Both34-entry original archives were downloaded/content-inspected; all21 PNGs match the visually reviewed reference. HANDOVER.md contains exact metrics, commands, hashes, expiry and retained failed attempts. Subsequent documentation-head CI/submission is identified in Issue#34/PR#32; independent G08/G10 confirmation, G11 owner acceptance and G12 merge are not self-approved. This supersedes progress snapshots below.
+
+
 This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01-D08 and bounded G05-G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
 
 Branch `feature/ha-003-a`, draft PR #32; exact start `c5b61a362fd35522718401e558961e12d1b24bab`, accepted base `216df25c5656a979fcf67dfe3a16d07d7d66f154`. Exactly thirteen existing paths are authorized; no new tracked files, migrations, dependencies or workflow edits. No merge, public authentication, production data or next milestone. Claude independently reviews G10; G11 owner acceptance and G12 merge authority remain separate.
 
-G05 passed before source changes. G06 implementation and G07 verification are in progress. Local Release build: zero warnings/errors; sixteen new lifecycle/configuration tests passed. Actual PostgreSQL/recovery/browser/overhead checks await isolated CI because local Docker is unavailable. G08-G09 are not complete; G10-G12 are not approved. DEF-01-08 remain unchanged.
+G05 passed before source changes. G06 implementation is complete; checkpoint3714b59 passed both push/PR PostgreSQL, recovery, 105 disabled / 238 enabled tests, browser/security and overhead checks. Test-evidence follow-up3714b59 passed its own fresh isolated CI. Local Release has zero warnings/errors and non-PostgreSQL tests pass76/76. G08 independent confirmation and G09 final submission remain pending; G10-G12 are not approved. Earlier discovery p95 failure is retained in HANDOVER/risk register, not erased by subsequent success. DEF-01-08 remain unchanged.
 
 
 ## HA-003-A current execution update
