@@ -356,7 +356,10 @@ def verify_mutations(container, env, expected, results):
             runtime=f.execute(container,runtime_sql,'happy_identity_app',env['happy_identity_app'])
             if runtime != ('f' if reject else 't'):raise RuntimeError('Runtime mutation boundary mismatch: '+identifier+'/'+variant)
             if identifier=='T16':
-                assert f.execute(container,'SET ROLE happy_identity_owner; '+runtime_sql,'happy_identity_app',env['happy_identity_app'])=='f'
+                # Statistics visibility can yield no row after SET ROLE. Match
+                # the interceptor's exact acceptance rule: only scalar true.
+                switched=f.execute(container,"SET ROLE happy_identity_owner; SELECT session_user||'/'||current_user; SELECT ("+runtime_sql+") IS TRUE",'happy_identity_app',env['happy_identity_app'])
+                assert switched.splitlines()==['happy_identity_app/happy_identity_owner','f']
             if identifier in ['T19','T20','T21']:
                 schema,table={'T19':('catalog','cities'),'T20':('discovery','discovery_entries'),'T21':('public','"__EFMigrationsHistory"')}[identifier]
                 principal='happy_identity_backup' if variant.startswith('happy_identity_backup') else 'happy_identity_app'

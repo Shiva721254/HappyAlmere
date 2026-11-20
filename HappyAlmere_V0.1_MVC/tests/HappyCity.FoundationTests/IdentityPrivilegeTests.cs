@@ -123,6 +123,8 @@ public sealed class IdentityRuntimeSafetyTests
     [Theory]
     [InlineData(false, "false", false)]
     [InlineData(true, "false", false)]
+    [InlineData(false, "null", false)]
+    [InlineData(true, "null", false)]
     [InlineData(false, "error", false)]
     [InlineData(true, "error", false)]
     [InlineData(false, "error", true)]
@@ -136,6 +138,7 @@ public sealed class IdentityRuntimeSafetyTests
         {
             if (result == "cancel") { cancellation.Cancel(); cancellation.Token.ThrowIfCancellationRequested(); }
             if (result == "error") throw new InvalidOperationException("synthetic-private-diagnostic");
+            if (result == "null") return null;
             return false;
         }, closeFails);
         var interceptor = Interceptor();
