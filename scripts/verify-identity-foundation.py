@@ -208,7 +208,7 @@ def authority_inventory(container):
         coalesce(c.relacl,acldefault('s',c.relowner)),ARRAY['USAGE','SELECT','UPDATE']
         FROM pg_class c JOIN ns n ON n.oid=c.relnamespace WHERE c.relkind='S'
       UNION ALL SELECT 'column',n.nspname,c.relname,a.attname,c.oid,a.attnum,c.relowner,a.attacl,
-        coalesce(a.attacl,'{}'::aclitem[]),ARRAY['SELECT','INSERT','UPDATE','REFERENCES']
+        coalesce(a.attacl,acldefault('c',c.relowner)),ARRAY['SELECT','INSERT','UPDATE','REFERENCES']
         FROM pg_class c JOIN ns n ON n.oid=c.relnamespace JOIN pg_attribute a ON a.attrelid=c.oid
         WHERE c.relkind IN ('r','p','v','m','f') AND a.attnum>0 AND NOT a.attisdropped
       UNION ALL SELECT 'routine',n.nspname,p.proname||'('||pg_get_function_identity_arguments(p.oid)||')','',p.oid,0,p.proowner,p.proacl,
@@ -337,12 +337,13 @@ def mutation_cases():
     return cases
 
 
-def verify_mutations(container, env, expected):
-    results=[]
+def verify_mutations(container, env, expected, results):
     runtime_source=(ROOT/'HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Identity/IdentityConfiguration.cs').read_text(encoding='utf-8-sig')
     runtime_sql=re.search(r'private const string Sql = """(.*?)""";',runtime_source,re.S).group(1)
     runtime_reject={'T06','T07','T08','T09','T10','T11','T12','T13','T14','T15','T16','T17','T18','T22'}
     for identifier,variant,change,cleanup,dimension in mutation_cases():
+        record={'scenario':identifier,'variant':variant,'status':'INCOMPLETE','expectedMismatch':dimension}
+        results.append(record)
         verify_authority(container,expected)
         assert f.execute(container,'SELECT current_user = \'happy_identity_app\' AND (SELECT ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid())','happy_identity_app',env['happy_identity_app'])=='t'
         # Positive authenticated operation precedes each deviation.
@@ -367,8 +368,8 @@ def verify_mutations(container, env, expected):
         verify_authority(container,expected)
         f.execute(container,'SELECT count(*) FROM identity.users','happy_identity_app',env['happy_identity_app'])
         assert f.execute(container,runtime_sql,'happy_identity_app',env['happy_identity_app'])=='t'
-        results.append({'scenario':identifier,'variant':variant,'status':'PASS','expectedMismatch':dimension,'runtimeAcceptedDuringMutation':not reject,
-                        'actualMismatch':mismatch,'cleanupAuthoritySha256':authority_digest(expected)})
+        record.update({'status':'PASS','runtimeAcceptedDuringMutation':not reject,
+                       'actualMismatch':mismatch,'cleanupAuthoritySha256':authority_digest(expected)})
     return results
 
 
@@ -528,7 +529,8 @@ def main():
         evidence['r01AuthorityReference']=expected_authority
         evidence['r01AuthorityPaths']={name:verify_authority(instance,expected_authority)
             for name,instance in [('clean',clean),('upgrade',upgraded),('recovered',recovered)]}
-        evidence['r01Mutations']=verify_mutations(upgraded,uenv,expected_authority)
+        evidence['r01Mutations']=[]
+        verify_mutations(upgraded,uenv,expected_authority,evidence['r01Mutations'])
         check('r01IndependentAuthorityMutationCleanup')
         expected=identity_metadata(reference)
         for instance in [upgraded,clean,recovered]:assert_contract(identity_metadata(instance),expected)
@@ -617,8 +619,13 @@ def main():
         evidence['targetContainers']=targets;evidence['status']='PASS'
         r.private_write(directory/'evidence.json',json.dumps(evidence,indent=2)+'\n')
         print(json.dumps({'status':'PASS','checks':evidence['checks'],'evidence':str((directory/'evidence.json').relative_to(ROOT)),'testEnvironment':str((directory/'tests.env').relative_to(ROOT))},indent=2))
-    except Exception:
-        for container in targets:r.docker('stop',container)
+    except Exception as error:
+        # Preserve only already-sanitized progress. No exception messages, SQL,
+        # connection values, snapshots or account data enter failure artifacts.
+        evidence['status']='FAIL';evidence['failureType']=type(error).__name__;evidence['targetContainers']=targets
+        try:r.private_write(directory/'evidence.json',json.dumps(evidence,indent=2)+'\n')
+        finally:
+            for container in targets:r.docker('stop',container)
         raise
 
 
