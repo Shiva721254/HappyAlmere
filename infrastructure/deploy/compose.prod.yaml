@@ -7,8 +7,8 @@ services:
     image: caddy:2-alpine
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "${HAPPYCITY_HTTP_BIND:-80:80}"
+      - "${HAPPYCITY_HTTPS_BIND:-443:443}"
     environment:
       HAPPYCITY_DOMAIN: ${HAPPYCITY_DOMAIN:?Set explicit staging or pilot domain}
     volumes:
@@ -21,7 +21,7 @@ services:
       - no-new-privileges:true
     networks:
       internal:
-        ipv4_address: 172.29.0.10
+        ipv4_address: 10.89.0.10
 
   web:
     build:
@@ -33,12 +33,14 @@ services:
       AllowedHosts: ${HAPPYCITY_ALLOWED_HOSTS:?Set exact allowed hostnames}
       CityResolution__AllowLiveDomains: ${HAPPYCITY_ALLOW_LIVE_DOMAINS:-false}
       CityResolution__AllowedLiveDomains__0: ${HAPPYCITY_LIVE_DOMAIN:-}
+      TrustedLocalCities__localhost: ${HAPPYCITY_LOCAL_CITY:-}
       TrustedProxy__Enabled: "true"
-      TrustedProxy__KnownProxies__0: "172.29.0.10"
+      TrustedProxy__KnownProxies__0: "10.89.0.10"
       IdentityFoundation__Enabled: "false"
       ConnectionStrings__HappyCity: ${HAPPYCITY_RUNTIME_CONNECTION:?Set VerifyFull happy_app connection string}
     volumes:
       - postgres-tls:/var/lib/postgresql-tls:ro
+      - web-keys:/home/app/.aspnet/DataProtection-Keys
     depends_on:
       postgres:
         condition: service_healthy
@@ -50,7 +52,7 @@ services:
     mem_limit: 512m
     networks:
       internal:
-        ipv4_address: 172.29.0.20
+        ipv4_address: 10.89.0.20
 
   postgres:
     image: postgres:18-bookworm@sha256:1757c628698dd1ca67ff7a5fc386bfd91040afc62a45484c346c788b0cbe5402
@@ -78,11 +80,12 @@ services:
     mem_limit: 1536m
     networks:
       internal:
-        ipv4_address: 172.29.0.30
+        ipv4_address: 10.89.0.30
 
 volumes:
   caddy-data:
   caddy-config:
+  web-keys:
   postgres-data:
   postgres-tls:
 
@@ -91,4 +94,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.29.0.0/28
+        - subnet: 10.89.0.0/26

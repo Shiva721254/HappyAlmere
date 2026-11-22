@@ -8,6 +8,7 @@ if [ ! -f /var/lib/postgresql-tls/server.key ]; then
     -keyout /var/lib/postgresql-tls/server.key -out /var/lib/postgresql-tls/server.crt
 fi
 chown postgres:postgres /var/lib/postgresql-tls/server.*
+chmod 755 /var/lib/postgresql-tls
 chmod 600 /var/lib/postgresql-tls/server.key
 chmod 644 /var/lib/postgresql-tls/server.crt
 exec /usr/local/bin/docker-entrypoint.sh postgres \

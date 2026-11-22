@@ -18,13 +18,15 @@ Create `/etc/happyalmere/staging.env` (`chmod 600`, `chown root:root`) with:
 - `POSTGRES_APP_SECRET` (32+ random hex chars for `happy_app`)
 - `HAPPYCITY_RUNTIME_CONNECTION` (`Host=postgres;Port=5432;Database=happyalmere;Username=happy_app;...;SSL Mode=VerifyFull;Root Certificate=/var/lib/postgresql-tls/server.crt`)
 
-Note: `compose.prod.yaml` enables `TrustedProxy__Enabled=true` strictly for Caddy's pinned internal bridge IP (`172.29.0.10`), honors only `X-Forwarded-For` and `X-Forwarded-Proto` (`ForwardLimit=1`), and never trusts `X-Forwarded-Host`.
+Note: `compose.prod.yaml` enables `TrustedProxy__Enabled=true` strictly for Caddy's pinned internal bridge IP (`10.89.0.10`), honors only `X-Forwarded-For` and `X-Forwarded-Proto` (`ForwardLimit=1`), and never trusts `X-Forwarded-Host`.
 
-## 3. Starting and verifying staging
+## 3. Starting, bootstrapping, and verifying staging
 
 ```bash
 docker compose --env-file /etc/happyalmere/staging.env -f infrastructure/deploy/compose.prod.yaml up -d
 ```
+
+Generate the idempotent EF Core catalog SQL script in CI/dev (`dotnet ef migrations script 0 --idempotent`) and run `infrastructure/deploy/bootstrap-db.sh` once (safe to re-run on updates) to create `happy_owner` / `happy_schema_migrator` / `happy_backup`, apply schema migrations over `VerifyFull` TLS, and enforce least-privilege grants.
 
 - Keep `<meta name="robots" content="noindex,nofollow">` enabled during staging.
 - Verify health endpoint: `curl -fsS https://<your-domain>/healthz` returns `{"status":"ok"}` with security headers and zero database writes.
