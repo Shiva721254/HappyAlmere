@@ -42,7 +42,9 @@ public sealed class FoundationFactory : WebApplicationFactory<Program>
 public sealed class TestCityResolver : ICityResolver
 {
     public Task<CityResolution?> ResolveAsync(string hostname, CancellationToken cancellationToken = default) =>
-        Task.FromResult<CityResolution?>(hostname is "localhost" or "127.0.0.1" or "example.test" ? new CityResolution("almere", null) : null);
+        Task.FromResult<CityResolution?>(hostname is "localhost" or "127.0.0.1" or "example.test"
+            ? new CityResolution(HappyCity.Domain.LegacyIdentifier.Map(1, 1), "almere", "Almere",
+                "NL", "nl", "Europe/Amsterdam", hostname, null, true, false) : null);
 }
 
 public sealed class SecurityProbeController : Controller

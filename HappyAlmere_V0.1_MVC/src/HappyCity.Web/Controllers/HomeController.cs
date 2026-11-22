@@ -1,23 +1,16 @@
 using HappyCity.Application;
 using HappyCity.Web.ViewModels;
+using HappyCity.Web.CityContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
 namespace HappyCity.Web.Controllers;
 
-public sealed class HomeController(IDiscoveryService discovery, ICityResolver cities) : Controller
+public sealed class HomeController(IDiscoveryService discovery, ICityContext city) : Controller
 {
-    [HttpGet, EnableRateLimiting("search")]
+    [HttpGet, EnableRateLimiting("search"), CityScoped]
     public async Task<IActionResult> Index(string? category, string? q, CancellationToken cancellationToken, string? cursor = null)
     {
-        var city = await cities.ResolveAsync(Request.Host.Host, cancellationToken);
-        if (city is null) return NotFound();
-        if (city.CanonicalHost is not null)
-        {
-            var canonical = new UriBuilder("https", city.CanonicalHost);
-            // Host is from validated database configuration; no forwarded-host redirect input.
-            return RedirectPermanent(canonical.Uri.GetLeftPart(UriPartial.Authority) + Request.PathBase + Request.Path + Request.QueryString);
-        }
         DiscoveryFilter filter;
         try { filter = new DiscoveryFilter(city.CitySlug, category, q); }
         catch (ArgumentException) { return BadRequest(); }
