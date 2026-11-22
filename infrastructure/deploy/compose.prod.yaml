@@ -31,6 +31,8 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       AllowedHosts: ${HAPPYCITY_ALLOWED_HOSTS:?Set exact allowed hostnames}
+      CityResolution__AllowLiveDomains: ${HAPPYCITY_ALLOW_LIVE_DOMAINS:-false}
+      CityResolution__AllowedLiveDomains__0: ${HAPPYCITY_LIVE_DOMAIN:-}
       TrustedProxy__Enabled: "true"
       TrustedProxy__KnownProxies__0: "172.29.0.10"
       IdentityFoundation__Enabled: "false"
