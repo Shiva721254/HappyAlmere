@@ -44,11 +44,13 @@ jobs:
             happyalmere-web:ci
           trap 'docker rm -f ha-smoke >/dev/null 2>&1 || true' EXIT
           for i in $(seq 1 20); do
-            if curl -fsS http://127.0.0.1:18080/healthz >/dev/null 2>&1; then break; fi
+            if curl -fsS -H "Host: localhost" http://127.0.0.1:18080/healthz >/dev/null 2>&1; then break; fi
             sleep 1
           done
-          BODY="$(curl -fsS -D /tmp/headers.txt http://127.0.0.1:18080/healthz)"
+          BODY="$(curl -fsS -H "Host: localhost" -D /tmp/headers.txt http://127.0.0.1:18080/healthz)"
           echo "Body: $BODY"
           grep -Fq '{"status":"ok"}' <<< "$BODY"
           grep -Fiq 'x-content-type-options: nosniff' /tmp/headers.txt
           grep -Fiq "content-security-policy:" /tmp/headers.txt
+          BAD_HOST_STATUS="$(curl -s -o /dev/null -w '%{http_code}' -H "Host: evil.example" http://127.0.0.1:18080/healthz)"
+          test "$BAD_HOST_STATUS" = "400"
