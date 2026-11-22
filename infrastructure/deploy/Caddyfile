@@ -1,0 +1,17 @@
+# Caddy automatic-HTTPS edge proxy for HappyAlmere R1.
+# Strips any client-supplied X-Forwarded-Host and forwards only exact client IP & HTTPS proto.
+{$HAPPYCITY_DOMAIN} {
+    encode zstd gzip
+
+    header {
+        -Server
+    }
+
+    reverse_proxy web:8080 {
+        header_up Host {http.request.host}
+        header_up -X-Forwarded-Host
+        header_up -Forwarded
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto https
+    }
+}

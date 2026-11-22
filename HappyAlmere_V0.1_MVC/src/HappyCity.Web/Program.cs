@@ -53,7 +53,12 @@ builder.Services.AddRateLimiter(options =>
     };
 });
 
+var trustedProxy = TrustedProxyConfiguration.Create(builder.Configuration);
 var app = builder.Build();
+if (trustedProxy is not null)
+{
+    app.UseForwardedHeaders(trustedProxy);
+}
 // Register headers before exception handling; OnStarting also covers cleared error responses.
 app.UseMiddleware<SecurityHeadersMiddleware>();
 if (!app.Environment.IsDevelopment())
