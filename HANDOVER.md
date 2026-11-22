@@ -1,5 +1,20 @@
 # HappyAlmere implementation handover
 
+## R1 Foundation & UX Integration Handover (22 November 2026)
+
+This section supersedes prior candidate-status statements below; all historical handovers and retained failure records remain preserved verbatim below.
+
+- **Current `integration/ha-001-v02` HEAD:** `64adb9fdbb381933fe80e7860a82ba5ae5234900`
+- **Protected refs unchanged:** `main` @ `0e7739d3f72f08b095c3316e6680053ae99915f6`, `develop` @ `c2964eeff4232dd1f925c63af06f8c97c751b161`
+- **Integrated milestones (22 November 2026):**
+  1. **PR #48 (`HA-006-A` Multi-City Context Foundation)** — merged at `30d0f3918f621019dfb7f5bad6bcc9dc6a168b9f` (candidate `feature/ha-006-a` @ `804c300d52ff887c38f515ca979a0c8952593086`, exact 16 paths). Verified on Push CI [44996664830](https://github.com/Shiva721254/HappyAlmere/actions/runs/44996664830) (attempt 2, `10m 32s`, artifact `14755327182`, `sha256:4ad0a965...`) and PR CI [44997497174](https://github.com/Shiva721254/HappyAlmere/actions/runs/44997497174) (`10m 10s`, artifact `14744049839`, `sha256:fb2ecc63...`). Attempt-1 runner jitter (`QueryEvidenceTests` p95 `267.0627ms > 250ms`) is retained in `docs/phases/HA-006-A.md` and the [PR #48 handover](https://github.com/Shiva721254/HappyAlmere/pull/48#issuecomment-7079556187).
+  2. **PR #46 (`HA-010-A` Assurance & Release-Governance Documentation)** — merged at `ed45b92f1d1b124e39790b54d28155737f18c572` (24 create-only Markdown files in `docs/security/`, `docs/privacy/`, `docs/compliance/`, `docs/governance/`, `docs/phases/HA-010-A.md`). Verified after branch update onto `30d0f39` on PR CI [45026977662](https://github.com/Shiva721254/HappyAlmere/actions/runs/45026977662) (`9m 54s`) and Push CI [45026973217](https://github.com/Shiva721254/HappyAlmere/actions/runs/45026973217) (`16m 50s`). Documentary foundation only; release gates G01–G15 remain separate.
+  3. **PR #49 (`R1 UX-I01` Mobile-First Search-First Razor UI)** — merged at `64adb9fdbb381933fe80e7860a82ba5ae5234900` (candidate `feature/ha-ux-i01` @ `e8e53b0b946eb55ec83d9c185bb9b42db6766768`, exact 4 files: `_Layout.cshtml`, `Index.cshtml`, `_DiscoveryCard.cshtml`, `site.css`). Verified on Push CI [45028931677](https://github.com/Shiva721254/HappyAlmere/actions/runs/45028931677) (`16m 49s`) and PR CI [45028935587](https://github.com/Shiva721254/HappyAlmere/actions/runs/45028935587) (`16m 44s`) across all 242 .NET/PostgreSQL/City/Identity tests and Playwright 320–1920px responsive, security & rate checks.
+- **Outstanding next steps:**
+  - Owner hosting choice (`HA-009`: STRATO Linux VPS `VC 2-4` vs. Hetzner Cloud `CX23`), followed by bounded R1 deployment readiness (`Dockerfile`, production compose, Caddy/Nginx reverse proxy with strict loopback-only `ForwardedHeaders`, independent off-box backup + restore drill).
+  - Almere market validation (`R01–R03` per Issue #47) and conditional `HA-005-A` FTS search if pilot scale requires it.
+  - All `DEF-01–08` obligations remain active; no live domain activation, production deployment, or real customer data processing is active yet.
+
 ## HA-003-A-ARCH-R01 - current remediation (20 November 2026)
 
 This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01-D08 and bounded G05-G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
