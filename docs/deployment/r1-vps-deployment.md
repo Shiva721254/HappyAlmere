@@ -27,7 +27,8 @@ docker compose --env-file /etc/happyalmere/staging.env -f infrastructure/deploy/
 ```
 
 - Keep `<meta name="robots" content="noindex,nofollow">` enabled during staging.
-- Note on live domains (`DEF-03`): `PostgresCityResolver` restricts registered domains to `.test` during synthetic development; live `.nl` activation requires an explicit reviewed domain-policy amendment before public R1 launch.
+- Verify health endpoint: `curl -fsS https://<your-domain>/healthz` returns `{"status":"ok"}` with security headers and zero database writes.
+- Live domains (`DEF-03`): `CityResolution:AllowLiveDomains` defaults to `false` (enforcing `.test` hosts only in dev/CI). To activate an explicit staging/pilot live domain after owner review, set `HAPPYCITY_ALLOW_LIVE_DOMAINS=true` and `HAPPYCITY_LIVE_DOMAIN=<exact-fqdn>` in `/etc/happyalmere/staging.env` and register the matching active primary row in `catalog.city_domains`.
 
 ## 4. Independent off-box backup & restore drill (`DEF-06`)
 

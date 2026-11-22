@@ -25,9 +25,13 @@ builder.Services.AddDbContext<HappyCityDbContext>((provider, options) => options
     .AddInterceptors(provider.GetRequiredService<SafeQueryTimingInterceptor>()));
 builder.Services.AddScoped<IDiscoveryRepository, PostgresDiscoveryRepository>();
 builder.Services.AddScoped<ICategoryLookup, PostgresCategoryLookup>();
+var allowedLiveDomains = PostgresCityResolver.CreateAllowedLiveDomains(
+    builder.Configuration.GetValue<bool>("CityResolution:AllowLiveDomains"),
+    builder.Configuration.GetSection("CityResolution:AllowedLiveDomains").Get<string[]>());
 builder.Services.AddScoped<ICityResolver>(provider => new PostgresCityResolver(
     provider.GetRequiredService<HappyCityDbContext>(),
-    builder.Configuration.GetSection("TrustedLocalCities").Get<Dictionary<string, string>>() ?? new Dictionary<string, string>()));
+    builder.Configuration.GetSection("TrustedLocalCities").Get<Dictionary<string, string>>() ?? new Dictionary<string, string>(),
+    allowedLiveDomains));
 builder.Services.AddScoped<IDiscoveryService, DiscoveryService>();
 builder.Services.AddScoped<RequestCityContext>();
 builder.Services.AddScoped<ICityContext>(provider => provider.GetRequiredService<RequestCityContext>());
@@ -71,6 +75,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseRateLimiter();
 app.UseMiddleware<CityContextMiddleware>();
+app.MapGet("/healthz", () => Results.Json(new { status = "ok" }));
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
 
