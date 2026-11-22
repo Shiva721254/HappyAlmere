@@ -2,6 +2,7 @@ using HappyCity.Application;
 using HappyCity.Infrastructure;
 using HappyCity.Infrastructure.Identity;
 using HappyCity.Web.Security;
+using HappyCity.Web.CityContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -28,6 +29,8 @@ builder.Services.AddScoped<ICityResolver>(provider => new PostgresCityResolver(
     provider.GetRequiredService<HappyCityDbContext>(),
     builder.Configuration.GetSection("TrustedLocalCities").Get<Dictionary<string, string>>() ?? new Dictionary<string, string>()));
 builder.Services.AddScoped<IDiscoveryService, DiscoveryService>();
+builder.Services.AddScoped<RequestCityContext>();
+builder.Services.AddScoped<ICityContext>(provider => provider.GetRequiredService<RequestCityContext>());
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -62,6 +65,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseRateLimiter();
+app.UseMiddleware<CityContextMiddleware>();
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
 

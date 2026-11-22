@@ -36,9 +36,10 @@ public sealed class RemediationTests
             new CityDomain { CityId = city.Id, Hostname = "inactive.test", IsActive = false });
         await db.SaveChangesAsync();
         var resolver = new PostgresCityResolver(db, new Dictionary<string, string> { { "localhost", "almere" } });
-        Assert.Equal(new CityResolution("almere", null), await resolver.ResolveAsync("localhost"));
-        Assert.Equal(new CityResolution("almere", null), await resolver.ResolveAsync("ALMERE.TEST"));
-        Assert.Equal(new CityResolution("almere", "almere.test"), await resolver.ResolveAsync("alias.almere.test"));
+        var local = new CityResolution(almere, "almere", "Almere", "NL", "nl", "Europe/Amsterdam", "localhost", null, true, false);
+        Assert.Equal(local, await resolver.ResolveAsync("localhost"));
+        Assert.Equal(local with { RequestedHost = "almere.test", CanonicalHost = "almere.test", IsLocalEntryPoint = false }, await resolver.ResolveAsync("ALMERE.TEST"));
+        Assert.Equal(local with { RequestedHost = "alias.almere.test", CanonicalHost = "almere.test", IsLocalEntryPoint = false, RequiresCanonicalRedirect = true }, await resolver.ResolveAsync("alias.almere.test"));
         Assert.Equal("synthetic-utrecht", (await resolver.ResolveAsync("utrecht.test"))!.CitySlug);
         foreach (var host in new[] { "unknown.test", "inactive.test", "happyalmere.nl", "almere.test.", "almere.test@evil.test", " almere.test", "127.0.0.1" }) Assert.Null(await resolver.ResolveAsync(host));
         city.IsActive = false; await db.SaveChangesAsync(); Assert.Null(await resolver.ResolveAsync("utrecht.test"));
