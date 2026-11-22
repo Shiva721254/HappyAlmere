@@ -16,7 +16,7 @@
                 <a asp-action="Index" asp-route-category="@DiscoveryCategories.Activities">Ontdekken</a>
                 <a asp-action="Index" asp-route-category="@DiscoveryCategories.Savings">Besparen</a>
                 <a asp-action="Index" asp-route-category="@DiscoveryCategories.Services">Diensten</a>
-                <a asp-action="Business">Ondernemers</a>
+                <a class="nav-cta" asp-action="Business">Ondernemers</a>
             </nav>
         </div>
     </header>
@@ -25,9 +25,14 @@
     </main>
     <footer>
         <div class="wrap footer">
-            <strong>HappyAlmere · V0.2</strong>
-            <span>Prototype met voorbeeldinhoud</span>
-            <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="footer-brand">
+                <strong>HappyAlmere</strong>
+                <span class="footer-meta">Prototype met voorbeeldinhoud · Almere</span>
+            </div>
+            <div class="footer-links">
+                <a asp-controller="Home" asp-action="Business">Voor ondernemers</a>
+                <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
         </div>
     </footer>
 </body>
