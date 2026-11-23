@@ -1,0 +1,75 @@
+# Loopback-only local browser preview stack (non-root .NET 10 web + PostgreSQL 18 VerifyFull TLS).
+# Completely isolated from preserved happyalmere-v02 volumes and production compose.
+name: happyalmere-preview
+
+services:
+  web:
+    build:
+      context: ../..
+      dockerfile: infrastructure/deploy/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${HAPPYCITY_PREVIEW_PORT:-8088}:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      AllowedHosts: localhost
+      TrustedLocalCities__localhost: almere
+      CityResolution__AllowLiveDomains: "false"
+      TrustedProxy__Enabled: "false"
+      IdentityFoundation__Enabled: "false"
+      ConnectionStrings__HappyCity: ${HAPPYCITY_RUNTIME_CONNECTION:?Set VerifyFull happy_app connection string}
+    volumes:
+      - postgres-tls:/var/lib/postgresql-tls:ro
+      - web-keys:/home/app/.aspnet/DataProtection-Keys
+    depends_on:
+      postgres:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    networks:
+      preview_net:
+        ipv4_address: 10.89.1.20
+
+  postgres:
+    image: postgres:18-bookworm@sha256:1757c628698dd1ca67ff7a5fc386bfd91040afc62a45484c346c788b0cbe5402
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: happyalmere
+      POSTGRES_USER: happy_migrator
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_SECRET:?Set strong migrator secret}
+      HAPPY_APP_PASSWORD: ${POSTGRES_APP_SECRET:?Set strong runtime app secret}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=trust"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+      - postgres-tls:/var/lib/postgresql-tls
+      - ./postgres-start.sh:/opt/happy/start.sh:ro
+      - ../postgres/01-runtime-role.sh:/docker-entrypoint-initdb.d/01-runtime-role.sh:ro
+      - ../postgres/pg_hba.conf:/opt/happy/pg_hba.conf:ro
+    entrypoint: ["/bin/bash", "/opt/happy/start.sh"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U happy_migrator -d happyalmere"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 1024m
+    networks:
+      preview_net:
+        ipv4_address: 10.89.1.30
+
+volumes:
+  web-keys:
+  postgres-data:
+  postgres-tls:
+
+networks:
+  preview_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.89.1.0/26
