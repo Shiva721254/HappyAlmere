@@ -279,7 +279,8 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         # Rehearse R01 against the already-applied CatalogForward checkpoint,
         # with a protected exact migrated backup/restore gate before correction.
         r.run('dotnet','ef','migrations','script','20261119000108_InitialDiscovery','20261119161305_CatalogForward','--project',project,'--context','HappyCityDbContext','--configuration','Release','--no-build','--output',str(directory/'prior-forward.sql'),env=process)
-        r.run('dotnet','ef','migrations','script','20261119161305_CatalogForward','--project',project,'--context','HappyCityDbContext','--configuration','Release','--no-build','--output',str(directory/'correction.sql'),env=process)
+        r.run('dotnet','ef','migrations','script','20261119161305_CatalogForward','20261119175842_SupportedRegions','--project',project,'--context','HappyCityDbContext','--configuration','Release','--no-build','--output',str(directory/'correction.sql'),env=process)
+        r.run('dotnet','ef','migrations','script','20261119175842_SupportedRegions','--project',project,'--context','HappyCityDbContext','--configuration','Release','--no-build','--output',str(directory/'fts.sql'),env=process)
         execute(target,(directory/'prior-forward.sql').read_text(encoding='utf-8-sig'),'happy_schema_migrator',env['MIGRATION_PASSWORD'],'-c role=happy_owner');grants(target)
         prior_snapshot=migrated_snapshot(target)
         prior_archive=r.docker('exec',target,'pg_dump','-U','happy_migrator','-d','happyalmere','-Fc',binary=True)
@@ -307,6 +308,16 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         if complete_state(correction_recovery)!=complete_state(target):raise RuntimeError('Correction recovery reapplication mismatch')
         evidence['checks']['correctionSpecificFailureRollbackRecovery']='PASS: P0001 after constraints/history; complete state rollback, fresh restore and reapplication'
         evidence['correctionPreStateDigest']=r.digest(pre_correction)
+        pre_fts=complete_state(target)
+        fts=(directory/'fts.sql').read_text(encoding='utf-8-sig')
+        if fts.count('COMMIT;')!=1 or not fts.lstrip().startswith('START TRANSACTION;'):raise RuntimeError('Unexpected FTS transaction envelope')
+        fts_fault="DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema='discovery' AND table_name='discovery_entries' AND column_name='search_vector' AND udt_name='tsvector') OR NOT EXISTS(SELECT 1 FROM pg_indexes WHERE schemaname='discovery' AND tablename='discovery_entries' AND indexname='ix_discovery_entries_search_vector') OR NOT EXISTS(SELECT 1 FROM public.\"__EFMigrationsHistory\" WHERE \"MigrationId\"='20261123113902_DutchFullTextSearch') THEN RAISE EXCEPTION 'FTS probe prerequisite missing'; END IF; RAISE EXCEPTION 'Controlled FTS failure after search_vector, GIN index and history' USING ERRCODE='P0001'; END $$;"
+        execute(target,fts.replace('COMMIT;',fts_fault+'\nCOMMIT;'),'happy_schema_migrator',env['MIGRATION_PASSWORD'],'-c role=happy_owner',expected_state='P0001',expected_reason='Controlled FTS failure after search_vector, GIN index and history')
+        if complete_state(target)!=pre_fts:raise RuntimeError('FTS rollback changed complete state')
+        execute(target,fts,'happy_schema_migrator',env['MIGRATION_PASSWORD'],'-c role=happy_owner');grants(target)
+        execute(correction_recovery,fts,'happy_schema_migrator',crenv['MIGRATION_PASSWORD'],'-c role=happy_owner');grants(correction_recovery)
+        if complete_state(correction_recovery)!=complete_state(target):raise RuntimeError('FTS recovery reapplication mismatch')
+        evidence['checks']['dutchFullTextSearchFailureRollbackReapplication']='PASS: P0001 after search_vector/GIN/history; complete state rollback and reapplication'
 
 
         after=canonical(target)
@@ -319,9 +330,9 @@ VALUES (0,1,1,'zero-fixture','Synthetic zero','Migration boundary','Exact legacy
         evidence['checks']['allUuidMappingsAndBoundaryIds']='PASS'
 
         evidence['rowDigests']={k:r.digest(sorted(v,key=lambda x:x['Id'])) for k,v in after.items()}
-        # Immutable first migration history plus exactly one appended forward entry.
+        # Immutable first migration history plus reviewed forward migrations.
         history=json.loads(execute(target,'SELECT json_agg(t ORDER BY "MigrationId") FROM public."__EFMigrationsHistory" t;'))
-        if len(history)!=3 or history[0]!=before['rows']['__EFMigrationsHistory'][0]:raise RuntimeError('Migration history changed')
+        if len(history)!=4 or history[0]!=before['rows']['__EFMigrationsHistory'][0] or history[-1]['MigrationId']!='20261123113902_DutchFullTextSearch':raise RuntimeError('Migration history changed')
         evidence['migrationHistory']=history
         no_op_before=complete_state(target)
         r.run('dotnet','ef','database','update','--project',project,'--context','HappyCityDbContext','--configuration','Release','--no-build',env=process)
