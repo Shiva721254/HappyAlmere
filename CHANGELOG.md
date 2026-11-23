@@ -1,5 +1,18 @@
 # Governance and integration chronology — 19 November 2026
 
+## R1-rc1 Integration Chronology (22–23 November 2026)
+
+All eight R1 engineering PRs merged into `integration/ha-001-v02` (latest merge commit `f1e00fe05e91079bf27893541925824012dcca1a`), with protected `main` (`0e7739d3f72f08b095c3316e6680053ae99915f6`) and `develop` (`c2964eeff4232dd1f925c63af06f8c97c751b161`) preserved untouched pending separate owner release-gate approval on [PR #3](https://github.com/Shiva721254/HappyAlmere/pull/3):
+
+- **PR #48 (`HA-006-A`, `30d0f39`):** Multi-city context foundation (`ICityContext`, `PostgresCityResolver`, `CityContextMiddleware`, isolated disabled/enabled recovery & HTTP suites).
+- **PR #46 (`HA-010-A`, `ed45b92`):** 24 security, privacy, DPIA, compliance, and release-governance Markdown documents (`docs/security/`, `docs/privacy/`, `docs/compliance/`, `docs/governance/`).
+- **PR #49 (`R1 UX-I01`, `64adb9f`):** Mobile-first, search-first Razor UI refresh (`_Layout.cshtml`, `Index.cshtml`, `_DiscoveryCard.cshtml`, `site.css`) preserving all Playwright 320–1920px accessibility and security invariants.
+- **PR #50 (`eaa6d33`):** Synchronized `PROJECT_STATUS.md` and `HANDOVER.md`.
+- **PR #51 (`HA-009`, `a72657d`):** Opt-in fail-closed `TrustedProxyConfiguration`, 8 `TrustedProxyTests`, production `Dockerfile`, `compose.prod.yaml`, `Caddyfile`, `postgres-start.sh`, `backup-offbox.sh`, and `docs/deployment/r1-vps-deployment.md`.
+- **PR #52 (`1ebdbd9`):** Opt-in live-domain allowlist (`CityResolution:AllowLiveDomains`), `GET /healthz`, 12 `R1LaunchReadinessTests`, and `.github/workflows/container-build.yml`.
+- **PR #53 (`1def0b1`):** End-to-end 3-container dry-run hardening (`.dockerignore`, `bootstrap-db.sh`, `10.89.0.0/26` subnet, `web-keys` volume, `ASPNETCORE_HTTP_PORTS=8080`).
+- **PR #54 (`HA-005-A`, `f1e00fe`):** PostgreSQL 18 Dutch Full-Text Search (`20261123113902_DutchFullTextSearch` weighted A/B/C `search_vector` + GIN index, `plainto_tsquery('dutch', ...)` ranked search + compound-word fallback, `FullTextSearchTests`, forward/rollback fault verification, `docs/phases/HA-005-A.md`).
+
 ## HA-003-A-ARCH-R01 - current remediation (20 November 2026)
 
 **Latest verified implementation: 3714b59d3a9e6af0074072789d57b5ffafb8be1c.** Fresh push44715760735 and PR44715769012 both passed105 disabled /238 enabled tests, recovery, browser/security and dependency checks. Authority-query p95 max7.1313ms <25ms; discovery budgets unchanged and met. Both34-entry original archives were downloaded/content-inspected; all21 PNGs match the visually reviewed reference. HANDOVER.md contains exact metrics, commands, hashes, expiry and retained failed attempts. Subsequent documentation-head CI/submission is identified in Issue#34/PR#32; independent G08/G10 confirmation, G11 owner acceptance and G12 merge are not self-approved. This supersedes progress snapshots below.
