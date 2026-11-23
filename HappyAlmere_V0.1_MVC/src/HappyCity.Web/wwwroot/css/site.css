@@ -295,6 +295,162 @@ button:hover {
     border-color: var(--ink);
 }
 
+.districts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--line);
+}
+
+.districts-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+    margin-right: 0.25rem;
+}
+
+.districts a {
+    background: var(--surface);
+    color: var(--muted);
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.84rem;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.districts a:hover {
+    border-color: var(--green);
+    color: var(--ink);
+}
+
+.districts a.is-active {
+    background: var(--green);
+    color: var(--surface);
+    border-color: var(--green);
+}
+
+.card-link {
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.card-link:hover {
+    color: var(--green);
+    text-decoration: underline;
+}
+
+.card-footer {
+    margin-top: auto;
+    padding-top: 0.65rem;
+}
+
+.card-more {
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.card-more:hover {
+    text-decoration: underline;
+}
+
+.detail-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.6rem;
+    margin-bottom: 1.1rem;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.detail-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 1.1rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.detail-art {
+    background: linear-gradient(135deg, #dcece1 0%, #eef4ea 52%, #f9e5aa 100%);
+    font-size: 3.75rem;
+    text-align: center;
+    padding: 1.75rem 1rem;
+    color: var(--green);
+    line-height: 1;
+}
+
+.detail-body {
+    padding: clamp(1.25rem, 4vw, 2.25rem);
+}
+
+.detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.detail-pill {
+    display: inline-block;
+    background: var(--surface-tint);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.detail-pill:hover {
+    border-color: var(--green);
+}
+
+.detail-body h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.65rem, 4.5vw, 2.4rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+}
+
+.detail-description {
+    margin: 0 0 1.25rem;
+    font-size: 1.05rem;
+    max-width: 65ch;
+}
+
+.detail-notice {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: 0.75rem;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.35rem;
+    font-size: 0.9rem;
+}
+
+.detail-notice p {
+    margin: 0;
+}
+
+.detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem 1.25rem;
+}
+
+.detail-related {
+    margin-top: 1rem;
+}
+
 .provenance {
     margin: 0.45rem 0 1.1rem;
     font-size: 0.92rem;
@@ -350,6 +506,7 @@ button:hover {
 }
 
 .card-body {
+    flex: 1;
     padding: 1.15rem 1.25rem 1.3rem;
     display: flex;
     flex-direction: column;

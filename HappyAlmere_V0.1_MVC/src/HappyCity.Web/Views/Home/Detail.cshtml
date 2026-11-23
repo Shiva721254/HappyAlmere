@@ -1,0 +1,49 @@
+@model HappyCity.Web.ViewModels.DiscoveryDetailViewModel
+@{
+    ViewData["Title"] = Model.Item.Title;
+}
+
+<section class="wrap section detail-page">
+    <nav class="detail-breadcrumb" aria-label="Broodkruimelpad">
+        <a asp-action="Index">← Terug naar overzicht</a>
+        <span aria-hidden="true">·</span>
+        <a asp-action="Index" asp-route-category="@Model.Item.Category">@Model.Item.Category</a>
+        <span aria-hidden="true">·</span>
+        <a asp-action="Index" asp-route-district="@Model.Item.District">@Model.Item.District</a>
+    </nav>
+
+    <article class="detail-card">
+        <div class="detail-art" aria-hidden="true">@Model.Item.Icon</div>
+        <div class="detail-body">
+            <div class="detail-meta">
+                <a class="detail-pill" asp-action="Index" asp-route-district="@Model.Item.District">@Model.Item.District</a>
+                <a class="detail-pill" asp-action="Index" asp-route-category="@Model.Item.Category">@Model.Item.Category</a>
+            </div>
+            <h1>@Model.Item.Title</h1>
+            <p class="detail-description">@Model.Item.Description</p>
+            <div class="detail-notice">
+                <p class="muted">Onafhankelijke lokale vermelding zonder betaalde plaatsing of tracking. Controleer altijd actuele openingstijden via de officiële bron.</p>
+            </div>
+            <div class="detail-actions">
+                <a class="button" asp-action="Index" asp-route-district="@Model.Item.District">Meer in @Model.Item.District</a>
+                <a class="reset-link" asp-action="Index">Alle plekken in Almere</a>
+            </div>
+        </div>
+    </article>
+</section>
+
+@if (Model.Related.Count > 0)
+{
+    <section class="wrap section">
+        <div class="section-head">
+            <h2>Meer in @Model.Item.Category</h2>
+            <a class="reset-link" asp-action="Index" asp-route-category="@Model.Item.Category">Bekijk alles</a>
+        </div>
+        <div class="cards detail-related">
+            @foreach (var item in Model.Related)
+            {
+                <partial name="_DiscoveryCard" model="item" />
+            }
+        </div>
+    </section>
+}
