@@ -71,6 +71,32 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 app.UseHttpsRedirection();
+app.Use(async (context, next) =>
+{
+    await next();
+    if (context.Response.StatusCode == StatusCodes.Status404NotFound
+        && !context.Response.HasStarted
+        && context.Response.ContentLength is null
+        && string.IsNullOrEmpty(context.Response.ContentType)
+        && HttpMethods.IsGet(context.Request.Method)
+        && !context.Request.Path.Equals("/Home/NotFoundPage", StringComparison.OrdinalIgnoreCase))
+    {
+        var originalPath = context.Request.Path;
+        var originalQuery = context.Request.QueryString;
+        context.Request.Path = "/Home/NotFoundPage";
+        context.Request.QueryString = QueryString.Empty;
+        context.SetEndpoint(null);
+        try
+        {
+            await next();
+        }
+        finally
+        {
+            context.Request.Path = originalPath;
+            context.Request.QueryString = originalQuery;
+        }
+    }
+});
 app.UseStaticFiles();
 app.UseRouting();
 app.UseRateLimiter();

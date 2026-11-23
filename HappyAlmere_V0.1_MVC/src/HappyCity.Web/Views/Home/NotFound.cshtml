@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Pagina niet gevonden";
+}
+
+<section class="wrap section">
+    <div class="not-found-card">
+        <p class="eyebrow page-eyebrow">404 · Pagina niet gevonden</p>
+        <h1>Deze pagina bestaat niet (meer)</h1>
+        <p class="muted">De pagina of plek die je zocht is verplaatst, verwijderd of het adres bevat een typfout. Je kunt direct terug naar het overzicht van Almere.</p>
+        <div class="page-actions">
+            <a class="button" asp-controller="Home" asp-action="Index">Terug naar HappyAlmere</a>
+            <a class="reset-link" asp-controller="Home" asp-action="Index" asp-route-category="@DiscoveryCategories.Activities">Activiteiten bekijken</a>
+            <a class="reset-link" asp-controller="Home" asp-action="Over">Over HappyAlmere</a>
+        </div>
+    </div>
+</section>

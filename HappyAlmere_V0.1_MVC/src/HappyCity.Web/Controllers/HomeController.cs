@@ -41,11 +41,11 @@ public sealed class HomeController(IDiscoveryService discovery, ICityContext cit
     public async Task<IActionResult> Detail(string slug, CancellationToken cancellationToken)
     {
         if (!DiscoveryFilter.IsValidSlug(slug))
-            return NotFound();
+            return NotFoundPage();
 
         var item = await discovery.FindBySlugAsync(city.CitySlug, slug, cancellationToken);
         if (item is null)
-            return NotFound();
+            return NotFoundPage();
 
         var relatedPool = await discovery.FindAsync(new DiscoveryFilter(city.CitySlug, item.Category, null), cancellationToken);
         var related = relatedPool
@@ -56,11 +56,21 @@ public sealed class HomeController(IDiscoveryService discovery, ICityContext cit
         return View(new DiscoveryDetailViewModel(item, related));
     }
 
+    [HttpGet("/Home/Over"), HttpGet("/over")]
+    public IActionResult Over() => View();
+
     [HttpGet]
     public IActionResult Business() => View();
 
     [HttpGet]
     public IActionResult Privacy() => View();
+
+    [HttpGet("/Home/NotFoundPage"), ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    public IActionResult NotFoundPage()
+    {
+        Response.StatusCode = StatusCodes.Status404NotFound;
+        return View("NotFound");
+    }
 
     [Route("Home/Error"), ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public IActionResult Error()
