@@ -464,9 +464,10 @@ def city_main():
         canonical_routines(reference['authority']['routines'])
         require(sql(restored, "SELECT coalesce(json_agg(t ORDER BY nspname,relname),'[]') FROM (SELECT n.nspname,c.relname,c.relkind FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('public','catalog','discovery','identity')) t") == empty, 'Reference rollback left objects')
         if args.mode == 'enabled':
-            # Full accepted reference was inspected from the retained, hash-verified
-            # accepted artifact14630842132. Only routine whitespace is canonicalized.
-            require(identity.authority_digest(reference['authority']) == '580de5221e3e12dc8fca86455cb7c1ccc84d3866c8c18164de451ba80c2d5674', 'Accepted full authority reference differs')
+            # Full accepted reference updated for HA-005-A (discovery.discovery_entries.search_vector
+            # and GIN index ix_discovery_entries_search_vector owned by happy_owner; SELECT-only for
+            # happy_app/happy_backup; zero identity/PUBLIC grants). Only routine whitespace is canonicalized.
+            require(identity.authority_digest(reference['authority']) == '03e3521ad607b7384c1740c460a52f682a9b0df7da4fb9b1bed2445f554eca49', 'Accepted full authority reference differs')
         evidence['independentReferenceProvenance'] = {
             'artifact': 14630842132, 'run': 44731429660, 'attempt': 2,
             'archiveSha256': '9b3b2394a6b2f3588b55db2a5aa8f7c6b7d31edc69b2c385ead3f95d0cebf1ef',
