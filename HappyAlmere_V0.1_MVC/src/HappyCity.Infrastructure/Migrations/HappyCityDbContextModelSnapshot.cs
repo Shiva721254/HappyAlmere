@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NpgsqlTypes;
 
 #nullable disable
 
@@ -289,6 +290,12 @@ namespace HappyCity.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("legacy_id");
 
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasColumnName("search_vector")
+                        .HasComputedColumnSql("setweight(to_tsvector('dutch', coalesce(title, '')), 'A') || setweight(to_tsvector('dutch', coalesce(district, '')), 'B') || setweight(to_tsvector('dutch', coalesce(description, '')), 'C')", true);
+
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(120)
@@ -307,6 +314,11 @@ namespace HappyCity.Infrastructure.Migrations
 
                     b.HasIndex("LegacyId")
                         .IsUnique();
+
+                    b.HasIndex("SearchVector")
+                        .HasDatabaseName("ix_discovery_entries_search_vector");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "gin");
 
                     b.HasIndex("CityId", "Slug")
                         .IsUnique();

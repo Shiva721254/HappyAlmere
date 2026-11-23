@@ -1,6 +1,7 @@
 using HappyCity.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using NpgsqlTypes;
 
 namespace HappyCity.Infrastructure;
 
@@ -62,6 +63,13 @@ public sealed class HappyCityDbContext(DbContextOptions<HappyCityDbContext> opti
         entry.Property(x => x.Icon).HasMaxLength(16);
         entry.HasIndex(x => new { x.CityId, x.Slug }).IsUnique();
         entry.HasIndex(x => new { x.CityId, x.IsPublished, x.CategoryId, x.LegacyId, x.Id });
+        entry.Property<NpgsqlTsVector?>("SearchVector")
+            .HasComputedColumnSql(
+                "setweight(to_tsvector('dutch', coalesce(title, '')), 'A') || setweight(to_tsvector('dutch', coalesce(district, '')), 'B') || setweight(to_tsvector('dutch', coalesce(description, '')), 'C')",
+                stored: true);
+        entry.HasIndex("SearchVector")
+            .HasDatabaseName("ix_discovery_entries_search_vector")
+            .HasMethod("gin");
         entry.HasOne(x => x.City).WithMany().HasForeignKey(x => x.CityId).OnDelete(DeleteBehavior.Restrict);
         entry.HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId).OnDelete(DeleteBehavior.Restrict);
 
