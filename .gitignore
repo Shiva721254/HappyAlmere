@@ -9,3 +9,14 @@
 *.user
 artifacts/
 node_modules/
+*.key
+HappyAlmere_V0.1_MVC/HappyAlmere_Master_Business_Plan.md
+HappyAlmere_V0.1_MVC/HappyAlmere_Master_Business_Plan.pdf
+
+# Generated Python verification cache and sensitive database archives
+**/__pycache__/
+*.pyc
+*.dump
+*.pgdump
+*.backup
+**/globals-no-passwords.sql

@@ -1,0 +1,27 @@
+name: happyalmere-v02
+services:
+  postgres:
+    image: postgres:18-bookworm@sha256:1757c628698dd1ca67ff7a5fc386bfd91040afc62a45484c346c788b0cbe5402
+    environment:
+      POSTGRES_DB: happyalmere
+      POSTGRES_USER: happy_migrator
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/Initialize-LocalDatabase.ps1}
+      HAPPY_APP_PASSWORD: ${HAPPY_APP_PASSWORD:?Run scripts/Initialize-LocalDatabase.ps1}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=trust"
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+      - postgres-tls:/var/lib/postgresql-tls
+      - ./infrastructure/postgres/start.sh:/opt/happy/start.sh:ro
+      - ./infrastructure/postgres/01-runtime-role.sh:/docker-entrypoint-initdb.d/01-runtime-role.sh:ro
+      - ./infrastructure/postgres/pg_hba.conf:/opt/happy/pg_hba.conf:ro
+    entrypoint: ["/bin/bash", "/opt/happy/start.sh"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U happy_migrator -d happyalmere"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+volumes:
+  postgres-data:
+  postgres-tls:

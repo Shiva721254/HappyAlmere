@@ -1,7 +1,7 @@
 using HappyCity.Application;
 using HappyCity.Domain;
 
-namespace HappyCity.Infrastructure;
+namespace HappyCity.FoundationTests;
 
 public sealed class DemoDiscoveryRepository : IDiscoveryRepository
 {
@@ -19,6 +19,8 @@ public sealed class DemoDiscoveryRepository : IDiscoveryRepository
     {
         ArgumentNullException.ThrowIfNull(filter);
         cancellationToken.ThrowIfCancellationRequested();
+        if (filter.CitySlug != "almere")
+            return Task.FromResult<IReadOnlyList<DiscoveryItem>>(Array.Empty<DiscoveryItem>());
         IReadOnlyList<DiscoveryItem> results = Items
             .Where(x => filter.Category is null || x.Category.Equals(filter.Category, StringComparison.OrdinalIgnoreCase))
             .Where(x => filter.Query is null || $"{x.Title} {x.Description} {x.District}".Contains(filter.Query, StringComparison.OrdinalIgnoreCase))
@@ -26,5 +28,10 @@ public sealed class DemoDiscoveryRepository : IDiscoveryRepository
 
         // In-memory work completes synchronously; a future EF repository will await database I/O.
         return Task.FromResult(results);
+    }
+    public async Task<DiscoveryPage> FindPageAsync(DiscoveryFilter filter, int size, string? cursor, CancellationToken cancellationToken = default)
+    {
+        DiscoveryCursor.Parse(cursor, filter, size);
+        return new DiscoveryPage((await FindAsync(filter, cancellationToken)).Take(size).ToArray(), null);
     }
 }

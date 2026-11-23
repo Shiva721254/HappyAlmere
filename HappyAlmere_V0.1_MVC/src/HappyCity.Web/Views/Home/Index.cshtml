@@ -1,17 +1,18 @@
 @model HappyCity.Web.ViewModels.DiscoveryViewModel
 @{
     ViewData["Title"] = "Haal meer uit jouw Almere";
+    var hasFilter = !string.IsNullOrEmpty(Model.Category) || !string.IsNullOrEmpty(Model.Query);
 }
 
 <section class="hero">
-    <div class="wrap">
+    <div class="wrap hero-inner">
         <p class="eyebrow">JOUW STAD. JOUW BUURT.</p>
         <h1>Haal meer uit<br>jouw Almere.</h1>
-        <p>Ontdek, bespaar en geniet. Alles dichtbij huis.</p>
+        <p class="hero-lead">Ontdek lokale plekken, activiteiten en diensten dichtbij huis.</p>
         <form method="get" asp-action="Index" class="search" role="search">
             <label for="q">Wat zoek je vandaag?</label>
             <input type="hidden" name="category" value="@Model.Category">
-            <div>
+            <div class="search-controls">
                 <input id="q" name="q" maxlength="@HappyCity.Application.DiscoveryFilter.MaximumQueryLength" value="@Model.Query"
                        aria-describedby="search-help" placeholder="Bijvoorbeeld: familie, lunch, tuin">
                 <button type="submit">Zoeken</button>
@@ -20,26 +21,43 @@
         </form>
     </div>
 </section>
-<section class="wrap section">
-    <h2>Waar heb je zin in?</h2>
+
+<section class="wrap section section-categories">
+    <div class="section-head">
+        <h2>Waar heb je zin in?</h2>
+        @if (hasFilter)
+        {
+            <a class="reset-link" asp-action="Index">Filter wissen</a>
+        }
+    </div>
     <div class="categories">
-        <a asp-action="Index" asp-route-category="@DiscoveryCategories.Activities">☀ Activiteiten</a>
-        <a asp-action="Index" asp-route-category="@DiscoveryCategories.Savings">€ Besparen</a>
-        <a asp-action="Index" asp-route-category="@DiscoveryCategories.Food">♨ Eten &amp; drinken</a>
-        <a asp-action="Index" asp-route-category="@DiscoveryCategories.Services">⌂ Diensten</a>
-        <a asp-action="Index" asp-route-category="@DiscoveryCategories.Shopping">◇ Winkelen</a>
-        <a asp-action="Index">Alles bekijken</a>
+        <a class="@(Model.Category == DiscoveryCategories.Activities ? "is-active" : null)"
+           asp-action="Index" asp-route-category="@DiscoveryCategories.Activities">☀ Activiteiten</a>
+        <a class="@(Model.Category == DiscoveryCategories.Savings ? "is-active" : null)"
+           asp-action="Index" asp-route-category="@DiscoveryCategories.Savings">€ Besparen</a>
+        <a class="@(Model.Category == DiscoveryCategories.Food ? "is-active" : null)"
+           asp-action="Index" asp-route-category="@DiscoveryCategories.Food">♨ Eten &amp; drinken</a>
+        <a class="@(Model.Category == DiscoveryCategories.Services ? "is-active" : null)"
+           asp-action="Index" asp-route-category="@DiscoveryCategories.Services">⌂ Diensten</a>
+        <a class="@(Model.Category == DiscoveryCategories.Shopping ? "is-active" : null)"
+           asp-action="Index" asp-route-category="@DiscoveryCategories.Shopping">◇ Winkelen</a>
+        <a class="@(Model.Category is null ? "is-active" : null)"
+           asp-action="Index">Alles bekijken</a>
     </div>
 </section>
+
 <section class="wrap section">
     <div class="section-head">
         <h2>Ontdek jouw Almere</h2>
         <span class="tag">Voorbeeldinhoud</span>
     </div>
-    <p class="muted">Dit is een prototype. Er zijn nog geen actuele aanbiedingen of geverifieerde bedrijven.</p>
+    <p class="muted provenance">Dit is een prototype. Er zijn nog geen actuele aanbiedingen of geverifieerde bedrijven.</p>
     @if (Model.Category is not null)
     {
-        <p>Geselecteerde categorie: @Model.Category</p>
+        <div class="active-filter">
+            <p>Geselecteerde categorie: @Model.Category</p>
+            <a asp-action="Index">Alles tonen</a>
+        </div>
     }
     <div class="cards">
         @foreach (var item in Model.Items)
@@ -49,10 +67,24 @@
     </div>
     @if (Model.Items.Count == 0)
     {
-        <p>Geen resultaten. Probeer een andere zoekterm.</p>
-        <a asp-action="Index">Alle voorbeelden</a>
+        <div class="empty-state">
+            <p>Geen resultaten. Probeer een andere zoekterm.</p>
+            <a class="button" asp-action="Index">Alle voorbeelden</a>
+        </div>
+    }
+    @if (Model.Items.Count == HappyCity.Application.DiscoveryFilter.MaximumResults)
+    {
+        <p class="muted limit-note">De eerste 100 resultaten worden getoond. Verfijn je zoekterm of kies een categorie.</p>
     }
 </section>
+
+@if (Model.NextCursor is not null)
+{
+    <nav class="wrap pagination" aria-label="Volgende zoekresultaten">
+        <a class="button" asp-action="Index" asp-route-q="@Model.Query" asp-route-category="@Model.Category" asp-route-cursor="@Model.NextCursor">Volgende resultaten</a>
+    </nav>
+}
+
 <section class="wrap section">
     <div class="business-banner">
         <div>

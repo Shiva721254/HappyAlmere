@@ -12,8 +12,9 @@ passed (33 .NET tests, 42 layouts, 190 security and five rate assertions). The o
 remote-CI condition is satisfied: **AC15 PASS**, local synthetic V0.1 only.
 
 **15 PASS within the approved scope.** This is an attributed owner/reviewer decision,
-not agent self-approval or production certification. The final PR head must pass all
-mandatory checks and branch protection before merge. Existing V0.2 reconciliation and
+not agent self-approval or production certification. Final foundation head ef2b201 passed both Ubuntu/Windows push and PR checks;
+PR #2 merged normally into main at 0e7739d3f72f08b095c3316e6680053ae99915f6.
+The annotated checkpoint is checkpoint/ha-001-v01-approved. Existing V0.2 reconciliation and
 HA-002 acceptance remain separate; no new database feature implementation is approved.
 See [ARCH-03](HA-001-ARCH-03-final-architectural-review.md),
 [closure report](HA-001-CLOSE-final-report.md), and the permanent risk register.
@@ -224,3 +225,14 @@ This is an execution-based re-verification by the implementing assistant, not an
 - **Low:** CI actions are now pinned but the updated remote workflow has not run. Chromium resizing is not physical-device or cross-engine testing; automated debugger variable evaluation can cancel when stepping. Full accessibility/load testing and manual watch/hover coverage are not claimed.
 
 Recommend independent review of c13f223 and its documentation/evidence. Resolve or explicitly accept the bounded residual risks, obtain an architect recommendation, then obtain formal product-owner approval. **Stop HA-001 work here; do not begin or continue V0.2 without that review and approval.**
+
+## Reconciliation verification (separate from V0.1 acceptance)
+
+Dedicated branch integration/ha-001-v02 preserves develop c2964ee and approved main
+as merge parents (ee9651b75613df4a200adea83e409100011a636c). Draft PR #3 awaits
+independent review; it is not authorization to merge or accept HA-002. Fresh local
+Debug/Release builds have zero warnings/errors; 68 .NET tests, 42 layouts, 190
+security assertions and five rate assertions pass against the existing PostgreSQL.
+NUL search input is explicitly rejected with HTTP 400 before database I/O after a
+reproduced HTTP 500 regression. Original migrations/schema remain unchanged.
+See the closure report for actual remote integration CI and remaining HA-002 gaps.

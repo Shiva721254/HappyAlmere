@@ -1,11 +1,15 @@
 using HappyCity.Application;
 using HappyCity.Infrastructure;
+using HappyCity.Infrastructure.Identity;
 using HappyCity.Web.Security;
+using HappyCity.Web.CityContext;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddIdentityFoundation(builder.Configuration);
 builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
 builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
@@ -15,8 +19,22 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.SameSite = SameSiteMode.Strict;
 });
-builder.Services.AddSingleton<IDiscoveryRepository, DemoDiscoveryRepository>();
+builder.Services.AddSingleton<SafeQueryTimingInterceptor>();
+builder.Services.AddDbContext<HappyCityDbContext>((provider, options) => options.UseNpgsql(
+    DatabaseConfiguration.RequireVerifiedTls(builder.Configuration.GetConnectionString("HappyCity")))
+    .AddInterceptors(provider.GetRequiredService<SafeQueryTimingInterceptor>()));
+builder.Services.AddScoped<IDiscoveryRepository, PostgresDiscoveryRepository>();
+builder.Services.AddScoped<ICategoryLookup, PostgresCategoryLookup>();
+var allowedLiveDomains = PostgresCityResolver.CreateAllowedLiveDomains(
+    builder.Configuration.GetValue<bool>("CityResolution:AllowLiveDomains"),
+    builder.Configuration.GetSection("CityResolution:AllowedLiveDomains").Get<string[]>());
+builder.Services.AddScoped<ICityResolver>(provider => new PostgresCityResolver(
+    provider.GetRequiredService<HappyCityDbContext>(),
+    builder.Configuration.GetSection("TrustedLocalCities").Get<Dictionary<string, string>>() ?? new Dictionary<string, string>(),
+    allowedLiveDomains));
 builder.Services.AddScoped<IDiscoveryService, DiscoveryService>();
+builder.Services.AddScoped<RequestCityContext>();
+builder.Services.AddScoped<ICityContext>(provider => provider.GetRequiredService<RequestCityContext>());
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -39,7 +57,12 @@ builder.Services.AddRateLimiter(options =>
     };
 });
 
+var trustedProxy = TrustedProxyConfiguration.Create(builder.Configuration);
 var app = builder.Build();
+if (trustedProxy is not null)
+{
+    app.UseForwardedHeaders(trustedProxy);
+}
 // Register headers before exception handling; OnStarting also covers cleared error responses.
 app.UseMiddleware<SecurityHeadersMiddleware>();
 if (!app.Environment.IsDevelopment())
@@ -51,6 +74,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseRateLimiter();
+app.UseMiddleware<CityContextMiddleware>();
+app.MapGet("/healthz", () => Results.Json(new { status = "ok" }));
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
 

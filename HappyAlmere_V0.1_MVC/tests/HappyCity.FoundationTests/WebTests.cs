@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using HappyCity.Application;
 
 namespace HappyCity.FoundationTests;
 
@@ -21,7 +23,13 @@ public sealed class FoundationFactory : WebApplicationFactory<Program>
             }));
         // Probe actions exist only in the test assembly, never the production application.
         builder.ConfigureServices(services =>
-            services.AddControllersWithViews().AddApplicationPart(typeof(SecurityProbeController).Assembly));
+        {
+            services.RemoveAll<IDiscoveryRepository>();
+            services.AddSingleton<IDiscoveryRepository, DemoDiscoveryRepository>();
+            services.RemoveAll<ICityResolver>();
+            services.AddSingleton<ICityResolver, TestCityResolver>();
+            services.AddControllersWithViews().AddApplicationPart(typeof(SecurityProbeController).Assembly);
+        });
     }
 
     public HttpClient HttpsClient() => CreateClient(new WebApplicationFactoryClientOptions
@@ -29,6 +37,14 @@ public sealed class FoundationFactory : WebApplicationFactory<Program>
         BaseAddress = new Uri("https://localhost:7143"),
         AllowAutoRedirect = false
     });
+}
+
+public sealed class TestCityResolver : ICityResolver
+{
+    public Task<CityResolution?> ResolveAsync(string hostname, CancellationToken cancellationToken = default) =>
+        Task.FromResult<CityResolution?>(hostname is "localhost" or "127.0.0.1" or "example.test"
+            ? new CityResolution(HappyCity.Domain.LegacyIdentifier.Map(1, 1), "almere", "Almere",
+                "NL", "nl", "Europe/Amsterdam", hostname, null, true, false) : null);
 }
 
 public sealed class SecurityProbeController : Controller
@@ -46,6 +62,19 @@ public sealed class SecurityProbeController : Controller
 
 public sealed class WebTests
 {
+    [Theory]
+    [InlineData("/?q=%00")]
+    [InlineData("/?q=hello%00world")]
+    [InlineData("/?category=%00")]
+    public async Task Database_incompatible_text_is_rejected_at_http_boundary(string path)
+    {
+        await using var factory = new FoundationFactory();
+        using var client = factory.HttpsClient();
+        using var response = await client.GetAsync(path);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        AssertHeaders(response);
+    }
+
     [Theory]
     [InlineData("/", "Haal meer uit")]
     [InlineData("/Home/Business", "Voor ondernemers")]
@@ -96,7 +125,8 @@ public sealed class WebTests
         await using var factory = new FoundationFactory();
         using var client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
-            BaseAddress = new Uri("http://localhost:5143"), AllowAutoRedirect = false
+            BaseAddress = new Uri("http://localhost:5143"),
+            AllowAutoRedirect = false
         });
         using var response = await client.GetAsync("/?q=familie");
         Assert.Equal(HttpStatusCode.TemporaryRedirect, response.StatusCode);
@@ -147,7 +177,8 @@ public sealed class WebTests
                 new Dictionary<string, string?> { ["AllowedHosts"] = "example.test" })));
         using var hostedClient = hosted.CreateClient(new WebApplicationFactoryClientOptions
         {
-            BaseAddress = new Uri("https://example.test"), AllowAutoRedirect = false
+            BaseAddress = new Uri("https://example.test"),
+            AllowAutoRedirect = false
         });
         using var response = await hostedClient.GetAsync("/");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

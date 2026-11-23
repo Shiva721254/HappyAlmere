@@ -1,101 +1,56 @@
-# V0.1 development and verification
+# Reconciled PostgreSQL development verification
 
-Open the Git worktree root containing HappyAlmere.slnx. Use the .NET SDK selected
-by global.json and the C# extension for debugging. Python 3 is used for the standard-library-only source/credential scan. Browser tooling is development-only:
-Windows 10/11 or Windows Server with Windows PowerShell 5.1+, Node 24.22.3 as pinned
-in `.node-version` (Node 25 also supported locally), npm and the committed lockfile.
-The browser harness intentionally targets Windows trust stores and socket inventory;
-Linux .NET integration tests remain supported, but Linux browser trust setup is not
-claimed by this workflow. Node/Playwright are not deployed with the application.
+## HA-003-A current execution update
 
-## Repeatable setup and checks
+Current branch `feature/ha-003-a`, exact accepted baseline `216df25c5656a979fcf67dfe3a16d07d7d66f154`. [IAM-G04 authorization](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023159754) and [approved #28 contract](https://github.com/Shiva721254/HappyAlmere/issues/28) supersede historical execution snapshots below only within the bounded persistence scope. [INT-G12 passed](https://github.com/Shiva721254/HappyAlmere/issues/27#issuecomment-7022990043); [IAM-G05 passed before implementation](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023218886).
 
-Run from the root. On first setup, explicitly create/trust the local certificate:
+IAM-A01–02 preflight complete; A03–07 entities/context/migration/roles/minimal DI implemented locally; A08–09 verification in progress; A10 draft PR/handover pending. Identity defaults off, with seven functional tables and separate context/history. Existing catalog/discovery source, migrations, original tests and performance thresholds are preserved. Exact authorized changes remain within the 34-path maximum. [Technical dictionary/runbook](database/identity-foundation.md), [acceptance](../ACCEPTANCE.md) and [handover](../HANDOVER.md) own detailed evidence. Debug/Release builds pass with zero warnings/errors; 157 enabled .NET tests and all 105 original tests with Identity disabled pass (zero failures/skips). Eleven isolated database rehearsal checks, 42 responsive cases, 190 functional/security assertions and five rate assertions pass. NuGet/npm audits report no known vulnerabilities. Implementation head d4ec551 passed both push and PR CI; actual links/artifacts are in HANDOVER.md. Final documentation-head CI is reported in the GitHub submission ledger. Independent review remains outstanding.
+
+Owner remains migration coordinator and final approval authority; ChatGPT performs independent HA-003-A-ARCH-01 review. No merge, deployment, public auth endpoints, real accounts, business features or later Identity phases. IAM-OPEN-01–10 and IAM-PRE-D01/D02 are approved as recorded in #28; future cryptographic/session/resource policies remain deferred. Final commit, draft PR and push/PR CI are recorded in the GitHub submission ledger after actual synchronization; no self-referential commit hash is fabricated. Historical content below remains intact.
+
+See the root README and docs/V0.2-DATABASE-DISCOVERY.md for existing protected database
+setup. Windows local browser verification remains supported. Integration CI runs the
+same browser assertions on Ubuntu with an actual isolated TLS PostgreSQL container.
+Linux uses explicit OS/NSS trust; Chromium and Node HTTPS certificate validation stay
+on. Python 3 performs the bounded source/history scan. Node is pinned by .node-version,
+Playwright by package-lock.json. No Node dependency is deployed with the app.
 
 ```powershell
-dotnet dev-certs https --trust
-dotnet dev-certs https --check --trust
 dotnet restore HappyAlmere.slnx --force --no-http-cache
 dotnet build HappyAlmere.slnx -c Debug --no-restore -m:1 --disable-build-servers
 dotnet build HappyAlmere.slnx -c Release --no-restore -m:1 --disable-build-servers
-dotnet test HappyAlmere.slnx -c Release --no-build -m:1 --logger trx
-dotnet list HappyAlmere.slnx package --vulnerable --include-transitive --format json
+./scripts/Test-Local.ps1 -EnvironmentFile artifacts/forward/<run>/rehearsal.env
 npm ci --ignore-scripts
 npm run browser:install
-npm audit --audit-level=high
-python scripts/verify-source.py
+. ./scripts/Load-LocalEnvironment.ps1 -EnvironmentFile artifacts/forward/<run>/rehearsal.env
 npm run test:browser
+python scripts/verify-source.py
 ```
 
-`npm ci` installs exactly the lockfile's development dependencies. Playwright 1.65.1
-pins its Chromium revision; `browser:install` downloads that matching browser.
-No global npm module or machine-specific path is needed. Package lifecycle scripts
-are disabled during install; browser installation is a separate explicit operation.
-Review the lockfile, dependency audit and browser changes when upgrading.
+The first database setup uses Initialize-LocalDatabase.ps1 only for an isolated
+synthetic instance with matching credentials/volumes. Do not create mismatched credentials
+against preserved data. In closure, existing protected parent-checkout environment
+configuration was loaded without copying it to source or printing values.
 
-The browser harness checks certificate trust, exports only the public development
-certificate to ignored artifacts, and passes it to Node via NODE_EXTRA_CA_CERTS.
-It never exports the private key and never sets ignoreHTTPSErrors or disables TLS
-validation. Chromium uses Windows certificate trust. Agent sandboxes may require
-approved certificate/process/socket access; do not weaken TLS to avoid that boundary.
+The harness starts fresh loopback servers, strips admin/migration credentials from
+child environments, verifies actual socket bindings and runs responsive, security and
+rate suites separately. It does not raise rate limits or bypass TLS. Linux socket checks
+use ss and local IPv4 interface probes; Windows uses the preserved PowerShell probe.
+No public perimeter, production load, comprehensive accessibility or device claim.
 
-The harness starts the actual `https` launch profile for responsive checks on
-7143/5143. Fresh Production servers on 7243/5243 separately run functional/security
-and rate-budget probes. Readiness uses TCP so it does not consume discovery permits.
-Existing listeners cause failure; only harness-owned processes are terminated.
-All three suites verify loopback sockets and attempt connections through local
-non-loopback IPv4 interfaces. IPv6 listeners are inventoried and must be loopback;
-non-loopback IPv6 reachability is not separately probed. At least one non-loopback
-IPv4 interface is required to claim the boundary probe. No external host is contacted.
-Never raise the 120/minute limit to pass tests.
+CI pins actions, keeps contents:read and nonpersistent checkout credentials. It installs
+matching Chromium dependencies and libnss3-tools on the ephemeral runner. Only public
+certificate material is used for trust; no certificate/key/server logs are uploaded.
+Runtime permissions remain read-only; migration is separate and never runs at app startup.
+See the closure report for actual results and independent-review stop boundary.
 
-For a manually started development server:
 
-```powershell
-dotnet run --project HappyAlmere_V0.1_MVC/src/HappyCity.Web -c Release --no-build --launch-profile https
-# In another terminal:
-npm run test:responsive
-powershell.exe -NoProfile -File scripts/verify-network.ps1
-```
+## Forward-phase environment selection
 
-Stop the server before rebuilding on Windows. Browse https://localhost:7143;
-http://localhost:5143 redirects. `localhost` binds loopback IPv4/IPv6, not LAN/WAN.
-Never override URLs with wildcard/all-interface addresses, add port forwarding or
-create a public tunnel. AllowedHosts validates HTTP Host and noindex asks crawlers
-not to index; neither is a network access control. Local processes/users can still
-reach loopback. Use synthetic input only. See [security](SECURITY.md).
-
-## CI and evidence
-
-The root workflow retains the Ubuntu .NET job and adds a Windows 2025 browser job.
-Actions are pinned by full commit SHA; token permissions are contents:read, checkout
-credentials are not persisted, and package-manager caching is disabled. The browser
-job uses the same lockfile, pinned Node version, Chromium installer and harness.
-The ephemeral Windows runner exports its public dev certificate, imports it into the machine Root store with certutil, and verifies trust without an unattended user-consent dialog; no repository secret is
-needed. Artifact selection includes results/screenshots only, excluding certificates,
-keys and server logs. Retention is seven days. Hosted runner images and the OS trust
-store are external inputs, not bit-for-bit frozen infrastructure.
-
-Changing a workflow locally does not establish its remote result. The R02 report
-separates the submitted R01 commit's actual GitHub success from the revised R02 job,
-which can run only after an authorized push. No push or merge is implied by testing.
-
-Raw evidence is ignored under artifacts/. Publish only reviewed sanitized records.
-The suite retains seven viewport widths, 42 layouts, navigation/search, boundary
-inputs, skip-link controls, 190 production assertions and five live rate checks.
-Browser tests are not full accessibility, physical-device, load or penetration tests.
-
-## Debugging and acceptance
-
-Ctrl+Shift+B builds; F5 selects HappyAlmere HTTPS with the same localhost URLs.
-Set a HomeController.Index breakpoint, browse a search, inspect locals/continue and
-stop. Record actual debugger evidence separately; configuration inspection alone is
-not a debugger execution test. HSTS is tested with a non-loopback test host in the
-integration suite because localhost is intentionally excluded by the framework.
-
-See [R02 report](reports/HA-001-R02-independent-audit-remediation.md) and
-[risk register](security/security-risk-register.md). Stop after R02 pending independent
-review and formal owner approval; do not start HA-002/HA-003.
-
-Reference: [Playwright CI setup](https://playwright.dev/docs/ci) and
-[.NET certificate export semantics](https://learn.microsoft.com/dotnet/core/tools/dotnet-dev-certs).
+The old initialization command is intentionally pinned to InitialDiscovery and is
+only the preserved source fixture. Follow docs/database/backup-and-recovery.md for
+isolated forward instances. Pass the exact printed protected environment file to
+scripts/Test-Local.ps1 or scripts/Start-Local.ps1 using -EnvironmentFile. Do not run
+the new application against the original old-schema .env. Browser tests must load
+the same explicit rehearsal environment before npm run test:browser. Keep all
+credentials/dumps ignored and stop task containers after verification without deleting volumes.

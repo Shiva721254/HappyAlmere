@@ -1,0 +1,4250 @@
+{
+  "baselineCommit": "b4f092ffbbf385f16c4f42aaef117fafc8e56da7",
+  "startedUtc": "2026-11-19T18:59:12.101599+00:00",
+  "sourceGate": "artifacts\\ha002a\\20261119161050-4b5de6\\evidence.json",
+  "checks": {
+    "enrichedBackupRestore": "PASS",
+    "afterBackfillRollback": "PASS: P0001 Controlled migration failure after backfill; full rollback verified",
+    "postFailureFreshRestore": "PASS",
+    "preCorrectionMigratedBackupRestore": "PASS",
+    "correctionSpecificFailureRollbackRecovery": "PASS: P0001 after constraints/history; complete state rollback, fresh restore and reapplication",
+    "completeRowsAssociationsPublication": "PASS",
+    "allUuidMappingsAndBoundaryIds": "PASS",
+    "secondRunNoOp": "PASS",
+    "cleanCreation": "PASS",
+    "independentSqlOnlyDefinitionsAndMutationGuards": "PASS",
+    "efPhysicalDefinitionsCleanAndUpgrade": "PASS",
+    "exactSqlstateAndUnrelatedErrorRejection": "PASS",
+    "futurePrivateTableDenied": "PASS",
+    "tlsRoleReadsAndEscalationNegatives": "PASS",
+    "restrictedLogicalBackup": "PASS",
+    "completePrivilegesGrantOptionsAndRevocation": "PASS (authentication denial also required by PostgresTests)",
+    "dedicatedRestoreIdentityAndRevocation": "PASS",
+    "migratedArchiveAllTablesConstraintsIndexes": "PASS",
+    "restoredColumnsFunctionsTriggersHistoryOwnershipEffectivePrivileges": "PASS",
+    "restoredFunctionalNegatives": "PASS",
+    "nonLoginObjectOwnership": "PASS"
+  },
+  "enrichedCounts": {
+    "Categories": 5,
+    "Cities": 1,
+    "DiscoveryEntries": 8,
+    "__EFMigrationsHistory": 1
+  },
+  "enrichedSha256": "416b245e83c3544ba3318c23dfeeefcf6f9f7c8cffff051d20172b0b871ec051",
+  "recoverySeconds": 5.155,
+  "preCorrectionBackupSha256": "8d3254a8e45ff606caa775c9d5eb568da2544f9b94caa5a9e55f1ad8d2bc9987",
+  "correctionPreStateDigest": "7361434bd2df13a2ec9362397b7be7b6c874c2d65a0cc155d55c230e995ddb8e",
+  "rowDigests": {
+    "Cities": "da2eb7e6813b67d233a4e745a2a3d6a5c8f44709c8268d6e3578eee7743dbad6",
+    "Categories": "91e8603da6334368edd904c23cba93d8b1bd556ad17970356a1939c3b1b58e31",
+    "DiscoveryEntries": "61004d54e9d80c626feb03e113da850df8969243cf1df83366272760ca111f07"
+  },
+  "migrationHistory": [
+    {
+      "MigrationId": "20261119000108_InitialDiscovery",
+      "ProductVersion": "10.0.14"
+    },
+    {
+      "MigrationId": "20261119161305_CatalogForward",
+      "ProductVersion": "10.0.14"
+    },
+    {
+      "MigrationId": "20261119175842_SupportedRegions",
+      "ProductVersion": "10.0.14"
+    }
+  ],
+  "noOpStateDigest": "72e7e4e762bb1cb39ee27389e3b4d615ed52e81c70f79bea1f0a69cce7332960",
+  "sqlOnlyContractSha256": "63c6c74fe8c3a557bc276f2f2e0672cd4d838c7b60f828bafbe0d7074e5a0c1b",
+  "sqlOnlyInventory": {
+    "columns": [
+      {
+        "table_schema": "discovery",
+        "table_name": "discovery_entries",
+        "column_name": "legacy_category_id",
+        "data_type": "integer",
+        "udt_name": "int4",
+        "is_nullable": "YES",
+        "column_default": null,
+        "character_maximum_length": null,
+        "numeric_precision": 32,
+        "numeric_scale": 0
+      },
+      {
+        "table_schema": "discovery",
+        "table_name": "discovery_entries",
+        "column_name": "legacy_city_id",
+        "data_type": "integer",
+        "udt_name": "int4",
+        "is_nullable": "YES",
+        "column_default": null,
+        "character_maximum_length": null,
+        "numeric_precision": 32,
+        "numeric_scale": 0
+      }
+    ],
+    "constraints": [],
+    "indexes": [
+      {
+        "schemaname": "catalog",
+        "tablename": "categories",
+        "indexname": "Categories_uuid",
+        "indexdef": "CREATE UNIQUE INDEX \"Categories_uuid\" ON catalog.categories USING btree (id)"
+      },
+      {
+        "schemaname": "catalog",
+        "tablename": "cities",
+        "indexname": "Cities_uuid",
+        "indexdef": "CREATE UNIQUE INDEX \"Cities_uuid\" ON catalog.cities USING btree (id)"
+      },
+      {
+        "schemaname": "discovery",
+        "tablename": "discovery_entries",
+        "indexname": "DiscoveryEntries_uuid",
+        "indexdef": "CREATE UNIQUE INDEX \"DiscoveryEntries_uuid\" ON discovery.discovery_entries USING btree (id)"
+      },
+      {
+        "schemaname": "discovery",
+        "tablename": "discovery_entries",
+        "indexname": "IX_DiscoveryEntries_CategoryId",
+        "indexdef": "CREATE INDEX \"IX_DiscoveryEntries_CategoryId\" ON discovery.discovery_entries USING btree (legacy_category_id)"
+      },
+      {
+        "schemaname": "discovery",
+        "tablename": "discovery_entries",
+        "indexname": "IX_DiscoveryEntries_CityId_IsPublished_CategoryId_Id",
+        "indexdef": "CREATE INDEX \"IX_DiscoveryEntries_CityId_IsPublished_CategoryId_Id\" ON discovery.discovery_entries USING btree (legacy_city_id, is_published, legacy_category_id, legacy_id)"
+      },
+      {
+        "schemaname": "discovery",
+        "tablename": "discovery_entries",
+        "indexname": "IX_DiscoveryEntries_CityId_Slug",
+        "indexdef": "CREATE UNIQUE INDEX \"IX_DiscoveryEntries_CityId_Slug\" ON discovery.discovery_entries USING btree (legacy_city_id, slug)"
+      },
+      {
+        "schemaname": "discovery",
+        "tablename": "discovery_entries",
+        "indexname": "entries_page_order",
+        "indexdef": "CREATE INDEX entries_page_order ON discovery.discovery_entries USING btree (city_id, ((legacy_id IS NULL)), legacy_id, id) WHERE is_published"
+      }
+    ]
+  },
+  "revokedRestoreAuthorization": {
+    "roles": [
+      {
+        "rolname": "happy_restore",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolreplication": false,
+        "rolbypassrls": false,
+        "rolconnlimit": -1,
+        "rolvaliduntil": null
+      }
+    ],
+    "membership": [],
+    "effectiveTables": [
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "privilege": "DELETE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "privilege": "MAINTAIN",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "privilege": "TRIGGER",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "privilege": "TRUNCATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "privilege": "DELETE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "privilege": "MAINTAIN",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "privilege": "TRIGGER",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "privilege": "TRUNCATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "privilege": "DELETE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "privilege": "MAINTAIN",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "privilege": "TRIGGER",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "privilege": "TRUNCATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "privilege": "DELETE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "privilege": "MAINTAIN",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "privilege": "TRIGGER",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "privilege": "TRUNCATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "privilege": "DELETE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "privilege": "MAINTAIN",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "privilege": "TRIGGER",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "privilege": "TRUNCATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "privilege": "DELETE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "privilege": "MAINTAIN",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "privilege": "TRIGGER",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "privilege": "TRUNCATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "privilege": "DELETE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "privilege": "MAINTAIN",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "privilege": "TRIGGER",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "privilege": "TRUNCATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "privilege": "DELETE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "privilege": "MAINTAIN",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "privilege": "TRIGGER",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "privilege": "TRUNCATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      }
+    ],
+    "effectiveColumns": [
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "category_type",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "category_type",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "category_type",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "category_type",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "created_at",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "created_at",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "created_at",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "created_at",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "display_order",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "display_order",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "display_order",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "display_order",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "is_active",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "is_active",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "is_active",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "is_active",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "legacy_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "legacy_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "legacy_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "legacy_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "name",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "name",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "name",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "name",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "parent_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "parent_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "parent_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "parent_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "slug",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "slug",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "slug",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "slug",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "updated_at",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "updated_at",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "updated_at",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "categories",
+        "col": "updated_at",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "category_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "category_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "category_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "category_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "description",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "description",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "description",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "description",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "language_code",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "language_code",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "language_code",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "language_code",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "name",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "name",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "name",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "category_translations",
+        "col": "name",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "country_code",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "country_code",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "country_code",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "country_code",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "created_at",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "created_at",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "created_at",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "created_at",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "default_language",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "default_language",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "default_language",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "default_language",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "is_active",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "is_active",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "is_active",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "is_active",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "legacy_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "legacy_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "legacy_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "legacy_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "name",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "name",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "name",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "name",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "slug",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "slug",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "slug",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "slug",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "time_zone",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "time_zone",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "time_zone",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "time_zone",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "updated_at",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "updated_at",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "updated_at",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "cities",
+        "col": "updated_at",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "city_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "city_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "city_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "city_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "created_at",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "created_at",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "created_at",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "created_at",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "hostname",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "hostname",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "hostname",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "hostname",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "is_active",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "is_active",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "is_active",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "is_active",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "is_primary",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "is_primary",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "is_primary",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "city_domains",
+        "col": "is_primary",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "city_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "city_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "city_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "city_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "created_at",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "created_at",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "created_at",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "created_at",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "district_type",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "district_type",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "district_type",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "district_type",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "external_code",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "external_code",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "external_code",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "external_code",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "is_active",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "is_active",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "is_active",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "is_active",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "name",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "name",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "name",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "name",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "parent_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "parent_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "parent_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "parent_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "slug",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "slug",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "slug",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "slug",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "updated_at",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "updated_at",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "updated_at",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "districts",
+        "col": "updated_at",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "bag_identifier",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "bag_identifier",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "bag_identifier",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "bag_identifier",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "city_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "city_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "city_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "city_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "country_code",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "country_code",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "country_code",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "country_code",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "created_at",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "created_at",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "created_at",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "created_at",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "district_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "district_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "district_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "district_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "house_number",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "house_number",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "house_number",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "house_number",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "house_number_suffix",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "house_number_suffix",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "house_number_suffix",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "house_number_suffix",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "latitude",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "latitude",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "latitude",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "latitude",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "longitude",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "longitude",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "longitude",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "longitude",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "postal_code",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "postal_code",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "postal_code",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "postal_code",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "street",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "street",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "street",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "street",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "updated_at",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "updated_at",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "updated_at",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "tab": "locations",
+        "col": "updated_at",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "category_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "category_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "category_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "category_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "city_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "city_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "city_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "city_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "description",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "description",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "description",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "description",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "district",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "district",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "district",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "district",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "icon",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "icon",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "icon",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "icon",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "is_published",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "is_published",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "is_published",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "is_published",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_category_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_category_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_category_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_category_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_city_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_city_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_city_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_city_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_id",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_id",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_id",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "legacy_id",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "slug",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "slug",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "slug",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "slug",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "title",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "title",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "title",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "tab": "discovery_entries",
+        "col": "title",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "col": "MigrationId",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "col": "MigrationId",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "col": "MigrationId",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "col": "MigrationId",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "col": "ProductVersion",
+        "privilege": "INSERT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "col": "ProductVersion",
+        "privilege": "REFERENCES",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "col": "ProductVersion",
+        "privilege": "SELECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "tab": "__EFMigrationsHistory",
+        "col": "ProductVersion",
+        "privilege": "UPDATE",
+        "allowed": false,
+        "grantable": false
+      }
+    ],
+    "effectiveSchema": [
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "privilege": "CREATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "privilege": "USAGE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "privilege": "CREATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "discovery",
+        "privilege": "USAGE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "privilege": "CREATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "public",
+        "privilege": "USAGE",
+        "allowed": true,
+        "grantable": false
+      }
+    ],
+    "effectiveFunctions": [
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "name": "check_hierarchy",
+        "args": "",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "name": "check_timezone",
+        "args": "",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "schema": "catalog",
+        "name": "lock_hierarchy",
+        "args": "",
+        "allowed": false,
+        "grantable": false
+      }
+    ],
+    "effectiveDatabase": [
+      {
+        "role": "happy_restore",
+        "privilege": "CONNECT",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "privilege": "CREATE",
+        "allowed": false,
+        "grantable": false
+      },
+      {
+        "role": "happy_restore",
+        "privilege": "TEMP",
+        "allowed": false,
+        "grantable": false
+      }
+    ],
+    "effectiveSequences": [],
+    "defaultAcl": [
+      {
+        "role": "happy_migrator",
+        "schema": "public",
+        "type": "r",
+        "grants": "{happy_app=r/happy_migrator}"
+      }
+    ],
+    "objectAcl": [
+      {
+        "kind": "database",
+        "schema": "",
+        "name": "happyalmere",
+        "col": "",
+        "grantor": "happy_migrator",
+        "grantee": "happy_app",
+        "privilege_type": "CONNECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "database",
+        "schema": "",
+        "name": "happyalmere",
+        "col": "",
+        "grantor": "happy_migrator",
+        "grantee": "happy_backup",
+        "privilege_type": "CONNECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "database",
+        "schema": "",
+        "name": "happyalmere",
+        "col": "",
+        "grantor": "happy_migrator",
+        "grantee": "happy_migrator",
+        "privilege_type": "CONNECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "database",
+        "schema": "",
+        "name": "happyalmere",
+        "col": "",
+        "grantor": "happy_migrator",
+        "grantee": "happy_migrator",
+        "privilege_type": "CREATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "database",
+        "schema": "",
+        "name": "happyalmere",
+        "col": "",
+        "grantor": "happy_migrator",
+        "grantee": "happy_migrator",
+        "privilege_type": "TEMPORARY",
+        "is_grantable": false
+      },
+      {
+        "kind": "database",
+        "schema": "",
+        "name": "happyalmere",
+        "col": "",
+        "grantor": "happy_migrator",
+        "grantee": "happy_owner",
+        "privilege_type": "CONNECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "database",
+        "schema": "",
+        "name": "happyalmere",
+        "col": "",
+        "grantor": "happy_migrator",
+        "grantee": "happy_owner",
+        "privilege_type": "CREATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "database",
+        "schema": "",
+        "name": "happyalmere",
+        "col": "",
+        "grantor": "happy_migrator",
+        "grantee": "happy_schema_migrator",
+        "privilege_type": "CONNECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "function",
+        "schema": "catalog",
+        "name": "check_hierarchy()",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "EXECUTE",
+        "is_grantable": false
+      },
+      {
+        "kind": "function",
+        "schema": "catalog",
+        "name": "check_timezone()",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "EXECUTE",
+        "is_grantable": false
+      },
+      {
+        "kind": "function",
+        "schema": "catalog",
+        "name": "lock_hierarchy()",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "EXECUTE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "categories",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_app",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "categories",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_backup",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "categories",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "DELETE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "categories",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "INSERT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "categories",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "MAINTAIN",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "categories",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "REFERENCES",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "categories",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "categories",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRIGGER",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "categories",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "categories",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "UPDATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "category_translations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_app",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "category_translations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_backup",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "category_translations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "DELETE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "category_translations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "INSERT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "category_translations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "MAINTAIN",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "category_translations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "REFERENCES",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "category_translations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "category_translations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRIGGER",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "category_translations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "category_translations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "UPDATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "cities",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_app",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "cities",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_backup",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "cities",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "DELETE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "cities",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "INSERT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "cities",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "MAINTAIN",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "cities",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "REFERENCES",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "cities",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "cities",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRIGGER",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "cities",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "cities",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "UPDATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "city_domains",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_app",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "city_domains",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_backup",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "city_domains",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "DELETE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "city_domains",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "INSERT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "city_domains",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "MAINTAIN",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "city_domains",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "REFERENCES",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "city_domains",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "city_domains",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRIGGER",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "city_domains",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "city_domains",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "UPDATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "districts",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_app",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "districts",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_backup",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "districts",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "DELETE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "districts",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "INSERT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "districts",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "MAINTAIN",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "districts",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "REFERENCES",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "districts",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "districts",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRIGGER",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "districts",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "districts",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "UPDATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "locations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_app",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "locations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_backup",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "locations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "DELETE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "locations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "INSERT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "locations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "MAINTAIN",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "locations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "REFERENCES",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "locations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "locations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRIGGER",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "locations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "catalog",
+        "name": "locations",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "UPDATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "discovery",
+        "name": "discovery_entries",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_app",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "discovery",
+        "name": "discovery_entries",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_backup",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "discovery",
+        "name": "discovery_entries",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "DELETE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "discovery",
+        "name": "discovery_entries",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "INSERT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "discovery",
+        "name": "discovery_entries",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "MAINTAIN",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "discovery",
+        "name": "discovery_entries",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "REFERENCES",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "discovery",
+        "name": "discovery_entries",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "discovery",
+        "name": "discovery_entries",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRIGGER",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "discovery",
+        "name": "discovery_entries",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "discovery",
+        "name": "discovery_entries",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "UPDATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "public",
+        "name": "__EFMigrationsHistory",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_backup",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "public",
+        "name": "__EFMigrationsHistory",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "DELETE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "public",
+        "name": "__EFMigrationsHistory",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "INSERT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "public",
+        "name": "__EFMigrationsHistory",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "MAINTAIN",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "public",
+        "name": "__EFMigrationsHistory",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "REFERENCES",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "public",
+        "name": "__EFMigrationsHistory",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "SELECT",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "public",
+        "name": "__EFMigrationsHistory",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRIGGER",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "public",
+        "name": "__EFMigrationsHistory",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "relation",
+        "schema": "public",
+        "name": "__EFMigrationsHistory",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "UPDATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "catalog",
+        "name": "catalog",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_app",
+        "privilege_type": "USAGE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "catalog",
+        "name": "catalog",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_backup",
+        "privilege_type": "USAGE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "catalog",
+        "name": "catalog",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "CREATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "catalog",
+        "name": "catalog",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "USAGE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "discovery",
+        "name": "discovery",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_app",
+        "privilege_type": "USAGE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "discovery",
+        "name": "discovery",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_backup",
+        "privilege_type": "USAGE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "discovery",
+        "name": "discovery",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "CREATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "discovery",
+        "name": "discovery",
+        "col": "",
+        "grantor": "happy_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "USAGE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "public",
+        "name": "public",
+        "col": "",
+        "grantor": "pg_database_owner",
+        "grantee": "PUBLIC",
+        "privilege_type": "USAGE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "public",
+        "name": "public",
+        "col": "",
+        "grantor": "pg_database_owner",
+        "grantee": "happy_app",
+        "privilege_type": "USAGE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "public",
+        "name": "public",
+        "col": "",
+        "grantor": "pg_database_owner",
+        "grantee": "happy_backup",
+        "privilege_type": "USAGE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "public",
+        "name": "public",
+        "col": "",
+        "grantor": "pg_database_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "CREATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "public",
+        "name": "public",
+        "col": "",
+        "grantor": "pg_database_owner",
+        "grantee": "happy_owner",
+        "privilege_type": "USAGE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "public",
+        "name": "public",
+        "col": "",
+        "grantor": "pg_database_owner",
+        "grantee": "pg_database_owner",
+        "privilege_type": "CREATE",
+        "is_grantable": false
+      },
+      {
+        "kind": "schema",
+        "schema": "public",
+        "name": "public",
+        "col": "",
+        "grantor": "pg_database_owner",
+        "grantee": "pg_database_owner",
+        "privilege_type": "USAGE",
+        "is_grantable": false
+      }
+    ]
+  },
+  "inapplicableObjectCounts": {
+    "sequences": 0,
+    "largeObjects": 0,
+    "foreignServers": 0,
+    "foreignTables": 0,
+    "rowPolicies": 0,
+    "customDomainsEnums": 0,
+    "roleSettings": 0
+  },
+  "targetContainers": [
+    "6d56b4dc9f63abc0bd51abbd63aa9eb9d130808ff1017e9934b84e8a84042a67",
+    "691adafe6d7eebb00d9b933207a0d835d565fdf8a6c60a9444f4c26f703b888e",
+    "211e16db7e7457cefa24e091385e34f54f36d21e4f366b3391df28dfbb9dedf2",
+    "3d7f7563e52c07be9beb14059fa8e9d0510941ee7e1a258c292d459dd68caaee",
+    "bd02f0281bbc2c1d41414b33e083493dcd66a5a5f413665d0553ae2c8801233c",
+    "91cca3d38a0c157e89b24bf60062afb810e05548eccaf7cdaa4ac87f69f61a75",
+    "fe91002c3793c87f180bdf53b0f7bb7b83800341e65cf58d1ee0f21f22a2b33f",
+    "ba0508a787884f309374a2215e088d8028b68c7cdf08fccdb407245f666e0890"
+  ],
+  "regressionContainer": "91cca3d38a0c157e89b24bf60062afb810e05548eccaf7cdaa4ac87f69f61a75",
+  "completedUtc": "2026-11-19T19:01:11.343701+00:00",
+  "status": "PASS"
+}

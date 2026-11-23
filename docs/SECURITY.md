@@ -1,5 +1,9 @@
 # V0.1 security review
 
+Historical V0.1 baseline. The [V0.2 database review](V0.2-DATABASE-DISCOVERY.md)
+adds verified database TLS, runtime least privilege and database tests. Identity
+and customer-data release gates below still apply.
+
 ## Enforced and tested
 
 - Localhost launch bindings; actual loopback socket inventory and non-loopback local-interface probes in R02. AllowedHosts separately validates HTTP Host headers.
@@ -18,7 +22,7 @@
 - Generic production error output with no-store caching. Detailed diagnostics
   remain restricted to Development.
 - Kestrel server-identification header disabled.
-- No customer-data entry flows, database, accounts, uploads, payments or trackers.
+- No customer-data entry flows, accounts, uploads, payments or trackers; the integration branch preserves only the existing synthetic PostgreSQL catalog.
   The search field explicitly asks visitors not to enter personal information.
 
 No existing protection was disabled to make the build or browser tests pass.
@@ -78,3 +82,14 @@ Future identity, secret storage, Data Protection and database requirements in th
 register are not represented as implemented V0.1 capabilities.
 
 Reference: [Kestrel endpoint binding](https://learn.microsoft.com/aspnet/core/fundamentals/servers/kestrel/endpoints?view=aspnetcore-10.0).
+
+## Current reconciliation boundary
+
+The integration branch combines the accepted V0.1 HTTP controls with the preserved
+PostgreSQL implementation. Runtime reads use VerifyFull TLS and read-only credentials;
+no runtime demo fallback or app-startup migration. Admin/migration variables are
+removed from browser/web child environments. NUL-bearing query/category input now
+returns HTTP 400 at the shared filter boundary rather than reaching PostgreSQL and
+causing HTTP 500. This is a reproduced integration compatibility correction, not a
+new database feature. Existing schema/migrations and synthetic data remain unchanged.
+The HA-002 master gaps and temporary risk acceptance are documented separately.

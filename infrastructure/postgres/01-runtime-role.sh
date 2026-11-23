@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" \
+  --set=app_password="$HAPPY_APP_PASSWORD" <<'SQL'
+CREATE ROLE happy_app LOGIN PASSWORD :'app_password' NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION;
+REVOKE ALL ON DATABASE happyalmere FROM PUBLIC;
+GRANT CONNECT ON DATABASE happyalmere TO happy_app;
+REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+GRANT USAGE ON SCHEMA public TO happy_app;
+ALTER DEFAULT PRIVILEGES FOR ROLE happy_migrator IN SCHEMA public GRANT SELECT ON TABLES TO happy_app;
+SQL

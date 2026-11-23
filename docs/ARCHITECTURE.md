@@ -1,5 +1,22 @@
 # V0.1 architecture
 
+## Current integration candidate
+
+The dedicated integration branch preserves existing EF Core/PostgreSQL entities,
+migration and projected/cancellation-aware repository, while retaining the approved
+MVC/Razor layout, centralized category IDs and normalized transport-peer limiter.
+Infrastructure owns DbContext/Npgsql; the demo repository exists only in tests.
+The approved project graph is unchanged. Existing integer/public-schema models are
+not yet compliant with the supplied UUID/catalog master; see the HA-002 gap analysis.
+No new schema, migration, identity or payment feature is introduced.
+
+The foundation descriptions below are historical design records. Where they describe
+an in-memory runtime repository or future-only persistence, the existing PostgreSQL
+implementation supersedes them on this integration branch only.
+
+Historical V0.1 baseline. See [V0.2 database discovery](V0.2-DATABASE-DISCOVERY.md)
+for the current persistence implementation and its approved scope.
+
 ## Existing workspace review
 
 Before editing, all 23 original authored files were read: four project files,

@@ -1,0 +1,25 @@
+﻿{
+    "suite":  "responsive",
+    "result":  "PASS",
+    "listeners":  [
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  7143
+                      },
+                      {
+                          "LocalAddress":  "::1",
+                          "LocalPort":  5143
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  7143
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  5143
+                      }
+                  ],
+    "nonLoopbackInterfacesProbed":  3,
+    "nonLoopbackConnectionsRejected":  6,
+    "limitation":  "Local interface probes and process socket inventory; not an external firewall or public deployment test."
+}

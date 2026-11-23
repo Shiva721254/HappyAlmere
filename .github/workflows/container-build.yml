@@ -1,0 +1,56 @@
+name: R1 container build
+
+on:
+  push:
+    paths:
+      - 'infrastructure/deploy/Dockerfile'
+      - 'HappyAlmere_V0.1_MVC/src/**'
+      - 'Directory.Build.props'
+      - 'global.json'
+      - 'HappyAlmere.slnx'
+      - '.github/workflows/container-build.yml'
+  pull_request:
+    paths:
+      - 'infrastructure/deploy/Dockerfile'
+      - 'HappyAlmere_V0.1_MVC/src/**'
+      - 'Directory.Build.props'
+      - 'global.json'
+      - 'HappyAlmere.slnx'
+      - '.github/workflows/container-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+
+      - name: Build production container image
+        run: docker build -f infrastructure/deploy/Dockerfile -t happyalmere-web:ci .
+
+      - name: Smoke-test /healthz and security headers inside container
+        env:
+          TEST_DB_CONN: Host=127.0.0.1;Port=5432;Database=happyalmere;Username=happy_app;SSL Mode=VerifyFull;Root Certificate=/etc/ssl/certs/ca-certificates.crt
+        run: |
+          docker run -d --name ha-smoke -p 127.0.0.1:18080:8080 \
+            -e ASPNETCORE_ENVIRONMENT=Production \
+            -e AllowedHosts=localhost \
+            -e IdentityFoundation__Enabled=false \
+            -e ConnectionStrings__HappyCity="$TEST_DB_CONN" \
+            happyalmere-web:ci
+          trap 'docker rm -f ha-smoke >/dev/null 2>&1 || true' EXIT
+          for i in $(seq 1 20); do
+            if curl -fsS -H "Host: localhost" http://127.0.0.1:18080/healthz >/dev/null 2>&1; then break; fi
+            sleep 1
+          done
+          BODY="$(curl -fsS -H "Host: localhost" -D /tmp/headers.txt http://127.0.0.1:18080/healthz)"
+          echo "Body: $BODY"
+          grep -Fq '{"status":"ok"}' <<< "$BODY"
+          grep -Fiq 'x-content-type-options: nosniff' /tmp/headers.txt
+          grep -Fiq "content-security-policy:" /tmp/headers.txt
+          BAD_HOST_STATUS="$(curl -s -o /dev/null -w '%{http_code}' -H "Host: evil.example" http://127.0.0.1:18080/healthz)"
+          test "$BAD_HOST_STATUS" = "400"

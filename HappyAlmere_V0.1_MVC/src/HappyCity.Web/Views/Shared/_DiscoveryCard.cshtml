@@ -3,7 +3,10 @@
 <article class="card">
     <div class="art" aria-hidden="true">@Model.Icon</div>
     <div class="card-body">
-        <p class="eyebrow">@Model.District · @Model.Category</p>
+        <div class="card-meta">
+            <p class="eyebrow">@Model.District · @Model.Category</p>
+            <span class="card-badge">Voorbeeld</span>
+        </div>
         <h3>@Model.Title</h3>
         <p>@Model.Description</p>
     </div>

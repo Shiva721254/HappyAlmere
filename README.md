@@ -1,86 +1,39 @@
-# HappyAlmere V0.1
+# HappyAlmere — accepted development foundation
 
-Proprietary commercial platform foundation. Local demo only: no verified businesses,
-accounts, customer registration, persistent database, tracking or payments.
-No license to redistribute this proprietary source is granted.
+## HA-003-A-ARCH-R01 - current remediation (20 November 2026)
 
-Open this directory (the Git root) in VS Code. The original versioned source folder
-is retained to avoid an unnecessary directory migration.
+**Latest verified implementation: 3714b59d3a9e6af0074072789d57b5ffafb8be1c.** Fresh push44715760735 and PR44715769012 both passed105 disabled /238 enabled tests, recovery, browser/security and dependency checks. Authority-query p95 max7.1313ms <25ms; discovery budgets unchanged and met. Both34-entry original archives were downloaded/content-inspected; all21 PNGs match the visually reviewed reference. HANDOVER.md contains exact metrics, commands, hashes, expiry and retained failed attempts. Subsequent documentation-head CI/submission is identified in Issue#34/PR#32; independent G08/G10 confirmation, G11 owner acceptance and G12 merge are not self-approved. This supersedes progress snapshots below.
 
-## Prerequisites and commands
 
-- .NET SDK 10.0.403 (global.json permits later patches within that SDK feature band).
-- A trusted ASP.NET development HTTPS certificate.
-- VS Code C# extension for F5 debugging; C# Dev Kit is recommended.
+This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01-D08 and bounded G05-G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
 
-From this directory:
+Branch `feature/ha-003-a`, draft PR #32; exact start `c5b61a362fd35522718401e558961e12d1b24bab`, accepted base `216df25c5656a979fcf67dfe3a16d07d7d66f154`. Exactly thirteen existing paths are authorized; no new tracked files, migrations, dependencies or workflow edits. No merge, public authentication, production data or next milestone. Claude independently reviews G10; G11 owner acceptance and G12 merge authority remain separate.
 
-```powershell
-dotnet dev-certs https --check --trust
-# Only if a trusted certificate is missing:
-dotnet dev-certs https --trust
-dotnet restore HappyAlmere.slnx
-dotnet build HappyAlmere.slnx --configuration Release --no-restore
-dotnet test HappyAlmere.slnx --configuration Release --no-build --logger trx
-dotnet run --project HappyAlmere_V0.1_MVC/src/HappyCity.Web --configuration Release --no-build --launch-profile https
-```
+Runtime authority assurance is being strengthened under the approved Alternative B: one bounded check per EF Identity open plus exhaustive independent provisioning/recovery verification. See [technical contract](docs/database/identity-foundation.md), [acceptance](ACCEPTANCE.md) and [handover](HANDOVER.md). Checkpoint3714b59 passed both fresh CI runs (105 disabled / 238 enabled tests and database/browser/security gates). Follow-up3714b59 passed its own verification; see HANDOVER.md for exact evidence and retained failures. Independent architectural review and owner acceptance remain outstanding.
 
-Visit https://localhost:7143. HTTP port 5143 redirects to HTTPS.
-Stop the running app before rebuilding its configuration on Windows to avoid DLL locks.
-If restricted MSBuild worker processes fail, run build/test with `-m:1` and build
-with `--disable-build-servers`; this does not change compiler or security settings.
-Certificate private-key access and browser launches may require execution outside
-an agent sandbox. Do not bypass TLS certificate validation.
 
-VS Code: Ctrl+Shift+B builds the solution; F5 launches the HTTPS debugger.
-The tasks menu also provides tests and an HTTPS run task.
+## HA-003-A current execution update
 
-## Verification
+Current branch `feature/ha-003-a`, exact accepted baseline `216df25c5656a979fcf67dfe3a16d07d7d66f154`. [IAM-G04 authorization](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023159754) and [approved #28 contract](https://github.com/Shiva721254/HappyAlmere/issues/28) supersede historical execution snapshots below only within the bounded persistence scope. [INT-G12 passed](https://github.com/Shiva721254/HappyAlmere/issues/27#issuecomment-7022990043); [IAM-G05 passed before implementation](https://github.com/Shiva721254/HappyAlmere/issues/28#issuecomment-7023218886).
 
-The solution contains application and full MVC pipeline tests using xUnit and
-Microsoft.AspNetCore.Mvc.Testing. Runtime projects have no additional package dependencies.
-The root GitHub workflow restores, builds and tests Release.
+IAM-A01–02 preflight complete; A03–07 entities/context/migration/roles/minimal DI implemented locally; A08–09 verification in progress; A10 draft PR/handover pending. Identity defaults off, with seven functional tables and separate context/history. Existing catalog/discovery source, migrations, original tests and performance thresholds are preserved. Exact authorized changes remain within the 34-path maximum. [Technical dictionary/runbook](docs/database/identity-foundation.md), [acceptance](ACCEPTANCE.md) and [handover](HANDOVER.md) own detailed evidence. Debug/Release builds pass with zero warnings/errors; 157 enabled .NET tests and all 105 original tests with Identity disabled pass (zero failures/skips). Eleven isolated database rehearsal checks, 42 responsive cases, 190 functional/security assertions and five rate assertions pass. NuGet/npm audits report no known vulnerabilities. Implementation head d4ec551 passed both push and PR CI; actual links/artifacts are in HANDOVER.md. Final documentation-head CI is reported in the GitHub submission ledger. Independent review remains outstanding.
 
-Browser regression tooling is a development-only dependency. On Windows, install
-Node 24.22.3 (pinned in `.node-version`; Node 25 is also supported locally), then:
+Owner remains migration coordinator and final approval authority; ChatGPT performs independent HA-003-A-ARCH-01 review. No merge, deployment, public auth endpoints, real accounts, business features or later Identity phases. IAM-OPEN-01–10 and IAM-PRE-D01/D02 are approved as recorded in #28; future cryptographic/session/resource policies remain deferred. Final commit, draft PR and push/PR CI are recorded in the GitHub submission ledger after actual synchronization; no self-referential commit hash is fabricated. Historical content below remains intact.
 
-```powershell
-npm ci --ignore-scripts
-npm run browser:install
-npm audit --audit-level=high
-# Stop any manually started test server first; Release must be built.
-npm run test:browser
-```
+ASP.NET Core MVC, .NET 10 LTS, C#, Razor and mobile-first CSS; layered modular monolith with EF Core/Npgsql/PostgreSQL persistence. Preserve controller/service/repository/domain boundaries and synthetic data only.
 
-The harness starts and stops its own loopback-only servers, retains TLS certificate
-validation, checks actual listeners and non-loopback connection rejection, and runs
-42 responsive cases plus production security and rate-limit regressions. Results
-and screenshots go to ignored `artifacts/`. No absolute Playwright path is needed.
-The Windows browser CI job uses the same commands; the Linux .NET job remains.
-See [development instructions](docs/DEVELOPMENT.md) for setup and CI limitations.
+[Status](PROJECT_STATUS.md) · [Roadmap](ROADMAP.md) · [Tasks](TASKS.md) · [Decisions](DECISIONS.md) · [Acceptance](ACCEPTANCE.md) · [Documentation index](docs/README.md) · [Handover](HANDOVER.md)
 
-See [architecture](docs/ARCHITECTURE.md), [security review](docs/SECURITY.md), and
-[V0.1 verification report](docs/V0.1-VERIFICATION.md).
+The product owner accepted HA-002 development scope at **6da4b25e7a291e08b8fb0feab1b75ff22e55d0e0** in the [formal decision](https://github.com/Shiva721254/HappyAlmere/issues/21#issuecomment-7021312167), following [ARCH-04](https://github.com/Shiva721254/HappyAlmere/issues/21). PR #6 integrated that candidate at **719dbcc6f0d05f9d2f338f74b89cec8991a3aa6f**; both trees equal **7965cf8397c7ff5b9345da8333b5bc179424be4e**. [INT-G11](https://github.com/Shiva721254/HappyAlmere/issues/22#issuecomment-7022022047) verifies integrated CI. This is not production readiness or authorization for another feature.
 
-## HA-001-R02 remediation checkout
+Current assignment: [HA-GOV-R01](https://github.com/Shiva721254/HappyAlmere/issues/23), documentation only on **docs/ha-gov-r01**, under [recorded owner authorization](https://github.com/Shiva721254/HappyAlmere/issues/23#issuecomment-7022146146). Final review, owner governance acceptance, separate merge approval and INT-G12 remain pending. Original PR #9 is preserved; PR #3 remains draft/unmerged into main.
 
-This branch is based on V0.1 commit ebc99a0. The original develop branch already
-contains separate V0.2 work and is intentionally untouched. Open this worktree root
-(the directory containing HappyAlmere.slnx) in VS Code, not the nested source folder.
-No PostgreSQL, Docker or customer-data setup is required for this V0.1 checkout.
+The [risk register](docs/security/security-risk-register.md) carries all eight approved deferrals and mandatory gates. Private authorization, live domain/proxy/TLS, production secrets, backup encryption/retention, measured RPO/RTO, concurrent capacity and operational readiness are outstanding. No real customers, Identity/business implementation, deployment or procurement is authorized.
 
-Browser regression coverage now includes all seven required widths and accepted
-long-category text, with screenshots and document/viewport measurements in artifacts/.
-See [development instructions](docs/DEVELOPMENT.md), [engineering rules](AGENTS.md),
-[security](SECURITY.md), [changelog](CHANGELOG.md),
-[acceptance audit](docs/reports/HA-001-acceptance-audit.md) and
-[R02 remediation report](docs/reports/HA-001-R02-independent-audit-remediation.md) and
-[permanent risk register](docs/security/security-risk-register.md).
-V0.1 acceptance remains subject to architect recommendation and product-owner approval.
+## Development and historical records
 
-Historical R01 continuation results: [verification ledger](docs/reports/evidence/HA-001-R01-refresh/README.md). Browser coverage includes
-42 layouts across seven widths, including combined maximum-length query/category input.
+Use [development instructions](docs/DEVELOPMENT.md), [database architecture](docs/database/database-architecture.md), [migration policy](docs/database/migration-policy.md), [backup/recovery runbook](docs/database/backup-and-recovery.md), [ERD](docs/database/entity-relationship-diagram.md), [dictionary](docs/database/data-dictionary.md) and [security](docs/database/database-security.md) for technical details. Accepted migrations and original volumes are immutable under this task. Do not point the new application at the preserved old schema. Runbooks describe capability, not authorization to execute local database operations during governance work. Only unchanged ephemeral GitHub Actions synthetic CI is authorized here.
 
-Current closure status: [HA-001-CLOSE](docs/reports/HA-001-CLOSE-final-report.md).
-Owner approval is limited to local synthetic development; the remote CI condition passed.
-protected integration and existing-work reconciliation are authorized. No public release.
+The [implementation report](docs/reports/HA-002-implementation-report.md), [gap analysis](docs/reports/HA-002-existing-implementation-gap-analysis.md) and [R02 evidence](docs/reports/evidence/HA-002-A/r02/) retain their original review-time statements; the current decision index supersedes their pending-acceptance wording, without rewriting evidence. Original readme checkpoints remain accessible at [accepted source README](https://github.com/Shiva721254/HappyAlmere/blob/6da4b25e7a291e08b8fb0feab1b75ff22e55d0e0/README.md) and [historical governance README](https://github.com/Shiva721254/HappyAlmere/blob/871e7a35c95b05b75b047fc1cc048f29e33b7cbc/README.md).
+
+GitHub is the shared source of truth. Codex implements authorized work, ChatGPT independently reviews, and the product owner accepts scope and authorizes integration/release separately. See [AGENTS.md](AGENTS.md). STRATO-first remains the hosting constraint; expansion needs separate approval. Microsoft business verification, Azure registration, Artifact Signing and production signing certificates are pre-release items, not internal development blockers.

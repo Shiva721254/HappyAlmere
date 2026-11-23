@@ -9,4 +9,6 @@ public sealed class DiscoveryService(IDiscoveryRepository repository) : IDiscove
         ArgumentNullException.ThrowIfNull(filter);
         return repository.FindAsync(filter, cancellationToken);
     }
+    public Task<DiscoveryPage> FindPageAsync(DiscoveryFilter filter, int size, string? cursor, CancellationToken cancellationToken = default) =>
+        repository.FindPageAsync(filter, size, cursor, cancellationToken);
 }

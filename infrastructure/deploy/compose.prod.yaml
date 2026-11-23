@@ -1,0 +1,97 @@
+# Vendor-neutral R1 staging/pilot stack (STRATO VC 2-4 / Hetzner CX23, 4 GB RAM).
+# Supply all secrets via a root-owned 0600 host .env file outside Git.
+name: happyalmere-r1
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "${HAPPYCITY_HTTP_BIND:-80:80}"
+      - "${HAPPYCITY_HTTPS_BIND:-443:443}"
+    environment:
+      HAPPYCITY_DOMAIN: ${HAPPYCITY_DOMAIN:?Set explicit staging or pilot domain}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - web
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      internal:
+        ipv4_address: 10.89.0.10
+
+  web:
+    build:
+      context: ../..
+      dockerfile: infrastructure/deploy/Dockerfile
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      AllowedHosts: ${HAPPYCITY_ALLOWED_HOSTS:?Set exact allowed hostnames}
+      CityResolution__AllowLiveDomains: ${HAPPYCITY_ALLOW_LIVE_DOMAINS:-false}
+      CityResolution__AllowedLiveDomains__0: ${HAPPYCITY_LIVE_DOMAIN:-}
+      TrustedLocalCities__localhost: ${HAPPYCITY_LOCAL_CITY:-}
+      TrustedProxy__Enabled: "true"
+      TrustedProxy__KnownProxies__0: "10.89.0.10"
+      IdentityFoundation__Enabled: "false"
+      ConnectionStrings__HappyCity: ${HAPPYCITY_RUNTIME_CONNECTION:?Set VerifyFull happy_app connection string}
+    volumes:
+      - postgres-tls:/var/lib/postgresql-tls:ro
+      - web-keys:/home/app/.aspnet/DataProtection-Keys
+    depends_on:
+      postgres:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    networks:
+      internal:
+        ipv4_address: 10.89.0.20
+
+  postgres:
+    image: postgres:18-bookworm@sha256:1757c628698dd1ca67ff7a5fc386bfd91040afc62a45484c346c788b0cbe5402
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: happyalmere
+      POSTGRES_USER: happy_migrator
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_SECRET:?Set strong migrator secret}
+      HAPPY_APP_PASSWORD: ${POSTGRES_APP_SECRET:?Set strong runtime app secret}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=trust"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+      - postgres-tls:/var/lib/postgresql-tls
+      - ./postgres-start.sh:/opt/happy/start.sh:ro
+      - ../postgres/01-runtime-role.sh:/docker-entrypoint-initdb.d/01-runtime-role.sh:ro
+      - ../postgres/pg_hba.conf:/opt/happy/pg_hba.conf:ro
+    entrypoint: ["/bin/bash", "/opt/happy/start.sh"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U happy_migrator -d happyalmere"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 1536m
+    networks:
+      internal:
+        ipv4_address: 10.89.0.30
+
+volumes:
+  caddy-data:
+  caddy-config:
+  web-keys:
+  postgres-data:
+  postgres-tls:
+
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.89.0.0/26

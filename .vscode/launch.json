@@ -5,6 +5,7 @@
       "name": "HappyAlmere HTTPS",
       "type": "coreclr",
       "request": "launch",
+      "envFile": "${workspaceFolder}/.env.runtime",
       "preLaunchTask": "build",
       "program": "${workspaceFolder}/HappyAlmere_V0.1_MVC/src/HappyCity.Web/bin/Debug/net10.0/HappyCity.Web.dll",
       "cwd": "${workspaceFolder}/HappyAlmere_V0.1_MVC/src/HappyCity.Web",

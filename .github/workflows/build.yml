@@ -1,30 +1,16 @@
-name: V0.1 foundation
+name: Reconciled foundation and PostgreSQL verification
 on: [push, pull_request]
 permissions:
   contents: read
 jobs:
   verify:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
-      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
-        with:
-          global-json-file: global.json
-      - run: dotnet restore HappyAlmere.slnx
-      - run: dotnet build HappyAlmere.slnx --configuration Release --no-restore
-      - run: dotnet test HappyAlmere.slnx --configuration Release --no-build --logger trx
-      - run: dotnet list HappyAlmere.slnx package --vulnerable --include-transitive
-
-  browser:
-    # Windows certificate trust matches the documented local test environment.
-    runs-on: windows-2025
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-        with:
-          persist-credentials: false
+          fetch-depth: 0 # Recovery inventory needs original develop and auditable history.
       - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
         with:
           global-json-file: global.json
@@ -32,32 +18,98 @@ jobs:
         with:
           node-version-file: .node-version
           package-manager-cache: false
+      - run: dotnet restore HappyAlmere.slnx
+      - run: dotnet build HappyAlmere.slnx -c Debug --no-restore
+      - run: dotnet build HappyAlmere.slnx -c Release --no-restore
+      - name: Initialize isolated TLS PostgreSQL
+        shell: pwsh
+        run: ./scripts/Initialize-LocalDatabase.ps1
+      - name: Isolated synthetic backup and restore gate
+        run: python3 scripts/verify-database-recovery.py
+      - name: Forward migration, rollback, recovery and privilege verification
+        shell: pwsh
+        run: |
+          $gate = Get-ChildItem artifacts/ha002a/*/evidence.json | Sort-Object FullName | Select-Object -Last 1
+          python3 scripts/verify-forward-migration.py --gate $gate.FullName
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $forward = Get-ChildItem artifacts/forward/*/rehearsal.env | Sort-Object FullName | Select-Object -Last 1
+          "HAPPYCITY_FORWARD_ENV_FILE=$($forward.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+      - name: Original regression suite with Identity foundation disabled
+        shell: pwsh
+        run: |
+          . ./scripts/Load-LocalEnvironment.ps1 -EnvironmentFile $env:HAPPYCITY_FORWARD_ENV_FILE
+          $env:IdentityFoundation__Enabled = 'false'
+          $env:HAPPYCITY_EVIDENCE_DIRECTORY = Join-Path (Get-Location) 'artifacts/identity-disabled-tests'
+          dotnet test HappyAlmere.slnx -c Release --no-build -m:1 --filter 'FullyQualifiedName!~HappyCity.FoundationTests.Identity' --logger trx
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Isolated Identity contract, privileges and coordinated recovery
+        shell: pwsh
+        run: |
+          python3 scripts/verify-identity-foundation.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $identity = Get-ChildItem artifacts/identity/*/tests.env | Sort-Object FullName | Select-Object -Last 1
+          "HAPPYCITY_IDENTITY_ENV_FILE=$($identity.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+      - name: Foundation and migrated PostgreSQL tests
+        shell: pwsh
+        run: |
+          $env:HAPPYCITY_EVIDENCE_DIRECTORY = Join-Path (Get-Location) 'artifacts/forward-tests'
+          ./scripts/Test-Local.ps1 -EnvironmentFile $env:HAPPYCITY_IDENTITY_ENV_FILE
+      - run: dotnet list HappyAlmere.slnx package --vulnerable --include-transitive
       - run: npm ci --ignore-scripts
       - run: npm audit --audit-level=high
-      - run: python scripts/verify-source.py
-      - run: npm run browser:install
-      - run: dotnet restore HappyAlmere.slnx
-      - run: dotnet build HappyAlmere.slnx -c Release --no-restore
-      - name: Trust the ephemeral runner certificate without an interactive dialog
-        timeout-minutes: 1
+      - run: python3 scripts/verify-source.py
+      - run: npm run browser:install -- --with-deps
+      - name: Trust only the ephemeral local HTTPS certificate
         run: |
-          New-Item -ItemType Directory -Force artifacts/ci | Out-Null
+          sudo apt-get update
+          sudo apt-get install -y libnss3-tools
+          mkdir -p artifacts/ci "$HOME/.pki/nssdb"
           dotnet dev-certs https --export-path artifacts/ci/localhost.crt --format PEM
+          if [ ! -f "$HOME/.pki/nssdb/cert9.db" ]; then
+            certutil -N -d "sql:$HOME/.pki/nssdb" --empty-password
+          fi
+          certutil -A -d "sql:$HOME/.pki/nssdb" -n HappyAlmereCI -t "P,," -i artifacts/ci/localhost.crt
+          sudo cp artifacts/ci/localhost.crt /usr/local/share/ca-certificates/happyalmere-ci.crt
+          sudo update-ca-certificates
+      - name: Trusted HTTPS PostgreSQL browser, responsive, security and network tests
+        shell: pwsh
+        run: |
+          . ./scripts/Load-LocalEnvironment.ps1 -EnvironmentFile $env:HAPPYCITY_IDENTITY_ENV_FILE
+          npm run test:browser
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          # Hosted Windows runners are ephemeral administrators. Machine-root import
-          # avoids the current-user untrusted-root consent dialog; validation stays on.
-          certutil.exe -f -addstore Root artifacts/ci/localhost.crt
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          dotnet dev-certs https --check --trust
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-      - run: npm run test:browser
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         if: ${{ !cancelled() }}
         with:
-          name: browser-verification
+          name: integration-verification
           retention-days: 7
           path: |
+            artifacts/forward/*/evidence.json
+            artifacts/forward-tests/performance.json
+            artifacts/forward-tests/r01-query-plans.json
+            artifacts/ha002a/*/evidence.json
+            artifacts/identity/*/evidence.json
+            artifacts/identity-disabled-tests/performance.json
+            artifacts/identity-disabled-tests/r01-query-plans.json
             artifacts/responsive-results.json
             artifacts/*-*.png
             artifacts/r02/browser/*-results.json
             artifacts/r02/browser/*-network.json
+      - name: Stop CI database without deleting volumes
+        if: always()
+        shell: pwsh
+        run: |
+          docker compose stop postgres
+          foreach ($file in Get-ChildItem artifacts/forward/*/evidence.json -ErrorAction SilentlyContinue) {
+            $evidence = Get-Content $file.FullName -Raw | ConvertFrom-Json
+            foreach ($container in $evidence.targetContainers) {
+              $info = docker inspect $container | ConvertFrom-Json
+              if ($info.Config.Labels.'com.docker.compose.project' -like 'ha002f-*') { docker stop $container }
+            }
+          }
+          foreach ($file in Get-ChildItem artifacts/identity/*/evidence.json -ErrorAction SilentlyContinue) {
+            $evidence = Get-Content $file.FullName -Raw | ConvertFrom-Json
+            foreach ($container in $evidence.targetContainers) {
+              $info = docker inspect $container | ConvertFrom-Json
+              if ($info.Config.Labels.'com.docker.compose.project' -like 'ha002f-iam-*') { docker stop $container }
+            }
+          }

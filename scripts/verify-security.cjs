@@ -52,7 +52,10 @@ function check(name, actual, expected) {
                         await page.screenshot({ path: path.join(output, 'home-' + width + '.png'), fullPage: true });
                         await page.keyboard.press('Tab');
                         check(width + ' skip link focused', await page.locator('.skip').evaluate(e => e === document.activeElement), true);
-                        await page.keyboard.press('Enter');
+                        await Promise.all([
+                            page.waitForURL(url => url.hash === '#main', { timeout: 5000 }),
+                            page.keyboard.press('Enter')
+                        ]);
                         check(width + ' skip target', new URL(page.url()).hash, '#main');
                     }
                 }
@@ -88,7 +91,7 @@ function check(name, actual, expected) {
             for (const [query, expected] of [
                 ['q='+'x'.repeat(100),200], ['q='+'x'.repeat(101),400],
                 ['category='+'x'.repeat(30),200],['category='+'x'.repeat(31),400],
-                ['q=%25',200],['q=%00',200],['category=unknown',200]
+                ['q=%25',200],['q=%00',400],['category=unknown',200]
             ]) {
                 const response = await context.request.get(base + '/?' + query);
                 check('Input ' + query.slice(0,20) + ' length ' + query.length, response.status(), expected);

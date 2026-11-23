@@ -1,13 +1,5 @@
-# HappyAlmere V0.1 — MVC foundation
+# HappyAlmere database integration candidate
 
-The solution, shared build settings, VS Code configuration and CI workflow now
-live one directory above this folder, at the Git root.
-
-See the [root README](../README.md) for build, test and HTTPS launch commands.
-See [architecture](../docs/ARCHITECTURE.md), [security review](../docs/SECURITY.md)
-and [verification results](../docs/V0.1-VERIFICATION.md) for the verified scope.
-
-This remains a local prototype with synthetic content. Do not enter real customer
-information. No database, accounts, registration or payments are implemented.
-This V0.1 remediation does not implement V0.2. Pre-existing develop work remains
-untouched; the sequencing exception is tracked as GOV-F01 in the root risk register.
+Use the [root README](../README.md) and [closure report](../docs/reports/HA-001-CLOSE-final-report.md).
+This preserves existing PostgreSQL work and approved MVC security/layout corrections.
+HA-002 acceptance and further feature development require independent gap review.

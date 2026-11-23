@@ -1,10 +1,79 @@
+# Current risk and known-issues disposition — HA-GOV-R01
+
+## HA-003-A-ARCH-R01 - current remediation (20 November 2026)
+
+**Latest verified implementation: 3714b59d3a9e6af0074072789d57b5ffafb8be1c.** Fresh push44715760735 and PR44715769012 both passed105 disabled /238 enabled tests, recovery, browser/security and dependency checks. Authority-query p95 max7.1313ms <25ms; discovery budgets unchanged and met. Both34-entry original archives were downloaded/content-inspected; all21 PNGs match the visually reviewed reference. HANDOVER.md contains exact metrics, commands, hashes, expiry and retained failed attempts. Subsequent documentation-head CI/submission is identified in Issue#34/PR#32; independent G08/G10 confirmation, G11 owner acceptance and G12 merge are not self-approved. This supersedes progress snapshots below.
+
+
+This section supersedes prior candidate-status statements below; historical evidence remains historical. Owner decisions D01-D08 and bounded G05-G09 authority are recorded in [Issue #34](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7025018945). The owner-approved post-download evidence clarification and successful G05 preflight are recorded in [comment 7035023769](https://github.com/Shiva721254/HappyAlmere/issues/34#issuecomment-7035023769).
+
+Branch `feature/ha-003-a`, draft PR #32; exact start `c5b61a362fd35522718401e558961e12d1b24bab`, accepted base `216df25c5656a979fcf67dfe3a16d07d7d66f154`. Exactly thirteen existing paths are authorized; no new tracked files, migrations, dependencies or workflow edits. No merge, public authentication, production data or next milestone. Claude independently reviews G10; G11 owner acceptance and G12 merge authority remain separate.
+
+F01 (high runtime assurance gap), F02 (high independent cross-schema inventory gap) and F03 (high mutation-coverage gap) have implementation and test evidence ready for independent review; no confirmed exploit or breach is claimed. New bounded runtime, exhaustive independent reference, mutation cleanup and overhead checks passed both fresh runs; independent review remains outstanding. Highest prospective risks are retained authority after a mutation, altered accepted grants/migrations, and an invalid positive result; exact cleanup, protected blobs, positive controls and explicit mismatches address them. Artifact inspection is a bounded content check, not blanket certification. Synthetic local results do not close DEF-01-08, production key management, private authorization, recovery or capacity requirements.
+
+R01 verification risk update: the a6df1ae PR run 44712698136 failed an unchanged discovery workload at p95 409.0267 ms against 250 ms; its push passed. Subsequent c41e82a push/PR both passed unchanged thresholds. Root cause remains unproven and the earlier failure is not erased; synthetic runner variability cannot be promoted into production capacity assurance. Test-evidence serialization is reduced in 3714b59 without reducing checks or samples; fresh verification passed in both3714b59 runs. Treat unexplained performance variability as medium priority for independent disposition; a repeated failure requiring discovery/runner changes needs a bounded scope amendment. Existing upload-artifact runtime/deprecation warnings are low-priority protected-workflow follow-up, not suppressed compiler failures. No new confirmed critical vulnerability has been established; F01-F03 retain high review priority until independently dispositioned.
+
+
+Documentation date 19 November 2026. This is the canonical KNOWN_ISSUES register. [ARCH-04](https://github.com/Shiva721254/HappyAlmere/issues/21) resolved ten original and five residual technical findings within the accepted development scope; [owner decision](https://github.com/Shiva721254/HappyAlmere/issues/21#issuecomment-7021312167) accepted exact 6da4b25e7a291e08b8fb0feab1b75ff22e55d0e0 and eight future deferrals. Historical pending wording below is preserved, superseded only by these attributed scoped dispositions. No universal security certification or production readiness.
+
+## Approved future obligations
+
+The table retains original criteria, risk reason, responsible roles and gates from ARCH-04. **DEF-01–08 are now owner-approved deferrals** under comment 7021312167, not passed requirements, waivers, feature permission or legal exemptions. Role assignments require named accountable people before execution. Affected functionality remains unavailable until mandatory gates are met. Master AC10/13/17 remain partial for private/production scope; acceptance formalities were dispositioned separately.
+
+| ID | Outstanding requirement / reason | Original linkage | Destination and responsible role | Future mandatory gate |
+|---|---|---|---|---|
+| DEF-01 | Private customer authorization absent by current scope | Master AC10; #4 AC12 | HA-003 #12, identity implementer/security reviewer | Account resource authorization tests before private accounts |
+| DEF-02 | Private business authorization absent by scope | Master AC10; #4 AC12 | HA-004 #13, business implementer/security reviewer | Ownership/delegation/isolation before private business operations |
+| DEF-03 | Live domain/trusted proxy/TLS not exercised by synthetic hosts | Master AC05/13 | HA-006 #16 / HA-009 #19, hosting/security owner | Actual approved domain/proxy/certificate verification before activation |
+| DEF-04 | Production secret storage/rotation/key lifecycle absent | Master AC13 | HA-009/010 #19/#20, operations/security owner | Verified rotation/access/recovery/incident policies before production |
+| DEF-05 | Production backup encryption and retention absent | Master AC17 | HA-009/010, DB/operations owner | Independent encrypted retained copies and restore proof before production |
+| DEF-06 | Production measured RPO/RTO absent | Master AC17 | HA-009/010, DB/operations owner | Approved objectives and measured protected recovery exercise |
+| DEF-07 | Concurrent/sustained capacity unknown; current sequential | Master AC11/16; #4 AC10 | HA-005 #15 / HA-009/010, performance/operations owner | Representative staging load/maintenance, approved thresholds |
+| DEF-08 | Production infrastructure/security/operations outside synthetic scope | Master AC02/13/17/18 | HA-009/010, infrastructure/security owner | Independent operational readiness and specific release authorization |
+
+## Governance reconciliation risks
+
+Source Issue #23; severity is governance/integration classification, not a newly reproduced production vulnerability. All remain controlled risks pending independent verification; documentation alone does not resolve them.
+
+| ID | Severity / impact | Responsible role | Required action and current evidence |
+|---|---|---|---|
+| GOV-R01-R01 | High: stale status overwrites acceptance | Codex / reviewer | Use #21 owner + #22 INT-G11; current indexes supersede historical snapshots |
+| GOV-R01-R02 | High: decision provenance lost | Codex / reviewer | Preserve 871e7a3 and original reports/decisions; three-way comparison |
+| GOV-R01-R03 | High: deferrals falsely marked passed | Owner / reviewer | Eight explicit mandatory gates above; private/production remains partial |
+| GOV-R01-R04 | High: unauthorized feature execution | Owner / implementer | TASKS labels published designs only; no executable future assignment |
+| GOV-R01-R05 | Critical: accepted migrations changed | Implementer / migration coordinator | All non-allowlisted blobs/modes equal; no DB access |
+| GOV-R01-R06 | Critical: CI controls weakened | Implementer / reviewer | Workflow/tests/thresholds unchanged; on failure stop/report |
+| GOV-R01-R07 | Critical: accidental main merge | Repository maintainer / owner | PR #3 stays draft; no merge authority; exact ref preservation |
+| GOV-R01-R08 | Medium: duplicate canonical records | Documentation maintainer | Eleven responsibilities, reuse register, no KNOWN_ISSUES duplicate |
+| GOV-R01-R09 | High: sensitive disclosure | Implementer / security reviewer | Scoped credential-pattern review, sanitized results only; no archives/credentials |
+| GOV-R01-R10 | High: self-acceptance | ChatGPT / product owner | GOV-G07–10 and INT-G12 pending; submit and stop |
+| GOV-TRC-001 | Provenance gap: ARCH-01 unavailable | Owner / reviewer | Retain reconstructed #4 attribution; recover authenticated reference if available, never invent |
+| GOV-STATE-001 | Closed #5 mistaken for acceptance | Owner | Preserve closure history; new candidate has separate review/acceptance, no automatic issue action |
+| GOV-PLAN-001 | Designs mistaken for approved critical path | Owner / architect | #11–20 published; HA-MASTER-EXEC-01 proposed, migration coordination unresolved |
+| GOV-COORD-001 | Historical #9 overwrites later DB evidence | Codex / reviewer | Fresh branch from 719dbcc, five-path reconciliation; old PR preserved |
+| GOV-VIS-001 | Administrative protection visibility limited | Owner / repository administrator | INT-G08 HTTP403 disposition retained; no claim full settings verified or permission to bypass |
+
+[Acceptance](../../ACCEPTANCE.md) carries original criterion dispositions; [tasks](../../TASKS.md) assigns next actions. Existing SEC/PERF/UI/ARCH/GOV findings below remain historical with continuing applicable future obligations. Future new schemas, routines, privileges or PostgreSQL versions require new inventory; accepted zero-count exclusions are not permanent exemptions.
+
+## Historical risk records — preserved verbatim below
+
+## Current R02 verification and proposed risk disposition
+
+Independent [ARCH-03 / Issue #14](https://github.com/Shiva721254/HappyAlmere/issues/14) identifies R-F01 through R-F04 as medium verification/evidence gaps and R-F05 as low documentation synchronization. No new critical/high defect was established. The [current implementation report](../reports/HA-002-implementation-report.md) maps each finding to tests and retains all original matrices. R-F01/R-F05 baseline missing evidence has been reconciled against actual same-head successful runs and the final Issue #10 handoff. R-F02/R-F03/R-F04 now have expanded verification candidates; independent closure remains pending.
+
+Proposed future risk destinations, responsible roles, original criteria and required gates are explicit in that report. Master AC10 private authorization, AC13 production lifecycle and AC17 production recovery remain partial; master AC18 and original acceptance gates remain pending. Proposed HA-003/004/005/006/009/010 deferrals require owner disposition and are not waivers. No production readiness or new feature authorization. Earlier risk history below is preserved.
+
+## Current HA-002-R01 review disposition
+
+Independent HA-002-ARCH-02 findings F01-F10, their severity/classification and authority remain in [Issue #10](https://github.com/Shiva721254/HappyAlmere/issues/10). The [current implementation report](../reports/HA-002-implementation-report.md) maps every finding to correction and verification. These remediation candidates do not close risks by self-approval. Production encryption, secret rotation/storage/retention, operational RTO/RPO, capacity and infrastructure controls require explicit HA-009/010 disposition; private resource authorization remains HA-003/004. Existing risk entries below are preserved. No production readiness or compliance claim.
+
 # HappyAlmere permanent security and engineering risk register
 
 Last updated: 19 November 2026 (Europe/Amsterdam). Scope: V0.1, reviewed commit `7b6e082662fb5449cfae0a3586a91488db6ef880`, branch `fix/ha-001-r01`; remediation branch `fix/ha-001-r02`.
 
 Authority: the owner's HA-001-R02 assignment and supplied **HA-001-ARCH-02 Independent Audit Findings Supplement**. SEC-F02?F06, PERF-F01?F02, UI-F01?F02, ARCH-F01 and GOV-F01 retain the supplied classifications, severity and deadlines. SEC-F01, QA-F01, QA-F02 and CODE-F01 were specified in the assignment without formal severity values; their provisional engineering priorities below are explicitly not attributed to the independent reviewer.
 
-The owner now temporarily accepts documented residual risks for local synthetic-data development only under HA-001-CLOSE. V0.1's remote-CI condition is satisfied by run 44541406736 for the CI-corrected descendant a174aa7 (application/tests unchanged from cbe2def). Final PR-head checks still gate merge. This is not public deployment authorization or acceptance for production/customer data. Original per-finding R02 decisions below are historical; this limited owner decision supersedes their local acceptance-pending wording. Resolution milestones remain binding. Future requirements are not claims of currently exploitable defects or implemented capabilities. R02 stops before HA-002/HA-003. Responsible roles are assignments to roles, not claims that named people accepted them.
+The owner now temporarily accepts documented residual risks for local synthetic-data development only under HA-001-CLOSE. V0.1's remote-CI condition is satisfied by run 44541406736 for the CI-corrected descendant a174aa7 (application/tests unchanged from cbe2def). Final foundation PR-head Ubuntu/Windows checks passed and PR #2 merged normally. This is not public deployment authorization or acceptance for production/customer data. Original per-finding R02 decisions below are historical; this limited owner decision supersedes their local acceptance-pending wording. Resolution milestones remain binding. Future requirements are not claims of currently exploitable defects or implemented capabilities. R02 stops before HA-002/HA-003. Responsible roles are assignments to roles, not claims that named people accepted them.
 
 Source shorthand: `Web/`, `Application/`, `Infrastructure/` resolve under `HappyAlmere_V0.1_MVC/src/HappyCity.*`; `tests/` resolves under `HappyAlmere_V0.1_MVC/`. Other paths are repository-relative. R01 evidence is historical; fresh evidence and exact commands are in [the R02 report](../reports/HA-001-R02-independent-audit-remediation.md).
 
@@ -206,3 +275,68 @@ Source shorthand: `Web/`, `Application/`, `Infrastructure/` resolve under `Happy
 ## HA-001-CLOSE acceptance boundary
 
 The owner explicitly accepts the documented residual risks only during local synthetic-data development. Future controls remain unimplemented requirements with their original deadlines. Successful Ubuntu and Windows CI is recorded in the closure report; local-scope V0.1 acceptance is now recorded. GOV-F01 reconciliation is authorized on a dedicated branch; develop and its original PostgreSQL history must remain recoverable. Independent review of the HA-002 gap analysis precedes additional database features.
+
+## Reconciliation disposition
+
+GOV-F01 sequencing exception is documented: owner-authorized foundation merge through
+PR #2 completed after checks; original develop c2964ee is preserved and integration
+has its own branch. Integration/gap-analysis acceptance remains subject to independent
+review, not automatic approval of existing V0.2 capabilities. ARCH-F01/PERF-F01/SEC-F05
+master gaps remain tracked; no production or private-data authorization is inferred.
+
+Integration local verification: 68 tests, 42 layouts, 190 security and five rate
+assertions passed against PostgreSQL; loopback-only HTTP/HTTPS and database port
+bindings were verified. The NUL-input compatibility regression is resolved by bounded
+validation (HTTP 400), without relaxing TLS or other controls. Draft PR #3 and the
+HA-002 gap analysis await independent review. This does not resolve deferred catalog,
+secrets lifecycle, backup/restore or production-access requirements.
+
+
+## HA-002-A recovery/design evidence
+
+Local synthetic backup/restore is now demonstrated; [the implementation report](../reports/HA-002-implementation-report.md)
+records scope, hashes, exact reconciliation, tests and open issue criteria. Archives and
+generated credentials are protected/ignored, never uploaded. Host disk encryption,
+production backup protection and separated backup/migration/owner roles are not claimed.
+SEC-F05/ARCH-F01/PERF-F01 remain open for their residual requirements. A successful
+baseline restore does not demonstrate UUID migration or recovery after its failure.
+
+
+## HA-002-A forward implementation evidence update
+
+Owner authorization: Issue #4 comment 7014717337; acceptance still pending.
+SEC-F05: local role separation, protected ephemeral credentials, verified TLS and
+restricted backup/restore now have execution evidence; rotation procedure documented.
+Production secret lifecycle, host/backup encryption and retention remain unverified.
+PERF-F01: 10,000 synthetic rows, bounded keyset traversal, plans and local timing are
+now measured; no production capacity conclusion. PERF-F02 remains open.
+ARCH-F01: shared catalog/city relationships now implemented/tested in isolation;
+no live domain resolver or private cross-city authorization is claimed. GOV-F01:
+histories remain preserved, governance PR #9 and primary PR #6 remain unmerged.
+No future Identity/business/Data Protection requirement is marked implemented.
+Docker address-pool exhaustion occurred during an extra rehearsal; task-private network
+reuse resolves subnet consumption while preserving independent instances/volumes.
+## HA-003-A candidate risk tracking
+
+[Issue #26](https://github.com/Shiva721254/HappyAlmere/issues/26) supplies the following prospective risks; [#28](https://github.com/Shiva721254/HappyAlmere/issues/28) approves bounded controls, not production acceptance. All fifteen remain tracked through implementation verification and independent HA-003-A-ARCH-01. Owner is accountable; Codex implements/tests; ChatGPT reviews. Evidence: [Identity foundation](../database/identity-foundation.md), [acceptance](../../ACCEPTANCE.md). No risk is closed by source presence alone.
+
+| ID | Risk | Severity | Control |
+|---|---|---|---|
+| IAM-R01 | Existing migration history overwritten | Critical | separate coordinated history |
+| IAM-R02 | Credential data exposed to discovery | Critical | explicit grants/negative tests |
+| IAM-R03 | Runtime migration authority | Critical | separate migration credentials |
+| IAM-R04 | Duplicate accounts | High | physical uniqueness/concurrency |
+| IAM-R05 | UUID namespace conflict | High | explicit UUIDv4 |
+| IAM-R06 | Incompatible dependencies | High | exact version review/builds |
+| IAM-R07 | Premature auth exposure | High | endpoint inventory/HTTP regression |
+| IAM-R08 | Uncontrolled admin account | Critical | no privileged bootstrap A |
+| IAM-R09 | Credential logs/artifacts | Critical | redacted synthetic evidence |
+| IAM-R10 | Account concurrency errors | High | framework concurrency tests |
+| IAM-R11 | Backup excludes identity | Critical | approved scope/actual restore |
+| IAM-R12 | Global roles confused with scoped authority | High | explicit resource boundaries |
+| IAM-R13 | Cross-context consistency failure | High | no speculative dependencies |
+| IAM-R14 | Discovery regression | High | preserve accepted tests |
+| IAM-R15 | Foundation mistaken for full authentication | High | explicit scope/release gates |
+Proposed risks, not findings of existing vulnerabilities.
+
+PRE-F01–08 compatibility controls: explicit context commands; scoped coordinated backups; runtime child environment allowlist; exact two Identity sequences; separate context/factory/history/snapshot; separate protected runtime config preserving debugger contract; explicit physical mapping; unchanged original recovery gate. Remaining package/CI/time-budget/startup/fixture-isolation risks require fresh execution. IAM-G05 package checks passed; production Data Protection, sessions, sensitive token protection, real accounts and all DEF-01–08 obligations remain deferred. Administrative visibility limitations and prior risk acceptance scopes below remain unchanged.
