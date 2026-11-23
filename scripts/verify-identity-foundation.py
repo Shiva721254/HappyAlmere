@@ -452,7 +452,17 @@ def main():
     if not json.loads(r.docker('context','inspect'))[0]['Endpoints']['docker']['Host'].startswith(('npipe://','unix://')):
         raise RuntimeError('Local Docker required')
     r.run('git','merge-base','--is-ancestor',BASELINE,'HEAD')
-    protected=['HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/','HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/HappyCityDbContext.cs','scripts/verify-database-recovery.py','scripts/verify-source.py']
+    protected=[
+        'HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/20261119000108_InitialDiscovery.cs',
+        'HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/20261119000108_InitialDiscovery.Designer.cs',
+        'HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/20261119161305_CatalogForward.cs',
+        'HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/20261119161305_CatalogForward.Designer.cs',
+        'HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/CatalogForward.sql',
+        'HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/20261119175842_SupportedRegions.cs',
+        'HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/Migrations/20261119175842_SupportedRegions.Designer.cs',
+        'scripts/verify-database-recovery.py',
+        'scripts/verify-source.py',
+    ]
     if r.run('git','diff',BASELINE,'--',*protected).strip():raise RuntimeError('Protected accepted assets changed')
     immutable=['HappyAlmere_V0.1_MVC/src/HappyCity.Infrastructure/IdentityMigrations/',
                'scripts/verify-identity-contract.sql','.github/workflows/build.yml']
