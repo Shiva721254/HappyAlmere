@@ -11,7 +11,7 @@ public sealed record DiscoveryPage(IReadOnlyList<DiscoveryItem> Items, string? N
 public sealed record DiscoveryCursor(int Version, string Binding, int? LegacyId, Guid Id)
 {
     private static string Bind(DiscoveryFilter filter, int size) => Convert.ToHexString(SHA256.HashData(
-        JsonSerializer.SerializeToUtf8Bytes(new { filter.CitySlug, filter.Category, filter.Query, Size = size })));
+        JsonSerializer.SerializeToUtf8Bytes(new { filter.CitySlug, filter.Category, filter.Query, filter.District, Size = size })));
 
     public static DiscoveryCursor? Parse(string? value, DiscoveryFilter filter, int size)
     {

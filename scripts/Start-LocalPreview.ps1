@@ -57,7 +57,7 @@ try {
             & docker compose -p $projectName --env-file $envFile -f $composeFile down -v
         }
         else {
-            & docker compose -p $projectName -f $composeFile down -v
+            & docker compose -p $projectName down -v
         }
         if (Test-Path $envFile) { Remove-Item $envFile -Force }
         Write-Host "Preview stack stopped cleanly. Preserved happyalmere-v02 untouched." -ForegroundColor Green
@@ -176,10 +176,17 @@ ALTER DEFAULT PRIVILEGES FOR ROLE happy_owner IN SCHEMA catalog, discovery REVOK
 
     $url = "http://localhost:$Port"
     $healthy = $false
-    for ($i = 0; $i -lt 25; $i++) {
-        $null = (& curl.exe -fsS -H 'Host: localhost' "http://127.0.0.1:$Port/healthz" 2>$null)
-        if ($LASTEXITCODE -eq 0) { $healthy = $true; break }
-        Start-Sleep -Seconds 1
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        for ($i = 0; $i -lt 25; $i++) {
+            & curl.exe -fsS -H 'Host: localhost' "http://127.0.0.1:$Port/healthz" 2>&1 | Out-Null
+            if ($LASTEXITCODE -eq 0) { $healthy = $true; break }
+            Start-Sleep -Seconds 1
+        }
+    }
+    finally {
+        $ErrorActionPreference = $prevEap
     }
     if (-not $healthy) { throw "Web preview did not become healthy on $url/healthz." }
 

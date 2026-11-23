@@ -1,4 +1,5 @@
 using HappyCity.Application;
+using HappyCity.Domain;
 using HappyCity.Web.ViewModels;
 using HappyCity.Web.CityContext;
 using Microsoft.AspNetCore.Mvc;
@@ -9,18 +10,50 @@ namespace HappyCity.Web.Controllers;
 public sealed class HomeController(IDiscoveryService discovery, ICityContext city) : Controller
 {
     [HttpGet, EnableRateLimiting("search"), CityScoped]
-    public async Task<IActionResult> Index(string? category, string? q, CancellationToken cancellationToken, string? cursor = null)
+    public async Task<IActionResult> Index(string? category, string? q, string? district, CancellationToken cancellationToken, string? cursor = null)
     {
         DiscoveryFilter filter;
-        try { filter = new DiscoveryFilter(city.CitySlug, category, q); }
+        try { filter = new DiscoveryFilter(city.CitySlug, category, q, district); }
         catch (ArgumentException) { return BadRequest(); }
 
         try
         {
-            var page = await discovery.FindPageAsync(filter, DiscoveryFilter.MaximumResults, cursor, cancellationToken);
-            return View(new DiscoveryViewModel(page.Items, filter.Query, filter.Category, page.NextCursor));
+            IReadOnlyList<DiscoveryItem> items;
+            string? nextCursor = null;
+            if (cursor is null && filter.Query is not null)
+            {
+                items = await discovery.FindAsync(filter, cancellationToken);
+            }
+            else
+            {
+                var page = await discovery.FindPageAsync(filter, DiscoveryFilter.MaximumResults, cursor, cancellationToken);
+                items = page.Items;
+                nextCursor = page.NextCursor;
+            }
+
+            var districts = await discovery.FindDistrictsAsync(city.CitySlug, cancellationToken);
+            return View(new DiscoveryViewModel(items, filter.Query, filter.Category, nextCursor, filter.District, districts));
         }
         catch (ArgumentException) { return BadRequest(); }
+    }
+
+    [HttpGet("/ontdek/{slug}"), EnableRateLimiting("search"), CityScoped]
+    public async Task<IActionResult> Detail(string slug, CancellationToken cancellationToken)
+    {
+        if (!DiscoveryFilter.IsValidSlug(slug))
+            return NotFound();
+
+        var item = await discovery.FindBySlugAsync(city.CitySlug, slug, cancellationToken);
+        if (item is null)
+            return NotFound();
+
+        var relatedPool = await discovery.FindAsync(new DiscoveryFilter(city.CitySlug, item.Category, null), cancellationToken);
+        var related = relatedPool
+            .Where(x => !string.Equals(x.Slug, item.Slug, StringComparison.Ordinal))
+            .Take(3)
+            .ToArray();
+
+        return View(new DiscoveryDetailViewModel(item, related));
     }
 
     [HttpGet]

@@ -1,7 +1,7 @@
 @model HappyCity.Web.ViewModels.DiscoveryViewModel
 @{
     ViewData["Title"] = "Haal meer uit jouw Almere";
-    var hasFilter = !string.IsNullOrEmpty(Model.Category) || !string.IsNullOrEmpty(Model.Query);
+    var hasFilter = !string.IsNullOrEmpty(Model.Category) || !string.IsNullOrEmpty(Model.Query) || !string.IsNullOrEmpty(Model.District);
 }
 
 <section class="hero">
@@ -12,9 +12,13 @@
         <form method="get" asp-action="Index" class="search" role="search">
             <label for="q">Wat zoek je vandaag?</label>
             <input type="hidden" name="category" value="@Model.Category">
+            @if (!string.IsNullOrEmpty(Model.District))
+            {
+                <input type="hidden" name="district" value="@Model.District">
+            }
             <div class="search-controls">
                 <input id="q" name="q" maxlength="@HappyCity.Application.DiscoveryFilter.MaximumQueryLength" value="@Model.Query"
-                       aria-describedby="search-help" placeholder="Bijvoorbeeld: familie, lunch, tuin">
+                       aria-describedby="search-help" placeholder="Bijvoorbeeld: familie, lunch, kringloop, theater">
                 <button type="submit">Zoeken</button>
             </div>
             <p id="search-help">Voer geen persoonsgegevens in.</p>
@@ -32,30 +36,56 @@
     </div>
     <div class="categories">
         <a class="@(Model.Category == DiscoveryCategories.Activities ? "is-active" : null)"
-           asp-action="Index" asp-route-category="@DiscoveryCategories.Activities">☀ Activiteiten</a>
+           asp-action="Index" asp-route-category="@DiscoveryCategories.Activities" asp-route-district="@Model.District">☀ Activiteiten</a>
         <a class="@(Model.Category == DiscoveryCategories.Savings ? "is-active" : null)"
-           asp-action="Index" asp-route-category="@DiscoveryCategories.Savings">€ Besparen</a>
+           asp-action="Index" asp-route-category="@DiscoveryCategories.Savings" asp-route-district="@Model.District">€ Besparen</a>
         <a class="@(Model.Category == DiscoveryCategories.Food ? "is-active" : null)"
-           asp-action="Index" asp-route-category="@DiscoveryCategories.Food">♨ Eten &amp; drinken</a>
+           asp-action="Index" asp-route-category="@DiscoveryCategories.Food" asp-route-district="@Model.District">♨ Eten &amp; drinken</a>
         <a class="@(Model.Category == DiscoveryCategories.Services ? "is-active" : null)"
-           asp-action="Index" asp-route-category="@DiscoveryCategories.Services">⌂ Diensten</a>
+           asp-action="Index" asp-route-category="@DiscoveryCategories.Services" asp-route-district="@Model.District">⌂ Diensten</a>
         <a class="@(Model.Category == DiscoveryCategories.Shopping ? "is-active" : null)"
-           asp-action="Index" asp-route-category="@DiscoveryCategories.Shopping">◇ Winkelen</a>
-        <a class="@(Model.Category is null ? "is-active" : null)"
+           asp-action="Index" asp-route-category="@DiscoveryCategories.Shopping" asp-route-district="@Model.District">◇ Winkelen</a>
+        <a class="@(Model.Category is null && Model.District is null ? "is-active" : null)"
            asp-action="Index">Alles bekijken</a>
     </div>
+    @if (Model.AvailableDistricts.Count > 1)
+    {
+        <div class="districts" role="region" aria-label="Filter op stadsdeel">
+            <span class="districts-label">Stadsdeel:</span>
+            <a class="@(Model.District is null ? "is-active" : null)"
+               asp-action="Index" asp-route-category="@Model.Category" asp-route-q="@Model.Query">Alle wijken</a>
+            @foreach (var dist in Model.AvailableDistricts)
+            {
+                <a class="@(string.Equals(Model.District, dist, StringComparison.OrdinalIgnoreCase) ? "is-active" : null)"
+                   asp-action="Index" asp-route-category="@Model.Category" asp-route-q="@Model.Query" asp-route-district="@dist">@dist</a>
+            }
+        </div>
+    }
 </section>
 
 <section class="wrap section">
     <div class="section-head">
         <h2>Ontdek jouw Almere</h2>
-        <span class="tag">Voorbeeldinhoud</span>
+        <span class="tag">@Model.Items.Count @(Model.Items.Count == 1 ? "plek" : "plekken")</span>
     </div>
-    <p class="muted provenance">Dit is een prototype. Er zijn nog geen actuele aanbiedingen of geverifieerde bedrijven.</p>
-    @if (Model.Category is not null)
+    <p class="muted provenance">Onafhankelijk lokaal overzicht voor Almere — zonder reclame of tracking.</p>
+    @if (Model.Category is not null || Model.District is not null)
     {
         <div class="active-filter">
-            <p>Geselecteerde categorie: @Model.Category</p>
+            <p>
+                @if (Model.Category is not null && Model.District is not null)
+                {
+                    @:Geselecteerd: @Model.Category · @Model.District
+                }
+                else if (Model.Category is not null)
+                {
+                    @:Geselecteerde categorie: @Model.Category
+                }
+                else
+                {
+                    @:Geselecteerd stadsdeel: @Model.District
+                }
+            </p>
             <a asp-action="Index">Alles tonen</a>
         </div>
     }
@@ -81,7 +111,7 @@
 @if (Model.NextCursor is not null)
 {
     <nav class="wrap pagination" aria-label="Volgende zoekresultaten">
-        <a class="button" asp-action="Index" asp-route-q="@Model.Query" asp-route-category="@Model.Category" asp-route-cursor="@Model.NextCursor">Volgende resultaten</a>
+        <a class="button" asp-action="Index" asp-route-q="@Model.Query" asp-route-category="@Model.Category" asp-route-district="@Model.District" asp-route-cursor="@Model.NextCursor">Volgende resultaten</a>
     </nav>
 }
 

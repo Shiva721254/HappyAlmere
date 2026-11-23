@@ -5,9 +5,22 @@
     <div class="card-body">
         <div class="card-meta">
             <p class="eyebrow">@Model.District · @Model.Category</p>
-            <span class="card-badge">Voorbeeld</span>
+            <span class="card-badge">Lokaal</span>
         </div>
-        <h3>@Model.Title</h3>
+        @if (!string.IsNullOrEmpty(Model.Slug))
+        {
+            <h3><a class="card-link" asp-controller="Home" asp-action="Detail" asp-route-slug="@Model.Slug">@Model.Title</a></h3>
+        }
+        else
+        {
+            <h3>@Model.Title</h3>
+        }
         <p>@Model.Description</p>
+        @if (!string.IsNullOrEmpty(Model.Slug))
+        {
+            <div class="card-footer">
+                <a class="card-more" asp-controller="Home" asp-action="Detail" asp-route-slug="@Model.Slug">Bekijk details →</a>
+            </div>
+        }
     </div>
 </article>

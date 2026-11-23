@@ -158,51 +158,51 @@ print(f'Fast source scan PASS ({len(files)} tracked/untracked files, 0 secret fi
                 Write-Host 'No preserved happyalmere-v02 postgres container found; initializing baseline via Initialize-LocalDatabase.ps1...'
                 & (Join-Path $repoRoot 'scripts/Initialize-LocalDatabase.ps1')
                 Assert-ExitZero 'Initialize-LocalDatabase.ps1'
-                $startedSourcePostgres = $true
+                $script:startedSourcePostgres = $true
             }
             else {
                 $running = (& docker inspect -f '{{.State.Running}}' $pgId).Trim()
                 if ($running -ne 'true') {
                     & docker start $pgId | Out-Null
                     Assert-ExitZero 'docker start baseline postgres'
-                    $startedSourcePostgres = $true
+                    $script:startedSourcePostgres = $true
                     Start-Sleep -Seconds 3
                 }
             }
         }
 
-        $gateEvidence = $null
+        $script:gateEvidence = $null
         Invoke-Stage 'Isolated PostgreSQL 18 Backup & Restore Gate' {
             & $pythonCmd scripts/verify-database-recovery.py
             Assert-ExitZero 'scripts/verify-database-recovery.py'
-            $gateEvidence = (Get-ChildItem artifacts/ha002a/*/evidence.json | Sort-Object FullName | Select-Object -Last 1).FullName
+            $script:gateEvidence = (Get-ChildItem artifacts/ha002a/*/evidence.json | Sort-Object FullName | Select-Object -Last 1).FullName
         }
 
-        $forwardEnv = $null
+        $script:forwardEnv = $null
         Invoke-Stage 'Forward Migration, Rollback, Dutch FTS & Privilege Gate' {
-            & $pythonCmd scripts/verify-forward-migration.py --gate $gateEvidence
+            & $pythonCmd scripts/verify-forward-migration.py --gate $script:gateEvidence
             Assert-ExitZero 'scripts/verify-forward-migration.py'
-            $forwardEnv = (Get-ChildItem artifacts/forward/*/rehearsal.env | Sort-Object FullName | Select-Object -Last 1).FullName
+            $script:forwardEnv = (Get-ChildItem artifacts/forward/*/rehearsal.env | Sort-Object FullName | Select-Object -Last 1).FullName
         }
 
         Invoke-Stage 'Regression Suite (Identity Disabled)' {
-            . (Join-Path $repoRoot 'scripts/Load-LocalEnvironment.ps1') -EnvironmentFile $forwardEnv
+            . (Join-Path $repoRoot 'scripts/Load-LocalEnvironment.ps1') -EnvironmentFile $script:forwardEnv
             $env:IdentityFoundation__Enabled = 'false'
             $env:HAPPYCITY_EVIDENCE_DIRECTORY = Join-Path $repoRoot 'artifacts/local-ci/identity-disabled-tests'
             & dotnet test HappyAlmere.slnx -c Release --no-build -m:1 --filter 'FullyQualifiedName!~HappyCity.FoundationTests.Identity'
             Assert-ExitZero 'Identity-disabled regression suite'
         }
 
-        $identityEnv = $null
+        $script:identityEnv = $null
         Invoke-Stage 'Isolated Identity Contract, Privileges & Coordinated Recovery' {
             & $pythonCmd scripts/verify-identity-foundation.py
             Assert-ExitZero 'scripts/verify-identity-foundation.py'
-            $identityEnv = (Get-ChildItem artifacts/identity/*/tests.env | Sort-Object FullName | Select-Object -Last 1).FullName
+            $script:identityEnv = (Get-ChildItem artifacts/identity/*/tests.env | Sort-Object FullName | Select-Object -Last 1).FullName
         }
 
         Invoke-Stage 'Full Migrated PostgreSQL 18, Dutch FTS, City & Identity Test Suite' {
             $env:HAPPYCITY_EVIDENCE_DIRECTORY = Join-Path $repoRoot 'artifacts/local-ci/forward-tests'
-            & (Join-Path $repoRoot 'scripts/Test-Local.ps1') -EnvironmentFile $identityEnv
+            & (Join-Path $repoRoot 'scripts/Test-Local.ps1') -EnvironmentFile $script:identityEnv
             Assert-ExitZero 'scripts/Test-Local.ps1'
         }
 
@@ -212,7 +212,7 @@ print(f'Fast source scan PASS ({len(files)} tracked/untracked files, 0 secret fi
                 Assert-ExitZero 'npm ci'
                 & npm audit --audit-level=high
                 Assert-ExitZero 'npm audit'
-                . (Join-Path $repoRoot 'scripts/Load-LocalEnvironment.ps1') -EnvironmentFile $identityEnv
+                . (Join-Path $repoRoot 'scripts/Load-LocalEnvironment.ps1') -EnvironmentFile $script:identityEnv
                 & npm run test:browser
                 Assert-ExitZero 'npm run test:browser'
             }

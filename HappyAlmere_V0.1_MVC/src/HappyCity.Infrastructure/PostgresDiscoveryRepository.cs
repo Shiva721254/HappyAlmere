@@ -25,7 +25,7 @@ public sealed class PostgresDiscoveryRepository(HappyCityDbContext database) : I
             .ThenBy(x => x.LegacyId)
             .ThenBy(x => x.Id)
             .Take(DiscoveryFilter.MaximumResults)
-            .Select(x => new DiscoveryItem(x.Title, x.Description, x.Category.Slug, x.District, x.Icon))
+            .Select(x => new DiscoveryItem(x.Title, x.Description, x.Category.Slug, x.District, x.Icon, x.Slug))
             .ToArrayAsync(cancellationToken);
     }
 
@@ -44,11 +44,33 @@ public sealed class PostgresDiscoveryRepository(HappyCityDbContext database) : I
         }
         var query = ApplyFilter(entries, filter);
         var rows = await query.OrderBy(x => x.LegacyId == null).ThenBy(x => x.LegacyId).ThenBy(x => x.Id)
-            .Take(size + 1).Select(x => new { x.Id, x.LegacyId, Item = new DiscoveryItem(x.Title, x.Description, x.Category.Slug, x.District, x.Icon) })
+            .Take(size + 1).Select(x => new { x.Id, x.LegacyId, Item = new DiscoveryItem(x.Title, x.Description, x.Category.Slug, x.District, x.Icon, x.Slug) })
             .ToArrayAsync(cancellationToken);
         var visible = rows.Take(size).ToArray();
         var next = rows.Length > size ? DiscoveryCursor.Encode(filter, size, visible[^1].LegacyId, visible[^1].Id) : null;
         return new DiscoveryPage(visible.Select(x => x.Item).ToArray(), next);
+    }
+
+    public async Task<DiscoveryItem?> FindBySlugAsync(string citySlug, string slug, CancellationToken cancellationToken = default)
+    {
+        if (!DiscoveryFilter.IsValidSlug(slug)) return null;
+        cancellationToken.ThrowIfCancellationRequested();
+        return await database.DiscoveryEntries.AsNoTracking()
+            .Where(x => x.City.Slug == citySlug && x.City.IsActive && x.IsPublished && x.Category.IsActive && x.Slug == slug)
+            .Select(x => new DiscoveryItem(x.Title, x.Description, x.Category.Slug, x.District, x.Icon, x.Slug))
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<string>> FindDistrictsAsync(string citySlug, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return await database.DiscoveryEntries.AsNoTracking()
+            .Where(x => x.City.Slug == citySlug && x.City.IsActive && x.IsPublished && x.Category.IsActive)
+            .Select(x => x.District)
+            .Distinct()
+            .OrderBy(x => x)
+            .Take(50)
+            .ToArrayAsync(cancellationToken);
     }
 
     private static IQueryable<DiscoveryEntry> ApplyFilter(IQueryable<DiscoveryEntry> entries, DiscoveryFilter filter)
@@ -56,6 +78,11 @@ public sealed class PostgresDiscoveryRepository(HappyCityDbContext database) : I
         var query = entries.AsNoTracking()
             .Where(x => x.City.Slug == filter.CitySlug && x.City.IsActive && x.IsPublished && x.Category.IsActive);
         if (filter.Category is not null) query = query.Where(x => x.Category.Slug == filter.Category);
+        if (filter.District is not null)
+        {
+            var districtPattern = filter.District.Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_");
+            query = query.Where(x => EF.Functions.ILike(x.District, districtPattern, "\\"));
+        }
         if (filter.Query is not null)
         {
             var raw = filter.Query;
