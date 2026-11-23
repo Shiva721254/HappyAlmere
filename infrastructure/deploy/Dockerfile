@@ -18,11 +18,12 @@ RUN dotnet publish HappyAlmere_V0.1_MVC/src/HappyCity.Web/HappyCity.Web.csproj \
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 
-ENV ASPNETCORE_URLS=http://0.0.0.0:8080 \
+ENV ASPNETCORE_HTTP_PORTS=8080 \
     ASPNETCORE_ENVIRONMENT=Production \
     DOTNET_EnableDiagnostics=0
 
 COPY --from=build /app/publish ./
+RUN mkdir -p /home/app/.aspnet/DataProtection-Keys && chown -R "$APP_UID:$APP_UID" /home/app/.aspnet
 
 USER $APP_UID
 EXPOSE 8080
