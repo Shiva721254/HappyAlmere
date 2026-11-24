@@ -1,32 +1,44 @@
 @model HappyCity.Web.ViewModels.DiscoveryDetailViewModel
+@using HappyCity.Web.ViewModels
 @{
     ViewData["Title"] = Model.Item.Title;
+    var presentation = DiscoveryPresentation.ExtractSource(Model.Item.Description);
+    var artClass = DiscoveryPresentation.CategoryArtClass(Model.Item.Category);
+    var categoryLabel = DiscoveryPresentation.CategoryDisplayName(Model.Item.Category);
 }
 
 <section class="wrap section detail-page">
     <nav class="detail-breadcrumb" aria-label="Broodkruimelpad">
         <a asp-action="Index">← Terug naar overzicht</a>
         <span aria-hidden="true">·</span>
-        <a asp-action="Index" asp-route-category="@Model.Item.Category">@Model.Item.Category</a>
+        <a asp-action="Index" asp-route-category="@Model.Item.Category">@categoryLabel</a>
         <span aria-hidden="true">·</span>
         <a asp-action="Index" asp-route-district="@Model.Item.District">@Model.Item.District</a>
     </nav>
 
     <article class="detail-card">
-        <div class="detail-art" aria-hidden="true">@Model.Item.Icon</div>
+        <div class="detail-art @artClass" aria-hidden="true">@Model.Item.Icon</div>
         <div class="detail-body">
             <div class="detail-meta">
                 <a class="detail-pill" asp-action="Index" asp-route-district="@Model.Item.District">@Model.Item.District</a>
-                <a class="detail-pill" asp-action="Index" asp-route-category="@Model.Item.Category">@Model.Item.Category</a>
+                <a class="detail-pill" asp-action="Index" asp-route-category="@Model.Item.Category">@categoryLabel</a>
             </div>
             <h1>@Model.Item.Title</h1>
-            <p class="detail-description">@Model.Item.Description</p>
+            <p class="detail-description">@presentation.CleanDescription</p>
             <div class="detail-notice">
                 <p class="muted">Onafhankelijke lokale vermelding zonder betaalde plaatsing of tracking. Controleer altijd actuele openingstijden via de officiële bron.</p>
                 <p class="detail-correction">Klopt er iets niet of ben je de eigenaar? <a asp-controller="Home" asp-action="Privacy" asp-fragment="correctie">Meld een correctie of verwijdering →</a></p>
             </div>
             <div class="detail-actions">
-                <a class="button" asp-action="Index" asp-route-district="@Model.Item.District">Meer in @Model.Item.District</a>
+                @if (presentation.OfficialUrl is not null && presentation.SourceDomain is not null)
+                {
+                    <a class="button" href="@presentation.OfficialUrl" target="_blank" rel="noopener noreferrer">Officiële website (@presentation.SourceDomain) ↗</a>
+                    <a class="button-secondary" asp-action="Index" asp-route-district="@Model.Item.District">Meer in @Model.Item.District</a>
+                }
+                else
+                {
+                    <a class="button" asp-action="Index" asp-route-district="@Model.Item.District">Meer in @Model.Item.District</a>
+                }
                 <a class="reset-link" asp-action="Index">Alle plekken in Almere</a>
             </div>
         </div>
@@ -37,7 +49,7 @@
 {
     <section class="wrap section">
         <div class="section-head">
-            <h2>Meer in @Model.Item.Category</h2>
+            <h2>Meer in @categoryLabel</h2>
             <a class="reset-link" asp-action="Index" asp-route-category="@Model.Item.Category">Bekijk alles</a>
         </div>
         <div class="cards detail-related">

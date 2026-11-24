@@ -1,11 +1,17 @@
 @model DiscoveryItem
+@using HappyCity.Web.ViewModels
+@{
+    var presentation = DiscoveryPresentation.ExtractSource(Model.Description);
+    var artClass = DiscoveryPresentation.CategoryArtClass(Model.Category);
+    var categoryLabel = DiscoveryPresentation.CategoryDisplayName(Model.Category);
+}
 
 <article class="card">
-    <div class="art" aria-hidden="true">@Model.Icon</div>
+    <div class="art @artClass" aria-hidden="true">@Model.Icon</div>
     <div class="card-body">
         <div class="card-meta">
-            <p class="eyebrow">@Model.District · @Model.Category</p>
-            <span class="card-badge">Lokaal</span>
+            <p class="eyebrow">@Model.District · @categoryLabel</p>
+            <span class="card-badge">@(presentation.SourceDomain ?? "Lokaal")</span>
         </div>
         @if (!string.IsNullOrEmpty(Model.Slug))
         {
@@ -15,7 +21,7 @@
         {
             <h3>@Model.Title</h3>
         }
-        <p>@Model.Description</p>
+        <p>@presentation.CleanDescription</p>
         @if (!string.IsNullOrEmpty(Model.Slug))
         {
             <div class="card-footer">

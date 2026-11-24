@@ -220,6 +220,59 @@ nav a.nav-cta:hover {
     color: #cfe1d9;
 }
 
+.quick-searches {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 1.05rem;
+    max-width: 680px;
+}
+
+.quick-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #cfe1d9;
+    margin-right: 0.15rem;
+}
+
+.quick-searches a {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    padding: 0.25rem 0.72rem;
+    font-size: 0.83rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.quick-searches a:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: var(--yellow);
+}
+
+.button-secondary {
+    display: inline-block;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    padding: 0.8rem 1.2rem;
+    border-radius: 0.65rem;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.button-secondary:hover {
+    border-color: var(--green);
+    background: var(--surface-tint);
+}
+
 .button,
 button {
     display: inline-block;
@@ -513,6 +566,31 @@ button:hover {
     padding: 1.15rem;
     color: var(--green);
     line-height: 1;
+}
+
+.art-activiteiten {
+    background: linear-gradient(135deg, #d7eadf 0%, #ebf4ea 52%, #f9e3a3 100%);
+    color: #12664f;
+}
+
+.art-eten {
+    background: linear-gradient(135deg, #f6e1d3 0%, #fbf1e6 52%, #f9dfb4 100%);
+    color: #8f4620;
+}
+
+.art-besparen {
+    background: linear-gradient(135deg, #d6eee5 0%, #eaf6f1 52%, #cde7da 100%);
+    color: #145e4b;
+}
+
+.art-diensten {
+    background: linear-gradient(135deg, #d8e8ec 0%, #eaf3f5 52%, #d4e4e7 100%);
+    color: #1d5564;
+}
+
+.art-winkelen {
+    background: linear-gradient(135deg, #f2e8d5 0%, #f8f3e8 52%, #f4ddb0 100%);
+    color: #755118;
 }
 
 .card-body {

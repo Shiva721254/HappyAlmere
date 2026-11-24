@@ -23,6 +23,15 @@
             </div>
             <p id="search-help">Voer geen persoonsgegevens in.</p>
         </form>
+        <div class="quick-searches" aria-label="Populaire zoektermen">
+            <span class="quick-label">Populair:</span>
+            <a asp-action="Index" asp-route-q="wandelen">wandelen</a>
+            <a asp-action="Index" asp-route-q="kringloop">kringloop</a>
+            <a asp-action="Index" asp-route-q="theater">theater</a>
+            <a asp-action="Index" asp-route-q="lunch">lunch</a>
+            <a asp-action="Index" asp-route-q="bibliotheek">bibliotheek</a>
+            <a asp-action="Index" asp-route-q="zwemmen">zwemmen</a>
+        </div>
     </div>
 </section>
 
@@ -99,7 +108,7 @@
     {
         <div class="empty-state">
             <p>Geen resultaten. Probeer een andere zoekterm.</p>
-            <a class="button" asp-action="Index">Alle voorbeelden</a>
+            <a class="button" asp-action="Index">Alle plekken bekijken</a>
         </div>
     }
     @if (Model.Items.Count == HappyCity.Application.DiscoveryFilter.MaximumResults)
@@ -119,7 +128,7 @@
     <div class="business-banner">
         <div>
             <h2>Ondernemer in Almere?</h2>
-            <p>Ontdek hoe HappyAlmere straks lokale bedrijven helpt.</p>
+            <p>Gratis lokale zichtbaarheid in alle stadsdelen — onafhankelijk en zonder advertenties.</p>
         </div>
         <a class="button" asp-action="Business">Meer informatie</a>
     </div>
