@@ -440,6 +440,16 @@ button:hover {
     margin: 0;
 }
 
+.detail-notice .detail-correction {
+    margin-top: 0.45rem;
+    font-size: 0.86rem;
+    color: var(--muted);
+}
+
+.detail-correction a {
+    font-weight: 700;
+}
+
 .detail-actions {
     display: flex;
     flex-wrap: wrap;
@@ -620,8 +630,125 @@ footer {
 }
 
 .prose {
-    max-width: 760px;
+    max-width: 820px;
     min-height: 45vh;
+}
+
+.page-eyebrow {
+    color: var(--green);
+    margin-bottom: 0.35rem;
+}
+
+.prose h1,
+.not-found-card h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+}
+
+.prose h2 {
+    margin-top: 1.75rem;
+    margin-bottom: 0.55rem;
+    font-size: clamp(1.18rem, 2.8vw, 1.4rem);
+}
+
+.lead {
+    font-size: clamp(1rem, 2.2vw, 1.12rem);
+    color: var(--muted);
+    margin: 0 0 1.4rem;
+    max-width: 65ch;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0 1.5rem;
+}
+
+.info-grid > *,
+.faq-list > * {
+    min-width: 0;
+}
+
+.info-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 0.9rem;
+    padding: 1.15rem 1.2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.info-card h2 {
+    margin: 0 0 0.45rem;
+    font-size: 1.05rem;
+}
+
+.info-card p {
+    margin: 0;
+    font-size: 0.94rem;
+    color: var(--muted);
+}
+
+.correction-box {
+    background: var(--surface-tint);
+    border: 1px solid #c9dccd;
+    border-radius: 0.95rem;
+    padding: 1.2rem 1.35rem;
+    margin: 1.5rem 0;
+}
+
+.correction-box h2 {
+    margin-top: 0;
+}
+
+.correction-box p:last-child {
+    margin-bottom: 0;
+}
+
+.faq-list {
+    display: grid;
+    gap: 0.85rem;
+    margin: 0.85rem 0 1.5rem;
+}
+
+.faq-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 0.85rem;
+    padding: 1rem 1.2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.faq-item h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1.02rem;
+    color: var(--ink);
+}
+
+.faq-item p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+
+.not-found-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 1.1rem;
+    padding: clamp(1.5rem, 4.5vw, 2.5rem);
+    max-width: 680px;
+    margin: 1rem auto;
+    box-shadow: var(--shadow-sm);
+}
+
+.page-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem 1.25rem;
+    margin-top: 1.5rem;
 }
 
 @media (min-width: 601px) {

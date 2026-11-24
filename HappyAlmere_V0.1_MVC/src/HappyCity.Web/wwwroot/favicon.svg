@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="HappyAlmere">
+  <rect width="64" height="64" rx="16" fill="#153b32"/>
+  <path d="M18 16h8v14.5c2.1-2.5 5-3.9 8.5-3.9 6.3 0 10.3 4.2 10.3 11.4V48h-8v-9.4c0-3.7-1.9-5.8-5.1-5.8-3.3 0-5.7 2.2-5.7 6V48h-8V16Z" fill="#ffffff"/>
+  <circle cx="50.5" cy="44.5" r="4.5" fill="#f8d575"/>
+</svg>

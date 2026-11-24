@@ -23,6 +23,7 @@
             <p class="detail-description">@Model.Item.Description</p>
             <div class="detail-notice">
                 <p class="muted">Onafhankelijke lokale vermelding zonder betaalde plaatsing of tracking. Controleer altijd actuele openingstijden via de officiële bron.</p>
+                <p class="detail-correction">Klopt er iets niet of ben je de eigenaar? <a asp-controller="Home" asp-action="Privacy" asp-fragment="correctie">Meld een correctie of verwijdering →</a></p>
             </div>
             <div class="detail-actions">
                 <a class="button" asp-action="Index" asp-route-district="@Model.Item.District">Meer in @Model.Item.District</a>
